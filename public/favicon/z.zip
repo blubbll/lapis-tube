@@ -1,0 +1,13 @@
+--2020-01-15 07:30:45--  https://cdn.glitch.com/03ae9c88-79e4-4632-ac9c-8adb8178b2c5%2F25848f4ff0a58576fe5555bc097dfe75.ico.zip?v=1579074189768
+Resolving cdn.glitch.com (cdn.glitch.com)... 54.192.30.117, 54.192.30.25, 54.192.30.91, ...
+Connecting to cdn.glitch.com (cdn.glitch.com)|54.192.30.117|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 148859 (145K) [application/x-zip-compressed]
+Saving to: ‘03ae9c88-79e4-4632-ac9c-8adb8178b2c5%2F25848f4ff0a58576fe5555bc097dfe75.ico.zip?v=1579074189768’
+
+     0K .......... .......... .......... .......... .......... 34% 39.4M 0s
+    50K .......... .......... .......... .......... .......... 68% 43.3M 0s
+   100K .......... .......... .......... .......... .....     100% 6.99M=0.009s
+
+2020-01-15 07:30:45 (16.3 MB/s) - ‘03ae9c88-79e4-4632-ac9c-8adb8178b2c5%2F25848f4ff0a58576fe5555bc097dfe75.ico.zip?v=1579074189768’ saved [148859/148859]
+

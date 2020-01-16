@@ -1,0 +1,28 @@
+body {
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuNSIgeDI9IjEuMCIgeTI9IjAuNSI+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmYWZhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g");
+  background: -moz-linear-gradient(0deg, #ffffff 1px, #fffafa 1px);
+  background: -webkit-linear-gradient(0deg, #ffffff 1px, #fffafa 1px);
+  background: linear-gradient(90deg, #ffffff 1px, #fffafa 1px);
+  -moz-background-size: 3px 3px;
+  -o-background-size: 3px 3px;
+  -webkit-background-size: 3px 3px;
+  background-size: 3px 3px;
+}
+
+:root {
+  --color-accent-main: #1b294b;
+  --color-font-main: mintcream;
+}
+
+#logo {
+  color: var(--color-accent-main);
+  font-family: consolas;
+}
+#logo img {
+  height: 34px;
+}
+
+#top .btn {
+  background: var(--color-accent-main);
+  color: var(--color-font-main);
+}

@@ -1,0 +1,192 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <link
+    rel="apple-touch-icon"
+    sizes="57x57"
+    href="./favicon/apple-icon-57x57.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="60x60"
+    href="./favicon/apple-icon-60x60.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="72x72"
+    href="./favicon/apple-icon-72x72.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="76x76"
+    href="./favicon/apple-icon-76x76.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="114x114"
+    href="./favicon/apple-icon-114x114.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="120x120"
+    href="./favicon/apple-icon-120x120.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="144x144"
+    href="./favicon/apple-icon-144x144.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="152x152"
+    href="./favicon/apple-icon-152x152.png"
+  />
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="./favicon/apple-icon-180x180.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="./favicon/android-icon-192x192.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="./favicon/favicon-32x32.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="96x96"
+    href="./favicon/favicon-96x96.png"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="./favicon/favicon-16x16.png"
+  />
+  <link rel="manifest" href="./favicon/manifest.json" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta
+    name="msapplication-TileImage"
+    content="./favicon/ms-icon-144x144.png"
+  />
+  <meta name="theme-color" content="#ffffff" />
+
+  <head>
+    <title>lapisTube</title>
+    <meta name="description" content="A cool thing made with Glitch" />
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    />
+    <!-- Bootstrap core CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Material Design Bootstrap -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/css/mdb.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- autocomplete -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+
+    <!-- bs -->
+    <link rel="stylesheet" href="./bs.css" />
+    <link rel="stylesheet" href="./bs-shards.css" />
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="./cash.js" defer></script>
+    <script src="/bg.js"></script>
+  </head>
+
+  <body onload="setDynamicBackground()">
+    <div id="wrap" class="d-flex flex-column position-absolute w-100 h-100">
+      <div id="top" class="flex-row">
+        <div class="w-100 h-100 border">
+          <div class="my-2 d-flex justify-content-around">
+            <div
+              id="logo"
+              class="d-flex justify-items-center align-items-center"
+            >
+              <img src="logo.png" class="ml-3 ml-md-5 mr-auto" />
+              <p class="d-none d-sm-flex mr-auto ml-0 mb-0">
+                lapisTube
+              </p>
+            </div>
+
+            <div
+              class="input-group col-sm-8 col-md-7 col-xl-5 mx-auto md-form mt-0 mb-1"
+            >
+              <input
+                type="text"
+                class="search-query form-control rounded-0"
+                placeholder="Search"
+              />
+              <span class="input-group-btn">
+                <button class="btn rounded-0" type="button">
+                  <i class="fas fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="left" class="flex-column col-3 p-0 flex-grow-1 border-right">
+        <button
+          type="button"
+          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+        >
+          History
+        </button>
+        <button
+          type="button"
+          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+        >
+          Trending
+        </button>
+        <button
+          type="button"
+          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+        >
+          Categories
+        </button>
+      </div>
+    </div>
+
+    <script src="./client.js"></script>
+  </body>
+  <script src="./client.js"></script>
+</html>
