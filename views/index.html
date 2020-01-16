@@ -121,6 +121,9 @@
       href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+    <!-- libs for bg -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.5/trianglify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
     <!-- bs -->
     <link rel="stylesheet" href="./bs.css" />
@@ -132,61 +135,66 @@
     <script src="/bg.js"></script>
   </head>
 
-  <body onload="setDynamicBackground()">
+  <body onload="initBg()">
     <div id="wrap" class="d-flex flex-column position-absolute w-100 h-100">
-      <div id="top" class="flex-row">
-        <div class="w-100 h-100 border">
-          <div class="my-2 d-flex justify-content-around">
-            <div
-              id="logo"
-              class="d-flex justify-items-center align-items-center"
-            >
-              <img src="logo.png" class="ml-3 ml-md-5 mr-auto" />
-              <p class="d-none d-sm-flex mr-auto ml-0 mb-0">
-                lapisTube
-              </p>
-            </div>
+      <div id="top" class="flex-row border">
+        <div class="my-2 d-flex justify-content-around">
+          <div
+            id="logo"
+            class="d-flex col-3 col-md-2 col-xl-1 p-0 justify-items-center align-items-center"
+          >
+            <img src="logo.png" class="ml-3 ml-md-5 ml-xl-4 mx-auto" />
+            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">
+              lapisTube
+            </p>
+          </div>
 
-            <div
-              class="input-group col-sm-8 col-md-7 col-xl-5 mx-auto md-form mt-0 mb-1"
-            >
-              <input
-                type="text"
-                class="search-query form-control rounded-0"
-                placeholder="Search"
-              />
-              <span class="input-group-btn">
-                <button class="btn rounded-0" type="button">
-                  <i class="fas fa-search"></i>
-                </button>
-              </span>
-            </div>
+          <div
+            class="input-group col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-auto"
+          >
+            <input
+              type="text"
+              class="search-query form-control rounded-0"
+              placeholder="Search"
+            />
+            <span class="input-group-btn">
+              <button class="btn rounded-0" type="button">
+                <i class="fas fa-search"></i>
+              </button>
+            </span>
           </div>
         </div>
       </div>
-      <div id="left" class="flex-column col-3 p-0 flex-grow-1 border-right">
+      <div
+        id="left"
+        class="flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
+      >
         <button
           type="button"
-          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
         >
-          History
+          <i class="justify-content-center d-flex d-sm-none fas fa-history"></i>
+          <span class="d-none d-sm-flex">History</span>
         </button>
         <button
           type="button"
-          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
         >
-          Trending
+          <i class="justify-content-center d-flex d-sm-none fas fa-fire"></i>
+          <span class="d-none d-sm-flex">Trending</span>
         </button>
         <button
           type="button"
-          class="btn btn-light w-100 rounded-0 p-2 m-0 border-bottom"
+          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
         >
-          Categories
+          <i
+            class="justify-content-center d-flex d-sm-none fas fa-folder-open"
+          ></i>
+          <span class="d-none d-sm-flex">Categories</span>
         </button>
       </div>
     </div>
 
     <script src="./client.js"></script>
   </body>
-  <script src="./client.js"></script>
 </html>
