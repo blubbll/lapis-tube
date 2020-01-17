@@ -68,6 +68,7 @@ app.get("/", function(request, response) {
 const prefix = "/api";
 
 app.get(`${prefix}/complete/:l::q`, (req, res) => {
+  const empty = "No results found..."
   var url = `http://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${req.params.l}&format=5&alt=json&callback=?`;
   request(
     {
@@ -88,7 +89,7 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
           for (const sugg of body) {
             sugg !== "0]" &&
               sugg.slice(2, -1).length > 0 &&
-              suggs.push(sugg.slice(2, -1));
+              suggs.push(decodeURIComponent(sugg.slice(2, -1)));
           }
 
           suggs = JSON.stringify(suggs)
@@ -96,8 +97,8 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
             .normalize()
             .slice(2, -1);
 
-          res.json("." + suggs.slice(0, -1) + ".");
-        } else res.json();
+          res.json({code: 200, data: "." + suggs.slice(0, -1) + "."});
+        } else res.json({code: 404, msg: empty});
       } else res.json();
     }
   );

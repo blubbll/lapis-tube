@@ -37,6 +37,7 @@ autocomplete({
   input: input,
   showOnFocus: true, //focus = show suggestions
   emptyMsg: "No results",
+  minLength: 1,
   className: "live-search", //class
   debounceWaitMs: 500, //wait
   fetch: function(text, update) {
@@ -46,17 +47,24 @@ autocomplete({
     text &&
       fetch("/api/complete/de:" + text)
         .then(res => res.text())
-        .then(arrText => {
-          const suggs = [];
-          const arr = arrText.split(",");
-  
-          arr.length > 0 && arr[0] !== ""
-            ? arr.forEach(function(sugg) {
-                const val = sugg.slice(2, -2);
-                suggs.push({ label: val, value: val });
-                update(suggs);
-              })
-            : update();
+        .then(raw => {
+          const result = JSON.parse(raw);
+          let arr = result.data ? result.data.split(",") : [];
+          console.log(result);
+          if (result.code === 200) {
+            const suggs = [];
+
+            //fix for number at less than 10 results
+            if (!isNaN(arr[arr.length - 1])) arr = arr.splice(0, 1);
+
+            arr.forEach(function(sugg) {
+              const val = sugg.slice(1, -1);
+              suggs.push({ label: val, value: val });
+              update(suggs);
+            });
+          } else if (result.code === 404) {
+            update({ label: arr[0] });
+          }
         });
   },
   onSelect: function(item) {
