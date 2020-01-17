@@ -23,11 +23,22 @@ body {
   backdrop-filter: blur(5rem);
 }
 
-footer#footer{
+footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(5rem);
   color: var(--color-font-dark);
+}
+
+.live-search {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2rem);
+}
+
+.live-search > div {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2rem);
+  padding: 0.4rem 0.8rem;
 }
 
 #top input {
