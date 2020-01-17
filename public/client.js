@@ -53,10 +53,7 @@ autocomplete({
           console.log(result);
           if (result.code === 200) {
             const suggs = [];
-
-            //fix for number at less than 10 results
-            if (!isNaN(arr[arr.length - 1])) arr = arr.splice(0, 1);
-
+            //loop and push
             arr.forEach(function(sugg) {
               const val = sugg.slice(1, -1);
               suggs.push({ label: val, value: val });
