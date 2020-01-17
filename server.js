@@ -81,20 +81,24 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
     async (error, response, body) => {
       if (body) {
         let suggs = [];
-        body = `[${body.split("[[")[1].split("]]")[0]}]`.split(",");
-        for (const sugg of body) {
-          sugg !== "0]" &&
-            sugg.slice(2, -1).length > 0 &&
-            suggs.push(sugg.slice(2, -1));
-        }
 
-        suggs = JSON.stringify(suggs)
-          .normalize()
-          .normalize()
-          .slice(2, -1);
+        if (body.split("[[")[1]) {
+          body = `[${body.split("[[")[1].split("]]")[0]}]`.split(",");
 
-        res.json(`[${suggs}]`);
-      }
+          for (const sugg of body) {
+            sugg !== "0]" &&
+              sugg.slice(2, -1).length > 0 &&
+              suggs.push(sugg.slice(2, -1));
+          }
+
+          suggs = JSON.stringify(suggs)
+            .normalize()
+            .normalize()
+            .slice(2, -1);
+
+          res.json("." + suggs.slice(0, -1) + ".");
+        } else res.json();
+      } else res.json();
     }
   );
 });

@@ -25,7 +25,7 @@ const initBg = () => {
   setTimeout(() => {
     document.querySelector("diamond").setAttribute("style", "display:none;");
     document.querySelector("#wrap").setAttribute("style", "");
-  }, 1499);
+  }, 999);
 };
 window.onresize = debounce(initBg, 49);
 //BG END

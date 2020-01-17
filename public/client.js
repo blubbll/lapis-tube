@@ -35,24 +35,29 @@ var input = document.getElementById("search");
 
 autocomplete({
   input: input,
-  showOnFocus: 1,
-  className: "live-search",
-  debounceWaitMs: 500,
+  showOnFocus: true, //focus = show suggestions
+  emptyMsg: "No results",
+  className: "live-search", //class
+  debounceWaitMs: 500, //wait
   fetch: function(text, update) {
     //input
     text = text.toLowerCase();
 
-    fetch("/api/complete/de:" + text)
-      .then(res => res.text())
-      .then(arrText => {
-        const suggs = [];
-        console.log(JSON.parse(arrText))
-        Array.from(arrText).forEach(function(sugg) {
-          //suggs.push()
-          console.log(sugg);
-          //update(suggs)
+    text &&
+      fetch("/api/complete/de:" + text)
+        .then(res => res.text())
+        .then(arrText => {
+          const suggs = [];
+          const arr = arrText.split(",");
+  
+          arr.length > 0 && arr[0] !== ""
+            ? arr.forEach(function(sugg) {
+                const val = sugg.slice(2, -2);
+                suggs.push({ label: val, value: val });
+                update(suggs);
+              })
+            : update();
         });
-      });
   },
   onSelect: function(item) {
     input.value = item.label;
