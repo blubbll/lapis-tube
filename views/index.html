@@ -1,12 +1,10 @@
 <!-- This is a static file -->
 <!-- served from your routes in server.js -->
-
 <!-- You might want to try something fancier: -->
 <!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
 <!-- pug: https://pugjs.org/ -->
 <!-- haml: http://haml.info/ -->
 <!-- hbs(handlebars): http://handlebarsjs.com/ -->
-
 <!DOCTYPE html>
 <html lang="en">
   <link
@@ -98,7 +96,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -114,87 +111,181 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/css/mdb.min.css"
       rel="stylesheet"
     />
-
     <!-- autocomplete -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css"
+      href="https://raw.githack.com/kraaden/autocomplete/master/autocomplete.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+    <script src="https://raw.githack.com/kraaden/autocomplete/master/autocomplete.min.js"></script>
     <!-- libs for bg -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.5/trianglify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-
     <!-- bs -->
-    <link rel="stylesheet" href="./bs.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="./bs-shards.css" />
     <link rel="stylesheet" href="./style.css" />
-
     <!-- import the webpage's client-side javascript file -->
-    <script src="./cash.js" defer></script>
-    <script src="/bg.js"></script>
   </head>
 
   <body onload="initBg()">
-    <div id="wrap" class="d-flex flex-column position-absolute w-100 h-100">
-      <div id="top" class="flex-row border">
+    <diamond>
+      <style>
+        diamond {
+          background: black;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+
+        loader {
+          background: var(--color-accent-main);
+          z-index: 2;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          font-size: 0;
+          width: 141.5%;
+          height: 141.5%;
+          -webkit-transform: translate(-50%, -50%) rotate(45deg);
+          transform: translate(-50%, -50%) rotate(45deg);
+        }
+        loader loaderitem {
+          display: inline-block;
+          width: 50%;
+          height: 50%;
+          opacity: 0;
+          background: rgba(0, 0, 0, 0.2);
+        }
+        loader loaderitem:nth-child(1) {
+          -webkit-animation: show 1.6s 0.6s steps(1) infinite;
+          animation: show 1.6s 0.6s steps(1) infinite;
+        }
+        loader loaderitem:nth-child(2) {
+          -webkit-animation: show 1.6s 0s steps(1) infinite;
+          animation: show 1.6s 0s steps(1) infinite;
+        }
+        loader loaderitem:nth-child(3) {
+          -webkit-animation: show 1.6s 0.4s steps(1) infinite;
+          animation: show 1.6s 0.4s steps(1) infinite;
+        }
+        loader loaderitem:nth-child(4) {
+          -webkit-animation: show 1.6s 0.2s steps(1) infinite;
+          animation: show 1.6s 0.2s steps(1) infinite;
+        }
+
+        @-webkit-keyframes show {
+          0% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+
+        @keyframes show {
+          0% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+      </style>
+      <loader>
+        <loaderitem></loaderitem>
+        <loaderitem></loaderitem>
+        <loaderitem></loaderitem>
+        <loaderitem></loaderitem>
+      </loader>
+    </diamond>
+    <div
+      id="wrap"
+      class="d-flex flex-column position-absolute w-100 h-100"
+      style="display:none!important;"
+    >
+      <header id="top" class="flex-row border-bottom">
         <div class="my-2 d-flex justify-content-around">
           <div
             id="logo"
             class="d-flex col-3 col-md-2 col-xl-1 p-0 justify-items-center align-items-center"
           >
-            <img src="logo.png" class="ml-3 ml-md-5 ml-xl-4 mx-auto" />
-            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">
-              lapisTube
-            </p>
+            <img src="logo.png" class="ml-3 ml-sm-2 ml-md-4 ml-xl-4 mx-auto" />
+            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">lapisTube</p>
           </div>
-
           <div
             class="input-group col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-auto"
           >
             <input
+              id="search"
               type="text"
-              class="search-query form-control rounded-0"
+              autocomplete="off"
+              class="form-control rounded-left"
               placeholder="Search"
             />
             <span class="input-group-btn">
-              <button class="btn rounded-0" type="button">
+              <button class="btn rounded-0 rounded-right m-0" type="button">
                 <i class="fas fa-search"></i>
               </button>
             </span>
           </div>
         </div>
-      </div>
-      <div
-        id="left"
-        class="flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
-      >
-        <button
-          type="button"
-          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
-        >
-          <i class="justify-content-center d-flex d-sm-none fas fa-history"></i>
-          <span class="d-none d-sm-flex">History</span>
-        </button>
-        <button
-          type="button"
-          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
-        >
-          <i class="justify-content-center d-flex d-sm-none fas fa-fire"></i>
-          <span class="d-none d-sm-flex">Trending</span>
-        </button>
-        <button
-          type="button"
-          class="btn btn-light w-100 rounded-0 py-3 m-0 border-bottom"
-        >
-          <i
-            class="justify-content-center d-flex d-sm-none fas fa-folder-open"
-          ></i>
-          <span class="d-none d-sm-flex">Categories</span>
-        </button>
-      </div>
-    </div>
+      </header>
 
+      <!-- content -->
+      <main id="content" class="flex-row d-flex flex-grow-1">
+        <nav
+          id="left"
+          class="flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
+        >
+          <button
+            type="button"
+            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
+          >
+            <i
+              class="justify-content-center d-flex d-sm-none fas fa-history"
+            ></i>
+            <span class="d-none d-sm-flex">History</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
+          >
+            <i class="justify-content-center d-flex d-sm-none fas fa-fire"></i>
+            <span class="d-none d-sm-flex">Trending</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-none"
+          >
+            <i
+              class="justify-content-center d-flex d-sm-none fas fa-folder-open"
+            ></i>
+            <span class="d-none d-sm-flex">Categories</span>
+          </button>
+        </nav>
+        <section
+          id="inner"
+          class="flex-column col-9 col-sm-10 col-xl-11 p-0 flex-grow-1"
+        ></section>
+      </main>
+      <footer id="footer" class="flex-row d-flex border-top">
+        <div class="justify-content-center ml-1">&copy Monad & Blu</div>
+      </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/6.0.1/cash.min.js"></script>
     <script src="./client.js"></script>
+    <script src="/bg.js"></script>
   </body>
 </html>
