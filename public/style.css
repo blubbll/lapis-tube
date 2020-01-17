@@ -1,11 +1,11 @@
-body {
-  background-repeat: round;
-}
-
 :root {
   --color-accent-main: #1b294b;
   --color-font-light: mintcream;
-  --color-font-dark: dimgray;
+  --color-font-dark: rgba(24, 24, 24);
+}
+
+body {
+  background: var(--color-accent-main);
 }
 
 #logo {
@@ -16,10 +16,18 @@ body {
   height: 34px;
 }
 
-#top, #left {
-    background: rgba(255,255,255, 0.1);
-    border-color: black!important;
-    backdrop-filter: blur(5rem);
+#top,
+#left {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(5rem);
+}
+
+footer#footer{
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(5rem);
+  color: var(--color-font-dark);
 }
 
 #top input {
@@ -27,23 +35,31 @@ body {
   color: var(--color-font-light);
 }
 
-#top input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+#top input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: var(--color-font-light);
 }
 
-#top input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+#top input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
   color: var(--color-font-light);
 }
 
-#top input::-ms-input-placeholder { /* Microsoft Edge */
+#top input::-ms-input-placeholder {
+  /* Microsoft Edge */
   color: var(--color-font-light);
 }
 
 #left .btn {
-  background: white !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
-#left .btn:hover {
-  background: mintcream !important;
+#left .btn:hover,
+#left .btn:focus {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+#left .btn:active {
+  background: rgba(255, 255, 255, 0.5) !important;
 }
 
 #top .btn {
