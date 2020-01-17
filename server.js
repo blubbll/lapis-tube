@@ -69,7 +69,7 @@ const prefix = "/api";
 
 app.get(`${prefix}/complete/:l::q`, (req, res) => {
   const empty = "No results found...";
-  var url = `http://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${req.params.l}&format=5&alt=json&callback=?`;
+  var url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${req.params.l}&format=5&alt=json&callback=?`;
   request(
     {
       uri: url,
@@ -80,10 +80,31 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
       encoding: "latin1"
     },
     async (error, response, body) => {
+      //console.warn(response);
       if (body) {
         let suggs = [];
 
-        if (body.split("[[")[1]) {
+        const raw = body
+          .split(`window.google.ac.h(["${req.params.q}",[[`)[1]
+          .slice(0, -1) //remove last
+          .split("]]]")[0] //trim end
+          .split(","); //into arr
+        raw.length--; //remove last char
+
+        Array.prototype.forEach.call(raw, (val, key) => {
+          if (key !== 0 && val !== "0]" && val.length) {
+            //reached da end
+            if (val.slice(1) === "]]" || val.startsWith("{")) return;
+            if(!val.slice(1).endsWith("]]") && val.slice(1).length)
+            suggs.push(val.slice(1));
+          }
+        });
+
+        console.log(suggs)
+        //sanitize
+        suggs = JSON.stringify(suggs).normalize();
+
+        /* if (body.split("[[")[1]) {
           body = `[${body.split("[[")[1].split("]]")[0]}]`.split(",");
 
           for (const sugg of body) {
@@ -92,6 +113,7 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
               suggs.push(decodeURIComponent(sugg.slice(2, -1)));
           }
 
+          
           //fix for number at last char
           !isNaN(suggs[suggs.length - 1].slice(1, -1)) && suggs.length--;
 
@@ -101,7 +123,7 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
             .slice(2, -1);
 
           res.json({ code: 200, data: "." + suggs.slice(0, -1) + "." });
-        } else res.json({ code: 404, msg: empty });
+        } else res.json({ code: 404, msg: empty }); */
       } else res.json();
     }
   );

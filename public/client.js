@@ -33,6 +33,7 @@ var countries = [
 //SEARCH
 var input = document.getElementById("search");
 
+const l = (navigator.language || navigator.userLanguage).split("-")[1].toLowerCase() || "en";
 autocomplete({
   input: input,
   showOnFocus: true, //focus = show suggestions
@@ -45,7 +46,7 @@ autocomplete({
     text = text.toLowerCase();
 
     text &&
-      fetch("/api/complete/de:" + text)
+      fetch(`/api/complete/${l}:${text}`)
         .then(res => res.text())
         .then(raw => {
           const result = JSON.parse(raw);
