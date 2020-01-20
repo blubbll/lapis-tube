@@ -85,7 +85,7 @@
   <meta name="theme-color" content="#ffffff" />
 
   <head>
-    <title>lapisTube</title>
+    <title>𝑙𝑎𝑝𝑖𝑠Tube</title>
     <meta name="description" content="A cool thing made with Glitch" />
     <link
       id="favicon"
@@ -117,6 +117,8 @@
       href="https://raw.githack.com/kraaden/autocomplete/master/autocomplete.min.css"
     />
     <script src="https://raw.githack.com/kraaden/autocomplete/master/autocomplete.min.js"></script>
+    <!-- fetch polyfill -->
+    <script src="https://cdn.jsdelivr.net/npm/unfetch/dist/unfetch.umd.js"></script>
     <!-- libs for bg -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.5/trianglify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
@@ -152,6 +154,7 @@
           font-size: 0;
           width: 141.5%;
           height: 141.5%;
+
           -webkit-transform: translate(-50%, -50%) rotate(45deg);
           transform: translate(-50%, -50%) rotate(45deg);
         }
@@ -215,14 +218,17 @@
       class="d-flex flex-column position-absolute w-100 h-100"
       style="display:none!important;"
     >
-      <header id="top" class="flex-row border-bottom">
+      <header id="top" class="backdrop-blur flex-row border-bottom">
         <div class="my-2 d-flex justify-content-around">
           <div
             id="logo"
             class="d-flex col-3 col-md-2 col-xl-1 p-0 justify-items-center align-items-center"
           >
-            <img src="logo.png" class="ml-3 ml-sm-2 ml-md-4 ml-xl-4 mx-auto" />
-            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">lapisTube</p>
+            <img
+              src="logo.png"
+              class="ml-3 ml-sm-3 ml-md-4 ml-xl-4 mx-auto mr-sm-2"
+            />
+            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">𝒍𝒂𝒑𝒊𝒔Tube</p>
           </div>
           <div
             class="input-group col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-auto"
@@ -242,16 +248,15 @@
           </div>
         </div>
       </header>
-
       <!-- content -->
       <main id="content" class="flex-row d-flex flex-grow-1">
         <nav
           id="left"
-          class="flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
+          class="backdrop-blur flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
         >
           <button
             type="button"
-            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
+            class="btn btn-light w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
           >
             <i
               class="justify-content-center d-flex d-sm-none fas fa-history"
@@ -260,14 +265,14 @@
           </button>
           <button
             type="button"
-            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
+            class="btn btn-light w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-bottom"
           >
             <i class="justify-content-center d-flex d-sm-none fas fa-fire"></i>
             <span class="d-none d-sm-flex">Trending</span>
           </button>
           <button
             type="button"
-            class="btn btn-dark w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-none"
+            class="btn btn-light w-100 rounded-0 py-3 px-1 px-sm-2 m-0 border-none"
           >
             <i
               class="justify-content-center d-flex d-sm-none fas fa-folder-open"
@@ -275,17 +280,18 @@
             <span class="d-none d-sm-flex">Categories</span>
           </button>
         </nav>
-        <section
+        <view
           id="inner"
-          class="flex-column col-9 col-sm-10 col-xl-11 p-0 flex-grow-1"
-        ></section>
+          class="d-flex h-100 w-100"
+        ></view>
       </main>
-      <footer id="footer" class="flex-row d-flex border-top">
+      <footer id="footer" class="backdrop-blur flex-row d-flex border-top">
         <div class="justify-content-center ml-1">&copy Monad & Blu</div>
       </footer>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/6.0.1/cash.min.js"></script>
+    <script src="./tools.js"></script>
+    <script src="./bg.js"></script>
     <script src="./client.js"></script>
-    <script src="/bg.js"></script>
   </body>
 </html>

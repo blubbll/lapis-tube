@@ -53,23 +53,84 @@ const express = require("express"),
   fs = require("fs"),
   bodyParser = require("body-parser"),
   cors = require("cors"),
-  request = require("request");
-// we've started you off with Express,
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+  request = require("request"),
+  sass = require("node-sass"),
+  es6tr = require("es6-transpiler"),
+  regionParser = require("accept-language-parser");
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function(request, response) {
-  response.sendFile(__dirname + "/views/index.html");
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
 });
 
+const transpile = file => {
+  var result = es6tr.run({ filename: file });
+  const ext = ".es5";
+  const output = `${file.replace("/build", "/public")}`;
+
+  if (result.src)
+    [
+      fs.writeFileSync(
+        output,
+        `//💜//i love you monad\r\n${result.src.replace(/\0/gi, "")}`
+      ),
+      console.log(`Transpiled ${file} to ${output}!`)
+    ];
+  else console.warn(`Error at transpiling of file ${file}:`, result);
+};
+
+//BUILD
+if (process.env.PROJECT_NAME) {
+  transpile(`${__dirname}/build/tools.js`);
+  transpile(`${__dirname}/build/bg.js`);
+  transpile(`${__dirname}/build/client.js`);
+
+  //SASS
+  {
+    const c = {
+      in: `${__dirname}/build/style.sass.css`,
+      out: `${__dirname}/public/style.css`
+    };
+    fs.writeFileSync(
+      c.out,
+      sass
+        .renderSync({
+          data: fs.readFileSync(c.in, "utf8")
+        })
+        .css.toString("utf8")
+    );
+  }
+}
+
+//API
 const prefix = "/api";
 
+app.get(`${prefix}/search/:reg::q`, (req, res) => {
+  request(
+    {
+      uri: `${process.env.IV_HOST}/v1/search/?region=${req.params.reg}&q=${req.params.q}`,
+      method: "GET",
+      timeout: 3000,
+      followRedirect: true,
+      maxRedirects: 10,
+      encoding: "latin1"
+    },
+    async (error, response, body) => {
+      //console.warn(response);
+      if (body) {
+      }
+    }
+  );
+});
+
 app.get(`${prefix}/complete/:l::q`, (req, res) => {
+  const region = regionParser.parse(req.headers["accept-language"])[0].region.toLowerCase();
+
   const empty = "No results found...";
-  var url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${req.params.l}&format=5&alt=json&callback=?`;
+  const url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${region}&format=5&alt=json&callback=?`;
   request(
     {
       uri: url,
@@ -83,48 +144,36 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
       //console.warn(response);
       if (body) {
         let suggs = [];
+        //console.log(body)
+        const any = !body.includes('",[],{"k"');
 
-        const raw = body
-          .split(`window.google.ac.h(["${req.params.q}",[[`)[1]
-          .slice(0, -1) //remove last
-          .split("]]]")[0] //trim end
-          .split(","); //into arr
-        raw.length--; //remove last char
+        if (any) {
+          const raw = body
+            .split(`window.google.ac.h(["${req.params.q}",[[`)[1]
+            .split("]]]")[0] //trim end
+            .split(","); //into arr
+          raw.length--; //remove last char
 
-        Array.prototype.forEach.call(raw, (val, key) => {
-          if (key !== 0 && val !== "0]" && val.length) {
-            //reached da end
-            if (val.slice(1) === "]]" || val.startsWith("{")) return;
-            if(!val.slice(1).endsWith("]]") && val.slice(1).length)
-            suggs.push(val.slice(1));
-          }
-        });
+          Array.prototype.forEach.call(raw, (val, key) => {
+            if (val !== "0]" && val.length) {
+              //reached da end
+              if (val.slice(1) === "]]" || val.startsWith("{")) return;
+              if (!val.slice(1).endsWith("]]") && val.slice(1).length > 1)
+                suggs.push(
+                  val
+                    .slice(key === 0 ? 1 : 2, -1)
+                    .replace(/\\u([0-9a-fA-F]{4})/g, (m, cc) =>
+                      String.fromCharCode("0x" + cc)
+                    )
+                );
+            }
+          });
+        }
 
-        console.log(suggs)
-        //sanitize
-        suggs = JSON.stringify(suggs).normalize();
-
-        /* if (body.split("[[")[1]) {
-          body = `[${body.split("[[")[1].split("]]")[0]}]`.split(",");
-
-          for (const sugg of body) {
-            sugg !== "0]" &&
-              sugg.slice(2, -1).length > 0 &&
-              suggs.push(decodeURIComponent(sugg.slice(2, -1)));
-          }
-
-          
-          //fix for number at last char
-          !isNaN(suggs[suggs.length - 1].slice(1, -1)) && suggs.length--;
-
-          suggs = JSON.stringify(suggs)
-            .normalize()
-            .normalize()
-            .slice(2, -1);
-
-          res.json({ code: 200, data: "." + suggs.slice(0, -1) + "." });
-        } else res.json({ code: 404, msg: empty }); */
-      } else res.json();
+        suggs.length
+          ? res.json({ code: 200, data: suggs })
+          : res.json({ code: 404, msg: empty });
+      }
     }
   );
 });

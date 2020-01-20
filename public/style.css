@@ -1,79 +1,89 @@
 :root {
   --color-accent-main: #1b294b;
   --color-font-light: mintcream;
-  --color-font-dark: rgba(24, 24, 24);
-}
+  --color-font-dark: rgba(24, 24, 24); }
 
 body {
-  background: var(--color-accent-main);
-}
+  background: var(--color-accent-main); }
 
-#logo {
-  color: var(--color-font-light);
-  font-family: consolas;
-}
-#logo img {
-  height: 34px;
-}
+/* if backdrop support: very transparent and blurred */
+@supports (-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em)) {
+  .backdrop-blur {
+    background-color: rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(2em);
+    backdrop-filter: blur(2em); } }
 
+/**************************/
+/**************************/
+@supports not ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
+  /* slightly transparent, dark fallback */
+  .backdrop-blur {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    color: white !important; } }
+
+/**************************/
+/**************************/
 #top,
 #left {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(5rem);
-}
+  border-color: rgba(255, 255, 255, 0.1) !important; }
 
+#logo {
+  color: var(--color-font-light);
+  font-family: consolas; }
+  #logo img {
+    height: 36px; }
+
+.live-search {
+  background: rgba(255, 255, 255, 0.1); }
+  .live-search > div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.8rem;
+    color: rgba(0, 0, 0, 0.5); }
+  .live-search > div.selected {
+    background: rgba(255, 255, 255, 0.25); }
+  .live-search > div:hover {
+    background: rgba(0, 255, 0, 0.4) !important;
+    color: black; }
+  .live-search > div:active {
+    background: rgba(255, 255, 255, 0.6) !important;
+    color: cyan; }
+
+#top {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */ }
+  #top .btn {
+    background: var(--color-accent-main);
+    color: var(--color-font-light); }
+  #top input {
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--color-font-light); }
+  #top input {
+    /* Internet Explorer 10-11 */
+    /* Microsoft Edge */
+    /*ie no clear btn */ }
+    #top input::placeholder {
+      color: var(--color-font-light); }
+    #top input:-ms-input-placeholder {
+      color: var(--color-font-light); }
+    #top input::-ms-input-placeholder {
+      color: var(--color-font-light); }
+    #top input::-ms-clear {
+      display: none; }
+
+/**************************/
+/**************************/
+#left .btn {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important; }
+  #left .btn:hover, #left .btn:focus {
+    background: rgba(255, 255, 255, 0.3) !important; }
+  #left .btn:active {
+    background: rgba(255, 255, 255, 0.5) !important; }
+
+/**************************/
+/**************************/
 footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(5rem);
-  color: var(--color-font-dark);
-}
-
-.live-search {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(2rem);
-}
-
-.live-search > div {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(2rem);
-  padding: 0.4rem 0.8rem;
-}
-
-#top input {
-  background: rgba(255, 255, 255, 0.3);
-  color: var(--color-font-light);
-}
-
-#top input::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--color-font-light);
-}
-
-#top input:-ms-input-placeholder {
-  /* Internet Explorer 10-11 */
-  color: var(--color-font-light);
-}
-
-#top input::-ms-input-placeholder {
-  /* Microsoft Edge */
-  color: var(--color-font-light);
-}
-
-#left .btn {
-  background: rgba(0, 0, 0, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-#left .btn:hover,
-#left .btn:focus {
-  background: rgba(255, 255, 255, 0.3) !important;
-}
-#left .btn:active {
-  background: rgba(255, 255, 255, 0.5) !important;
-}
-
-#top .btn {
-  background: var(--color-accent-main);
-  color: var(--color-font-main);
-}
+  color: var(--color-font-dark); }
