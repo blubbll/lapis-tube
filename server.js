@@ -58,9 +58,6 @@ const express = require("express"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser");
 
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static("public"));
-
 const transpile = file => {
   var result = es6tr.run({ filename: file });
   const ext = ".es5";
@@ -107,31 +104,46 @@ const prefix = "/api";
 const getRegion = header => {
   return (header
     ? regionParser.parse(header)[0]
-      ? regionParser.parse(header)[0].region ||
-        regionParser.parse(header)[0].code
+      ? regionParser.parse(header)[0].code
       : header
     : "EN"
   ).toLowerCase();
 };
 
-app.set("trust proxy", true);
+/*app.set("trust proxy", true);
 app.use("*", (req, res, next) => {
-  //prod
+  //prod & not already redirected
   if (
-    (!process.env.PROJECT_NAME && req.originalUrl === "/") ||
-    req.originalUrl.startsWith("/templates")
+    !process.env.PROJECT_NAME &&
+    !req.headers["x-gt-lang"] &&
+    !req.headers["'x-gt-clientip"]
   ) {
     const region = getRegion(req.headers["accept-language"]);
-    //REGIONPIPER
+
+    //REGIONMASKER
     console.log(`TRANSFORMING REQUEST FOR REGION ${region} FOR IP ${req.ip}`);
-    request({
-      url: `https://${region}.${req.hostname}${req.originalUrl}`,
-      rejectUnauthorized: false
-    }).pipe(res);
+    res.redirect(`https://${region}.${req.hostname}${req.originalUrl}`);
   } else next();
+});*/
+
+//CORZ
+app.use("*", (req, res, next) => {
+  if (
+    req.originalUrl === "/app.html" ||
+    req.originalUrl.startsWith("/api/") ||
+    req.originalUrl.startsWith("/templates/")
+  ) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+  }
+  next();
 });
 
-// http://expressjs.com/en/starter/basic-routing.html
+// static
+app.use(express.static("public"));
+
+// base html
 app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });

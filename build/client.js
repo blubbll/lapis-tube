@@ -1,22 +1,25 @@
 const { debounce, fetch, autocomplete, done, T, $ } = window;
+let { HOST } = window;
 
 //get page language
 const getL = () => {
   let L = navigator.language || navigator.userLanguage;
-  L.includes("-") && [(L = L.split("-")[1])];
+  //language has seperator
+  L.includes("-") && [(L = L.split("-")[0])];
   return L.toLowerCase() || "en";
 };
 
+HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
+  location.hostname
+}`;
+
 //navi switch
 {
-  $("#toggle-left").on("click", () => {
+  $(document).on("click", "#toggle-left", () => {
     const el = $("#left");
     //slide
-    el.attr(
-      "expanded",
-      el.attr("expanded") === "false" ? "true" : "false"
-    );
-    setTimeout(function() {
+    el.attr("expanded", el.attr("expanded") === "false" ? "true" : "false");
+    setTimeout(() => {
       //hide
       el.attr("expanded") === "false"
         ? el.addClass("d-none")
@@ -25,52 +28,8 @@ const getL = () => {
   });
 }
 
-//LIVESEARCH
-{
-  const input = document.getElementById("search");
-  const emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
-  const l = getL();
-  const auto = autocomplete({
-    input: input,
-    showOnFocus: true, //focus = show suggestions
-    minLength: 1,
-    className: "live-search backdrop-blur", //class
-    debounceWaitMs: 500, //wait
-    fetch: (input, update) => {
-      //input
-      const text = input.toLowerCase();
-
-      text &&
-        fetch(`/api/complete/${l}:${text}`)
-          .then(res => res.text())
-          .then(raw => {
-            const result = JSON.parse(raw);
-
-            if (result.code === 200) {
-              const suggs = [];
-              //loop and push
-              result.data.forEach(sugg => {
-                suggs.push({ label: sugg, value: sugg });
-                update(suggs);
-              });
-            } else if (result.code === 404) {
-              update([{ label: emptyMsg, value: emptyMsg }]);
-            }
-          });
-    },
-    onSelect: item => {
-      if (item.label !== emptyMsg) {
-        input.value = item.label;
-        SEARCH(item.label);
-
-        $("view").html(T.RESULTS);
-      }
-    }
-  });
-}
-
 const SEARCH = (str, ln) => {
-  fetch(`/api/search/${str}`)
+  fetch(`${HOST}/api/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const result = JSON.parse(raw);
@@ -93,24 +52,26 @@ const SEARCH = (str, ln) => {
 //LOAD TEMPLATES
 {
   //template remote path
-  const tr = "/templates";
+  const tr = `${HOST}/templates`;
   //template var inmemory
   const T = (window.T = {});
 
   Promise.all(
     [
+      HOST + "/app.html",
       tr + "/channel.html",
       tr + "/player.html",
       tr + "/result-item.html",
       tr + "/result-list.html"
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
-    T.CHANNEL = tx[0];
-    T.PLAYER = tx[1];
-    T.RESULT = tx[2];
-    T.RESULTS = tx[3];
+    $("gtranslate")[0].outerHTML = tx[0];
+    T.CHANNEL = tx[1];
+    T.PLAYER = tx[2];
+    T.RESULT = tx[3];
+    T.RESULTS = tx[4];
+    setup();
     done();
-
     demo();
   });
 }
@@ -118,4 +79,57 @@ const SEARCH = (str, ln) => {
 //////
 const demo = () => {
   //$("view").html(T.RESULTS);
+};
+
+//wreadyy
+const setup = () => {
+  
+  //sync country
+  $("#yt-region").text(getL());
+  
+  //LIVESEARCH
+  {
+    const input = document.getElementById("search");
+    const emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
+    const l = getL();
+    const auto = autocomplete({
+      input: input,
+      showOnFocus: true, //focus = show suggestions
+      minLength: 1,
+      className: "live-search backdrop-blur", //class
+      debounceWaitMs: 500, //wait
+      fetch: (input, update) => {
+        //input
+        const text = input.toLowerCase();
+
+        text &&
+          fetch(`${HOST}/api/complete/${l}:${text}`)
+            .then(res => res.text())
+            .then(raw => {
+              const result = JSON.parse(raw);
+
+              if (result.code === 200) {
+                const suggs = [];
+                //loop and push
+                result.data.forEach(sugg => {
+                  suggs.push({ label: sugg, value: sugg });
+                  update(suggs);
+                });
+              } else if (result.code === 404) {
+                update([{ label: emptyMsg, value: emptyMsg }]);
+              }
+            });
+      },
+      onSelect: item => {
+        if (item.label !== emptyMsg) {
+          //set input content
+          input.value = item.label;
+          //show resultlist
+          $("view").html(T.RESULTS);
+          //load results
+          SEARCH(item.label);
+        }
+      }
+    });
+  }
 };

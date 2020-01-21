@@ -10,8 +10,8 @@ body {
 @supports (-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em)) {
   .backdrop-blur {
     background-color: rgba(255, 255, 255, 0.5);
-    -webkit-backdrop-filter: blur(2em);
-    backdrop-filter: blur(2em); } }
+    -webkit-backdrop-filter: blur(0.75rem);
+    backdrop-filter: blur(0.75rem); } }
 
 /**************************/
 /**************************/
