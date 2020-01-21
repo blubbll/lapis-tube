@@ -132,9 +132,15 @@ app.use(express.static("public"));
 
 // base html
 app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`);
+  res.sendFile(`${__dirname}/build/index.html`);
 });
 
+//HTML-Templates
+app.get("/html/*", (req, res) => {
+  res.sendFile(`${__dirname}${req.originalUrl}`);
+});
+
+//simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
   request(`http://api.petabyet.com/geoip/${req.ip}`).pipe(res);
 });

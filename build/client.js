@@ -14,7 +14,7 @@ HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
   location.hostname
 }`;
 //api
-API = `${HOST}/api`;
+API = `//${location.hostname}/api`;
 
 //navi switch
 {
@@ -55,13 +55,13 @@ const SEARCH = (str, ln) => {
 //LOAD TEMPLATES
 {
   //template remote path
-  const tr = `${HOST}/templates`;
+  const tr = `${HOST}/html`;
   //template var inmemory
   const T = (window.T = {});
 
   Promise.all(
     [
-      HOST + "/app.html",
+      tr + "/app.html",
       API + "/geoip",
       tr + "/channel.html",
       tr + "/player.html",
@@ -69,7 +69,7 @@ const SEARCH = (str, ln) => {
       tr + "/result-list.html"
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
-    $("gtranslate")[0].outerHTML = tx[0];
+    T.HOME = tx[0];
     REGION = tx[1];
     T.CHANNEL = tx[2];
     T.PLAYER = tx[3];
@@ -88,6 +88,9 @@ const demo = () => {
 
 //wreadyy
 const setup = () => {
+  
+  $("gtranslate")[0].outerHTML = T.HOME;
+  
   //sync country
   $("#yt-region").text(getL());
 

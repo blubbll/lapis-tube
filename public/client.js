@@ -13,7 +13,7 @@ var getL = function()  {
 //host
 HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
 //api
-API = (("" + HOST) + "/api");
+API = (("//" + (location.hostname)) + "/api");
 
 //navi switch
 {
@@ -54,13 +54,13 @@ var SEARCH = function(str, ln)  {
 //LOAD TEMPLATES
 {
   //template remote path
-  var tr = (("" + HOST) + "/templates");
+  var tr = (("" + HOST) + "/html");
   //template var inmemory
   var T$0 = (window.T = {});
 
   Promise.all(
     [
-      HOST + "/app.html",
+      tr + "/app.html",
       API + "/geoip",
       tr + "/channel.html",
       tr + "/player.html",
@@ -68,7 +68,7 @@ var SEARCH = function(str, ln)  {
       tr + "/result-list.html"
     ].map(function(url ) {return fetch(url).then(function(resp ) {return resp.text()})})
   ).then(function(tx ) {
-    $("gtranslate")[0].outerHTML = tx[0];
+    T$0.HOME = tx[0];
     REGION = tx[1];
     T$0.CHANNEL = tx[2];
     T$0.PLAYER = tx[3];
@@ -87,6 +87,9 @@ var demo = function()  {
 
 //wreadyy
 var setup = function()  {
+  
+  $("gtranslate")[0].outerHTML = T.HOME;
+  
   //sync country
   $("#yt-region").text(getL());
 
