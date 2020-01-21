@@ -8,6 +8,24 @@ var getL = function()  {
   return L.toLowerCase() || "en";
 };
 
+//navi switch
+{
+  $("#toggle-left").on("click", function()  {
+    var el = $("#left");
+    //slide
+    el.attr(
+      "expanded",
+      el.attr("expanded") === "false" ? "true" : "false"
+    );
+    setTimeout(function() {
+      //hide
+      el.attr("expanded") === "false"
+        ? el.addClass("d-none")
+        : el.removeClass("d-none");
+    }, 199);
+  });
+}
+
 //LIVESEARCH
 {
   var input = document.getElementById("search");
@@ -53,7 +71,7 @@ var getL = function()  {
 }
 
 var SEARCH = function(str, ln)  {
-  fetch(("/api/complete/" + str))
+  fetch(("/api/search/" + str))
     .then(function(res ) {return res.text()})
     .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
       var result = JSON.parse(raw);
@@ -100,5 +118,5 @@ var SEARCH = function(str, ln)  {
 
 //////
 var demo = function()  {
-  $("view").html(T.RESULTS);
+  //$("view").html(T.RESULTS);
 };

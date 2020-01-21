@@ -61,11 +61,6 @@ const express = require("express"),
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-// http://expressjs.com/en/starter/basic-routing.html
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
-});
-
 const transpile = file => {
   var result = es6tr.run({ filename: file });
   const ext = ".es5";
@@ -108,10 +103,45 @@ if (process.env.PROJECT_NAME) {
 //API
 const prefix = "/api";
 
-app.get(`${prefix}/search/:reg::q`, (req, res) => {
+//calculate region based on accept-language header
+const getRegion = header => {
+  return (header
+    ? regionParser.parse(header)[0]
+      ? regionParser.parse(header)[0].region ||
+        regionParser.parse(header)[0].code
+      : header
+    : "EN"
+  ).toLowerCase();
+};
+
+app.set("trust proxy", true);
+app.use("*", (req, res, next) => {
+  //prod
+  if (
+    (!process.env.PROJECT_NAME && req.originalUrl === "/") ||
+    req.originalUrl.startsWith("/templates")
+  ) {
+    const region = getRegion(req.headers["accept-language"]);
+    //REGIONPIPER
+    console.log(`TRANSFORMING REQUEST FOR REGION ${region} FOR IP ${req.ip}`);
+    request({
+      url: `https://${region}.${req.hostname}${req.originalUrl}`,
+      rejectUnauthorized: false
+    }).pipe(res);
+  } else next();
+});
+
+// http://expressjs.com/en/starter/basic-routing.html
+app.get("/", (req, res) => {
+  res.sendFile(`${__dirname}/views/index.html`);
+});
+
+//SEARCH
+app.get(`${prefix}/search/:q`, (req, res) => {
+  const region = getRegion(req.headers["accept-language"]);
   request(
     {
-      uri: `${process.env.IV_HOST}/v1/search/?region=${req.params.reg}&q=${req.params.q}`,
+      uri: `https://${process.env.IV_HOST}/api/v1/search/?region=${region}&q=${req.params.q}`,
       method: "GET",
       timeout: 3000,
       followRedirect: true,
@@ -120,15 +150,17 @@ app.get(`${prefix}/search/:reg::q`, (req, res) => {
     },
     async (error, response, body) => {
       //console.warn(response);
-      if (body) {
-      }
+      if (!error && body) {
+        console.log(body);
+      } else console.warn(response);
     }
   );
 });
 
+//COMPLETE
 app.get(`${prefix}/complete/:l::q`, (req, res) => {
-  const region = regionParser.parse(req.headers["accept-language"])[0].region.toLowerCase();
-
+  const region = getRegion(req.headers["accept-language"]);
+  console.log(region);
   const empty = "No results found...";
   const url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${region}&format=5&alt=json&callback=?`;
   request(
@@ -182,3 +214,15 @@ app.get(`${prefix}/complete/:l::q`, (req, res) => {
 const listener = app.listen(process.env.PORT, function() {
   console.log("Your app is listening on port " + listener.address().port);
 });
+
+const restartHours = 6;
+setTimeout(function() {
+  process.on("exit", function() {
+    require("child_process").spawn(process.argv.shift(), process.argv, {
+      cwd: process.cwd(),
+      detached: true,
+      stdio: "inherit"
+    });
+  });
+  process.exit();
+}, 1000 * 60 * 60 * restartHours); //restart every 6 hours

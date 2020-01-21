@@ -5,10 +5,7 @@ window.done = function()
   {return setTimeout(function()  {
     document.querySelector("diamond").setAttribute("style", "display:none;");
     document.querySelector("#wrap").setAttribute("style", "");
-  
-
-  
-  }, 1399)};
+  }, 999)};
 
 //BG START
 var initBg = function()  {

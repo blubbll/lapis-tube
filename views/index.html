@@ -222,16 +222,21 @@
         <div class="my-2 d-flex justify-content-around">
           <div
             id="logo"
-            class="d-flex col-3 col-md-2 col-xl-1 p-0 justify-items-center align-items-center"
+            class="d-flex col-3 col-md-2 col-xl-1 p-0 align-items-center"
           >
-            <img
-              src="logo.png"
-              class="ml-3 ml-sm-3 ml-md-4 ml-xl-4 mx-auto mr-sm-2"
-            />
-            <p class="d-none d-sm-flex mr-auto ml-0 mb-0">𝒍𝒂𝒑𝒊𝒔Tube</p>
+            <div
+              class="ml-sm-4 ml-xl-4 mx-auto mr-sm-2 align-items-center d-flex"
+            >
+              <div id="toggle-left" class="py-2 px-3 rounded">
+                <i class="fas fa-bars"></i>
+              </div>
+              <img src="logo.png" class="ml-3 ml-sm-4 ml-md-4" />
+            </div>
+
+            <p class="d-none d-md-flex mr-auto ml-0 mb-0">𝒍𝒂𝒑𝒊𝒔Tube</p>
           </div>
           <div
-            class="input-group col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-auto"
+            class="input-group col-7 col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-sm-auto mr-0 ml-5"
           >
             <input
               id="search"
@@ -241,7 +246,10 @@
               placeholder="Search"
             />
             <span class="input-group-btn">
-              <button class="btn rounded-0 rounded-right m-0" type="button">
+              <button
+                class="btn rounded-0 rounded-right m-0 px-2 px-sm-4"
+                type="button"
+              >
                 <i class="fas fa-search"></i>
               </button>
             </span>
@@ -252,7 +260,8 @@
       <main id="content" class="flex-row d-flex flex-grow-1">
         <nav
           id="left"
-          class="backdrop-blur flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right"
+          expanded="false"
+          class="backdrop-blur flex-column col-3 col-sm-2 col-xl-1 p-0 flex-grow-1 border-right d-none"
         >
           <button
             type="button"
@@ -280,10 +289,16 @@
             <span class="d-none d-sm-flex">Categories</span>
           </button>
         </nav>
-        <view
-          id="inner"
-          class="d-flex h-100 w-100"
-        ></view>
+        <view id="inner" class="d-flex h-100 w-100">
+          <p class="mx-5 align-self-center text-white">
+            Welcome to the lapisTube project. Go search for a YouTube&reg; Video
+            using the search bar above or come visit us again later and replace
+            the DOMAIN part (youtube.com) with (lapis.tube) to view your vid on
+            here. All page Elements are auto-translated with gtranslate. If
+            there's something you want to be manually adjusted, you can open an
+            issue or a pull request at <a class="text-dark" href="https://github.com/blubbll/lapis-tube">GitHub</a>.
+          </p>
+        </view>
       </main>
       <footer id="footer" class="backdrop-blur flex-row d-flex border-top">
         <div class="justify-content-center ml-1">&copy Monad & Blu</div>

@@ -4,10 +4,7 @@ window.done = () =>
   setTimeout(() => {
     document.querySelector("diamond").setAttribute("style", "display:none;");
     document.querySelector("#wrap").setAttribute("style", "");
-  
-
-  
-  }, 1399);
+  }, 999);
 
 //BG START
 const initBg = () => {

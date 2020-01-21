@@ -34,26 +34,17 @@ body {
   #logo img {
     height: 36px; }
 
-.live-search {
-  background: rgba(255, 255, 255, 0.1); }
-  .live-search > div {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.4rem 0.8rem;
-    color: rgba(0, 0, 0, 0.5); }
-  .live-search > div.selected {
-    background: rgba(255, 255, 255, 0.25); }
-  .live-search > div:hover {
-    background: rgba(0, 255, 0, 0.4) !important;
-    color: black; }
-  .live-search > div:active {
-    background: rgba(255, 255, 255, 0.6) !important;
-    color: cyan; }
-
 #top {
   /* Chrome, Firefox, Opera, Safari 10.1+ */ }
   #top .btn {
     background: var(--color-accent-main);
     color: var(--color-font-light); }
+  #top #toggle-left {
+    cursor: pointer; }
+    #top #toggle-left:hover {
+      background: rgba(255, 255, 255, 0.5); }
+    #top #toggle-left:active {
+      background: rgba(255, 255, 255, 0.75); }
   #top input {
     background: rgba(255, 255, 255, 0.3);
     color: var(--color-font-light); }
@@ -63,23 +54,44 @@ body {
     /*ie no clear btn */ }
     #top input::placeholder {
       color: var(--color-font-light); }
-    #top input:-ms-input-placeholder {
+    #top input :-ms-input-placeholder {
       color: var(--color-font-light); }
-    #top input::-ms-input-placeholder {
+    #top input ::-ms-input-placeholder {
       color: var(--color-font-light); }
-    #top input::-ms-clear {
+    #top input ::-ms-clear {
       display: none; }
+
+.live-search {
+  background: rgba(255, 255, 255, 0.1); }
+  .live-search > div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.8rem;
+    color: snow; }
+  .live-search > div.selected {
+    background: rgba(255, 255, 255, 0.25); }
+  .live-search > div:hover {
+    background: rgba(0, 0, 255, 0.1) !important;
+    color: white; }
+  .live-search > div:active {
+    background: rgba(255, 255, 255, 0.6) !important;
+    color: mintcream; }
 
 /**************************/
 /**************************/
-#left .btn {
-  background: rgba(0, 0, 0, 0.1) !important;
-  color: rgba(255, 255, 255, 0.75) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important; }
-  #left .btn:hover, #left .btn:focus {
-    background: rgba(255, 255, 255, 0.3) !important; }
-  #left .btn:active {
-    background: rgba(255, 255, 255, 0.5) !important; }
+#left {
+  transition: left ease-out 299ms; }
+  #left[expanded="false"] {
+    left: -100%; }
+  #left[expanded="true"] {
+    left: 0; }
+  #left .btn {
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important; }
+    #left .btn:hover, #left .btn:focus {
+      background: rgba(255, 255, 255, 0.3) !important; }
+    #left .btn:active {
+      background: rgba(255, 255, 255, 0.5) !important; }
 
 /**************************/
 /**************************/
@@ -87,3 +99,11 @@ footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
   color: var(--color-font-dark); }
+
+/**************************/
+/**************************/
+#results {
+  background: rgba(0, 0, 0, 0.3); }
+
+#filters {
+  background: rgba(255, 255, 255, 0.3); }

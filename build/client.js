@@ -7,6 +7,24 @@ const getL = () => {
   return L.toLowerCase() || "en";
 };
 
+//navi switch
+{
+  $("#toggle-left").on("click", () => {
+    const el = $("#left");
+    //slide
+    el.attr(
+      "expanded",
+      el.attr("expanded") === "false" ? "true" : "false"
+    );
+    setTimeout(function() {
+      //hide
+      el.attr("expanded") === "false"
+        ? el.addClass("d-none")
+        : el.removeClass("d-none");
+    }, 199);
+  });
+}
+
 //LIVESEARCH
 {
   const input = document.getElementById("search");
@@ -52,7 +70,7 @@ const getL = () => {
 }
 
 const SEARCH = (str, ln) => {
-  fetch(`/api/complete/${str}`)
+  fetch(`/api/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const result = JSON.parse(raw);
@@ -99,5 +117,5 @@ const SEARCH = (str, ln) => {
 
 //////
 const demo = () => {
-  $("view").html(T.RESULTS);
+  //$("view").html(T.RESULTS);
 };

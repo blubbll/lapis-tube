@@ -49,36 +49,22 @@ body {
   }
 }
 
-.live-search {
-  background: rgba(255, 255, 255, 0.1);
-
-  & > div {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.4rem 0.8rem;
-    color: rgba(0,0,0, 0.5);
-  }
-  & > div.selected {
-    background: rgba(255, 255, 255, 0.25);
-  }
-
-  & > div:hover {
-    background: rgba(0,255,0, 0.4) !important;
-    color: black;
-  }
-
-  & > div:active {
-    background: rgba(255, 255, 255, 0.6) !important;
-    color: cyan;
-  }
-}
-
 #top {
   & .btn {
     background: var(--color-accent-main);
     color: var(--color-font-light);
   }
 
-  //SUCHLEISTE
+  #toggle-left {
+    cursor: pointer;
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    &:active {
+      background: rgba(255, 255, 255, 0.75);
+    }
+  }
+
   & input {
     background: rgba(255, 255, 255, 0.3);
     color: var(--color-font-light);
@@ -92,18 +78,42 @@ body {
     }
 
     /* Internet Explorer 10-11 */
-    &:-ms-input-placeholder {
+    :-ms-input-placeholder {
       color: var(--color-font-light);
     }
 
     /* Microsoft Edge */
-    &::-ms-input-placeholder {
+    ::-ms-input-placeholder {
       color: var(--color-font-light);
     }
     /*ie no clear btn */
-    &::-ms-clear {
+    ::-ms-clear {
       display: none;
     }
+  }
+}
+
+//SUCHLEISTE
+.live-search {
+  background: rgba(255, 255, 255, 0.1);
+
+  > div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.8rem;
+    color: snow;
+  }
+  > div.selected {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  > div:hover {
+    background: rgba(0, 0, 255, 0.1) !important;
+    color: white;
+  }
+
+  > div:active {
+    background: rgba(255, 255, 255, 0.6) !important;
+    color: mintcream;
   }
 }
 
@@ -111,6 +121,13 @@ body {
 //NAVBAR LEFT///////////////
 /**************************/
 #left {
+  transition: left ease-out 299ms;
+  &[expanded="false"] {
+    left: -100%;
+  }
+  &[expanded="true"] {
+    left: 0;
+  }
   & .btn {
     background: rgba(0, 0, 0, 0.1) !important;
     color: rgba(255, 255, 255, 0.75) !important;
@@ -132,4 +149,14 @@ footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
   color: var(--color-font-dark);
+}
+
+/**************************/
+//CONTENT///////////////////
+/**************************/
+#results {
+  background: rgba(0, 0, 0, 0.3);
+}
+#filters {
+  background: rgba(255, 255, 255, 0.3);
 }
