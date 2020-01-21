@@ -1,73 +1,134 @@
-window.ln = navigator.language || navigator.userLanguage;
+//💜//i love you monad
+var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, done = window.done, T = window.T, $ = window.$;
+var HOST = window.HOST;
 
-const { autoComplete } = window;
+//get page language
+var getL = function()  {
+  var L = navigator.language || navigator.userLanguage;
+  //language has seperator
+  L.includes("-") && [(L = L.split("-")[0])];
+  return L.toLowerCase() || "en";
+};
 
-//DEBOUNHCE
-function debounce(func, wait, immediate) {
-  var timeout;
+HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
 
-  return function executedFunction() {
-    var context = this;
-    var args = arguments;
-
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-
-    var callNow = immediate && !timeout;
-
-    clearTimeout(timeout);
-
-    timeout = setTimeout(later, wait);
-
-    if (callNow) func.apply(context, args);
-  };
+//navi switch
+{
+  $(document).on("click", "#toggle-left", function()  {
+    var el = $("#left");
+    //slide
+    el.attr("expanded", el.attr("expanded") === "false" ? "true" : "false");
+    setTimeout(function()  {
+      //hide
+      el.attr("expanded") === "false"
+        ? el.addClass("d-none")
+        : el.removeClass("d-none");
+    }, 199);
+  });
 }
 
-var countries = [
-  { label: "United Kingdom", value: "UK" },
-  { label: "United States", value: "US" }
-];
+var SEARCH = function(str, ln)  {
+  fetch((("" + HOST) + ("/api/search/" + str) + ""))
+    .then(function(res ) {return res.text()})
+    .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
+      var result = JSON.parse(raw);
 
-//SEARCH
-var input = document.getElementById("search");
-
-autocomplete({
-  input: input,
-  showOnFocus: true, //focus = show suggestions
-  emptyMsg: "No results",
-  minLength: 1,
-  className: "live-search", //class
-  debounceWaitMs: 500, //wait
-  fetch: function(text, update) {
-    //input
-    text = text.toLowerCase();
-
-    text &&
-      fetch("/api/complete/de:" + text)
-        .then(res => res.text())
-        .then(raw => {
-          const result = JSON.parse(raw);
-          let arr = result.data ? result.data.split(",") : [];
-          console.log(result);
-          if (result.code === 200) {
-            const suggs = [];
-
-            //fix for number at less than 10 results
-            if (!isNaN(arr[arr.length - 1])) arr = arr.splice(0, 1);
-
-            arr.forEach(function(sugg) {
-              const val = sugg.slice(1, -1);
-              suggs.push({ label: val, value: val });
-              update(suggs);
-            });
-          } else if (result.code === 404) {
-            update({ label: arr[0] });
-          }
+      if (result.code === 200) {
+        var suggs = [];
+        //loop and push
+        result.data.forEach(function(sugg ) {
+          suggs.push({ label: sugg, value: sugg });
         });
-  },
-  onSelect: function(item) {
-    input.value = item.label;
+        $D$0 = GET_ITER$0(suggs);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? suggs.length : void 0);for (var item ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){item = ($D$2 ? suggs[$D$0++] : $D$1["value"]);
+          console.log(item);
+        };$D$0 = $D$1 = $D$2 = void 0;
+      } else if (result.code === 404) {
+        //update([{ label: emptyMsg, value: input }]);
+      }
+    });
+};
+
+//LOAD TEMPLATES
+{
+  //template remote path
+  var tr = (("" + HOST) + "/templates");
+  //template var inmemory
+  var T$0 = (window.T = {});
+
+  Promise.all(
+    [
+      HOST + "/app.html",
+      tr + "/channel.html",
+      tr + "/player.html",
+      tr + "/result-item.html",
+      tr + "/result-list.html"
+    ].map(function(url ) {return fetch(url).then(function(resp ) {return resp.text()})})
+  ).then(function(tx ) {
+    $("gtranslate")[0].outerHTML = tx[0];
+    T$0.CHANNEL = tx[1];
+    T$0.PLAYER = tx[2];
+    T$0.RESULT = tx[3];
+    T$0.RESULTS = tx[4];
+    setup();
+    done();
+    demo();
+  });
+}
+
+//////
+var demo = function()  {
+  //$("view").html(T.RESULTS);
+};
+
+//wreadyy
+var setup = function()  {
+  
+  //sync country
+  $("#yt-region").text(getL());
+  
+  //LIVESEARCH
+  {
+    var input = document.getElementById("search");
+    var emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
+    var l = getL();
+    var auto = autocomplete({
+      input: input,
+      showOnFocus: true, //focus = show suggestions
+      minLength: 1,
+      className: "live-search backdrop-blur", //class
+      debounceWaitMs: 500, //wait
+      fetch: function(input, update)  {
+        //input
+        var text = input.toLowerCase();
+
+        text &&
+          fetch((("" + HOST) + ("/api/complete/" + l) + (":" + text) + ""))
+            .then(function(res ) {return res.text()})
+            .then(function(raw ) {
+              var result = JSON.parse(raw);
+
+              if (result.code === 200) {
+                var suggs = [];
+                //loop and push
+                result.data.forEach(function(sugg ) {
+                  suggs.push({ label: sugg, value: sugg });
+                  update(suggs);
+                });
+              } else if (result.code === 404) {
+                update([{ label: emptyMsg, value: emptyMsg }]);
+              }
+            });
+      },
+      onSelect: function(item ) {
+        if (item.label !== emptyMsg) {
+          //set input content
+          input.value = item.label;
+          //show resultlist
+          $("view").html(T.RESULTS);
+          //load results
+          SEARCH(item.label);
+        }
+      }
+    });
   }
-});
+};

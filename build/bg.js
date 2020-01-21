@@ -1,17 +1,16 @@
-//💜//i love you monad
-var Trianglify = window.Trianglify, debounce = window.debounce, fetch = window.fetch;
+const { Trianglify, debounce, fetch } = window;
 
-window.done = function() 
-  {return setTimeout(function()  {
+window.done = () =>
+  setTimeout(() => {
     document.querySelector("diamond").setAttribute("style", "display:none;");
     document.querySelector("#wrap").setAttribute("style", "");
-  }, 999)};
+  }, 999);
 
 //BG START
-var initBg = function()  {
+const initBg = () => {
   var rn = Math.floor(Math.random() * 150 + 60);
   var rs = Math.floor(Math.random() * 11 + 4);
-  var prim = getComputedStyle(document.documentElement).getPropertyValue(
+  const prim = getComputedStyle(document.documentElement).getPropertyValue(
     "--color-accent-main"
   );
 
@@ -29,7 +28,7 @@ var initBg = function()  {
     cellsize: rn
   });
   var pattern = t.generate(window.innerWidth, window.innerHeight);
-  document.body.setAttribute("style", ("background-image: " + (pattern.dataUrl)));
+  document.body.setAttribute("style", `background-image: ${pattern.dataUrl}`);
 };
 window.onresize = debounce(initBg, 49);
 //BG END
