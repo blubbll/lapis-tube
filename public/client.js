@@ -69,7 +69,7 @@ var SEARCH = function(str, ln)  {
     ].map(function(url ) {return fetch(url).then(function(resp ) {return resp.text()})})
   ).then(function(tx ) {
     T$0.HOME = tx[0];
-    REGION = tx[1];
+    REGION = JSON.parse(tx[1]);
     T$0.CHANNEL = tx[2];
     T$0.PLAYER = tx[3];
     T$0.RESULT = tx[4];

@@ -70,7 +70,7 @@ const SEARCH = (str, ln) => {
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
     T.HOME = tx[0];
-    REGION = tx[1];
+    REGION = JSON.parse(tx[1]);
     T.CHANNEL = tx[2];
     T.PLAYER = tx[3];
     T.RESULT = tx[4];
