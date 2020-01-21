@@ -1,5 +1,5 @@
 const { debounce, fetch, autocomplete, done, T, $ } = window;
-let { HOST } = window;
+let { HOST, REGION, API } = window;
 
 //get page language
 const getL = () => {
@@ -9,9 +9,12 @@ const getL = () => {
   return L.toLowerCase() || "en";
 };
 
+//host
 HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
   location.hostname
 }`;
+//api
+API = `${HOST}/api`;
 
 //navi switch
 {
@@ -29,7 +32,7 @@ HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
 }
 
 const SEARCH = (str, ln) => {
-  fetch(`${HOST}/api/search/${str}`)
+  fetch(`${HOST}/api/${REGION.country_code}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const result = JSON.parse(raw);
@@ -59,6 +62,7 @@ const SEARCH = (str, ln) => {
   Promise.all(
     [
       HOST + "/app.html",
+      API + "/geoip",
       tr + "/channel.html",
       tr + "/player.html",
       tr + "/result-item.html",
@@ -66,10 +70,11 @@ const SEARCH = (str, ln) => {
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
     $("gtranslate")[0].outerHTML = tx[0];
-    T.CHANNEL = tx[1];
-    T.PLAYER = tx[2];
-    T.RESULT = tx[3];
-    T.RESULTS = tx[4];
+    REGION = tx[1];
+    T.CHANNEL = tx[2];
+    T.PLAYER = tx[3];
+    T.RESULT = tx[4];
+    T.RESULTS = tx[5];
     setup();
     done();
     demo();
@@ -83,10 +88,9 @@ const demo = () => {
 
 //wreadyy
 const setup = () => {
-  
   //sync country
   $("#yt-region").text(getL());
-  
+
   //LIVESEARCH
   {
     const input = document.getElementById("search");
@@ -103,7 +107,7 @@ const setup = () => {
         const text = input.toLowerCase();
 
         text &&
-          fetch(`${HOST}/api/complete/${l}:${text}`)
+          fetch(`${HOST}/api/${REGION.country_code}/complete/${text}`)
             .then(res => res.text())
             .then(raw => {
               const result = JSON.parse(raw);
