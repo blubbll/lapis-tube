@@ -1,10 +1,18 @@
 //💜//i love you monad
 var Trianglify = window.Trianglify, debounce = window.debounce, fetch = window.fetch;
 
+window.load = function() 
+  {return setTimeout(function()  {
+    document.querySelector("diamond").setAttribute("style", "");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "display:none;");
+  }, 999)};
+
 window.done = function() 
   {return setTimeout(function()  {
     document.querySelector("diamond").setAttribute("style", "display:none;");
-    document.querySelector("#wrap").setAttribute("style", "");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "");
   }, 999)};
 
 //BG START

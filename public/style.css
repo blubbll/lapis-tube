@@ -6,6 +6,9 @@
 body {
   background: var(--color-accent-main); }
 
+.text-accent {
+  color: var(--color-accent-main); }
+
 /* if backdrop support: very transparent and blurred */
 @supports (-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em)) {
   .backdrop-blur {
@@ -33,6 +36,8 @@ body {
   font-family: consolas; }
   #logo img {
     height: 36px; }
+  #logo #yt-region {
+    color: rgba(255, 255, 255, 0.75); }
 
 #top {
   /* Chrome, Firefox, Opera, Safari 10.1+ */ }

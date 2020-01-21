@@ -9,18 +9,18 @@
         id="logo"
         class="d-flex col-3 col-md-2 col-xl-1 p-0 align-items-center"
       >
-        <div class="ml-sm-4 ml-xl-4 mx-auto mr-sm-0 align-items-center d-flex">
+        <div class="ml-2 ml-sm-2 ml-xl-4 mr-sm-0 align-items-center d-flex">
           <div id="toggle-left" class="py-2 px-3 rounded">
             <i class="fas fa-bars"></i>
           </div>
-          <img src="logo.png" class="ml-3 ml-sm-1 ml-md-2 ml-lg-3" />
+          <img src="logo.png" class="ml-0 ml-sm-1 ml-md-2 ml-lg-3 mr-sm-1" />
         </div>
 
         <p class="d-none d-md-flex mr-auto ml-0 mb-0">𝒍𝒂𝒑𝒊𝒔Tube</p>
-        <p id="yt-region" class="small label text-muted pb-2 px-1 my-0"></p>
+        <p id="yt-region" class="small pb-2 px-1 my-0"></p>
       </div>
       <div
-        class="input-group col-7 col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-sm-auto mr-0 ml-5"
+        class="input-group col-7 col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-sm-auto mr-0 ml-5 pr-2"
       >
         <input
           id="search"
@@ -72,7 +72,13 @@
       </button>
     </nav>
     <view id="inner" class="d-flex h-100 w-100">
-      <div class="mx-5 align-self-center text-white">
+       <div
+    class="card backdrop-blur mx-auto align-self-center text-accent"
+    style="width: 75vmax; max-width:75%; height: 50vmax; max-height: 50vh;"
+  >
+    <div
+      class="card-body d-flex align-content-center justify-content-center flex-column"
+    >
         Welcome to the lapisTube project.<br />
         Go search for a YouTube&reg; Video using the search bar above or come
         visit us again later and replace the DOMAIN part (youtube.com) with
@@ -84,6 +90,7 @@
           >/lapis-tube</a
         >.
       </div>
+         </div>
     </view>
   </main>
   <footer id="footer" class="backdrop-blur flex-row d-flex border-top">

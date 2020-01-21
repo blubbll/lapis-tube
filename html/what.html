@@ -1,0 +1,52 @@
+<div
+  pop
+  class="d-flex flex-column position-absolute w-100 h-100 justify-content-center align-items-center backdrop-blur"
+  style=""
+>
+  <div
+    class="card backdrop-blur"
+    style="width: 75vmax; max-width:75%; height: 45vmax; max-height: 75%;"
+  >
+    <div
+      class="card-body d-flex align-content-center justify-content-center flex-column"
+    >
+      <h5
+        class="card-title text-secondary my-auto align-self-center"
+        style="font-size:2.5vmax;"
+      >
+        📈 usage of data
+      </h5>
+      <p
+        class="card-text text-dark my-auto align-self-center"
+        style="font-size:1.5vmax;"
+      >
+        We use <i>gTranslate</i> for our application translations. You can check
+        out their terms <a href="https://gtranslate.io/terms">here</a>.<br />
+        While search results from the live search are proxified and thus
+        anonymized, they might still get stored on google's servers.<br />
+        Also due to the Videos being directly loaded off from google's servers,
+        your connection data might get stored too.<br />
+        You can check out the
+        <a href="https://www.youtube.com/about/policies/">YouTube policies</a>
+        and read how YouTube will handle this data.
+        <br />
+        When you visit this web application, your location gets anonymously
+        resolved into a location by using the Databases of
+        <a href="https://www.maxmind.com/en/privacy-policy">MaxMind</a>
+        (we only use your external IP adress). We
+        currently use this to determine the location of the search results and
+        deliver them for the correct country.<br />
+      </p>
+      <div class="d-flex align-items-center justify-content-start mt-auto">
+        <button
+          type="button"
+          class="btn btn-dark"
+          style="font-size:1vmax;"
+          onclick="location.hash= (location.hash === '#cookie-what?' ? '#cookie' : '#close');"
+        >
+          go back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

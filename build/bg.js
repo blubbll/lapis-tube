@@ -1,9 +1,17 @@
 const { Trianglify, debounce, fetch } = window;
 
+window.load = () =>
+  setTimeout(() => {
+    document.querySelector("diamond").setAttribute("style", "");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "display:none;");
+  }, 999);
+
 window.done = () =>
   setTimeout(() => {
     document.querySelector("diamond").setAttribute("style", "display:none;");
-    document.querySelector("#wrap").setAttribute("style", "");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "");
   }, 999);
 
 //BG START
