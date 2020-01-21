@@ -98,10 +98,10 @@ if (process.env.PROJECT_NAME) {
 }
 
 //API
-const prefix = "/api";
+const API = "/api";
 
-//calculate region based on accept-language header
-const getRegion = header => {
+//calculate language based on accept-language header
+const getLanguage = header => {
   return (header
     ? regionParser.parse(header)[0]
       ? regionParser.parse(header)[0].code
@@ -110,21 +110,8 @@ const getRegion = header => {
   ).toLowerCase();
 };
 
-/*app.set("trust proxy", true);
-app.use("*", (req, res, next) => {
-  //prod & not already redirected
-  if (
-    !process.env.PROJECT_NAME &&
-    !req.headers["x-gt-lang"] &&
-    !req.headers["'x-gt-clientip"]
-  ) {
-    const region = getRegion(req.headers["accept-language"]);
-
-    //REGIONMASKER
-    console.log(`TRANSFORMING REQUEST FOR REGION ${region} FOR IP ${req.ip}`);
-    res.redirect(`https://${region}.${req.hostname}${req.originalUrl}`);
-  } else next();
-});*/
+//get da ip
+app.set("trust proxy", true);
 
 //CORZ
 app.use("*", (req, res, next) => {
@@ -145,15 +132,25 @@ app.use(express.static("public"));
 
 // base html
 app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`);
+  res.sendFile(`${__dirname}/build/index.html`);
+});
+
+//HTML-Templates
+app.get("/html/*", (req, res) => {
+  res.sendFile(`${__dirname}${req.originalUrl}`);
+});
+
+//simple geo ip
+app.get(`${API}/geoip`, (req, res) => {
+  request(`http://api.petabyet.com/geoip/${req.ip}`).pipe(res);
 });
 
 //SEARCH
-app.get(`${prefix}/search/:q`, (req, res) => {
-  const region = getRegion(req.headers["accept-language"]);
+app.get(`${API}/:region/search/:q`, (req, res) => {
+  //const L = getLanguage(req.headers["accept-language"]);
   request(
     {
-      uri: `https://${process.env.IV_HOST}/api/v1/search/?region=${region}&q=${req.params.q}`,
+      uri: `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`,
       method: "GET",
       timeout: 3000,
       followRedirect: true,
@@ -161,7 +158,7 @@ app.get(`${prefix}/search/:q`, (req, res) => {
       encoding: "latin1"
     },
     async (error, response, body) => {
-      //console.warn(response);
+      console.log(body);
       if (!error && body) {
         console.log(body);
       } else console.warn(response);
@@ -170,11 +167,10 @@ app.get(`${prefix}/search/:q`, (req, res) => {
 });
 
 //COMPLETE
-app.get(`${prefix}/complete/:l::q`, (req, res) => {
-  const region = getRegion(req.headers["accept-language"]);
-  console.log(region);
+app.get(`${API}/:region/complete/:q`, (req, res) => {
+  //const language = getLanguage(req.headers["accept-language"]);
   const empty = "No results found...";
-  const url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${region}&format=5&alt=json&callback=?`;
+  const url = `https://suggestqueries.google.com/complete/search?client=youtube&cp=1&ds=yt&q=${req.params.q}&hl=${req.params.region}&format=5&alt=json&callback=?`;
   request(
     {
       uri: url,

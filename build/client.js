@@ -1,5 +1,5 @@
 const { debounce, fetch, autocomplete, done, T, $ } = window;
-let { HOST } = window;
+let { HOST, REGION, API } = window;
 
 //get page language
 const getL = () => {
@@ -9,9 +9,12 @@ const getL = () => {
   return L.toLowerCase() || "en";
 };
 
+//host
 HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
   location.hostname
 }`;
+//api
+API = `//${location.hostname}/api`;
 
 //navi switch
 {
@@ -29,7 +32,7 @@ HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
 }
 
 const SEARCH = (str, ln) => {
-  fetch(`${HOST}/api/search/${str}`)
+  fetch(`${HOST}/api/${REGION.country_code}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const result = JSON.parse(raw);
@@ -52,24 +55,26 @@ const SEARCH = (str, ln) => {
 //LOAD TEMPLATES
 {
   //template remote path
-  const tr = `${HOST}/templates`;
+  const tr = `${HOST}/html`;
   //template var inmemory
   const T = (window.T = {});
 
   Promise.all(
     [
-      HOST + "/app.html",
+      tr + "/app.html",
+      API + "/geoip",
       tr + "/channel.html",
       tr + "/player.html",
       tr + "/result-item.html",
       tr + "/result-list.html"
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
-    $("gtranslate")[0].outerHTML = tx[0];
-    T.CHANNEL = tx[1];
-    T.PLAYER = tx[2];
-    T.RESULT = tx[3];
-    T.RESULTS = tx[4];
+    T.HOME = tx[0];
+    REGION = JSON.parse(tx[1]);
+    T.CHANNEL = tx[2];
+    T.PLAYER = tx[3];
+    T.RESULT = tx[4];
+    T.RESULTS = tx[5];
     setup();
     done();
     demo();
@@ -84,9 +89,11 @@ const demo = () => {
 //wreadyy
 const setup = () => {
   
+  $("gtranslate")[0].outerHTML = T.HOME;
+  
   //sync country
   $("#yt-region").text(getL());
-  
+
   //LIVESEARCH
   {
     const input = document.getElementById("search");
@@ -103,7 +110,7 @@ const setup = () => {
         const text = input.toLowerCase();
 
         text &&
-          fetch(`${HOST}/api/complete/${l}:${text}`)
+          fetch(`${HOST}/api/${REGION.country_code}/complete/${text}`)
             .then(res => res.text())
             .then(raw => {
               const result = JSON.parse(raw);
