@@ -1,5 +1,5 @@
 const { debounce, fetch, autocomplete, done, T, $ } = window;
-let { HOST, REGION, API } = window;
+let { HOST, GEO, REGION, API } = window;
 
 //get page language
 const getL = () => {
@@ -32,7 +32,7 @@ API = `//${location.hostname}/api`;
 }
 
 const SEARCH = (str, ln) => {
-  fetch(`${HOST}/api/${REGION.country_code}/search/${str}`)
+  fetch(`${HOST}/api/${REGION}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const result = JSON.parse(raw);
@@ -70,7 +70,7 @@ const SEARCH = (str, ln) => {
     ].map(url => fetch(url).then(resp => resp.text()))
   ).then(tx => {
     T.HOME = tx[0];
-    REGION = JSON.parse(tx[1]);
+    (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
     T.CHANNEL = tx[2];
     T.PLAYER = tx[3];
     T.RESULT = tx[4];
@@ -88,9 +88,8 @@ const demo = () => {
 
 //wreadyy
 const setup = () => {
-  
   $("gtranslate")[0].outerHTML = T.HOME;
-  
+
   //sync country
   $("#yt-region").text(getL());
 
@@ -110,7 +109,7 @@ const setup = () => {
         const text = input.toLowerCase();
 
         text &&
-          fetch(`${HOST}/api/${REGION.country_code}/complete/${text}`)
+          fetch(`${HOST}/api/${REGION}/complete/${text}`)
             .then(res => res.text())
             .then(raw => {
               const result = JSON.parse(raw);
