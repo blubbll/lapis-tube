@@ -3,16 +3,8 @@
 location.hash = "";
 
 //
-var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, load = window.load, done = window.done, T = window.T, $ = window.$;
+var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, load = window.load, done = window.done, T = window.T, $ = window.$, getL = window.getL;
 var HOST = window.HOST, GEO = window.GEO, REGION = window.REGION, API = window.API, lscache = window.lscache;
-
-//get page language
-var getL = function()  {
-  var L = navigator.language || navigator.userLanguage;
-  //language has seperator
-  L.includes("-") && [(L = L.split("-")[0])];
-  return L.toLowerCase() || "en";
-};
 
 //host
 HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
@@ -83,13 +75,14 @@ var SEARCH = function(str, ln)  {
       done();
       demo();
     });
-  } else
+  } else {
     fetch(tr + "/cookie.html")
       .then(function(res ) {return res.text()})
       .then(function(html ) {
         $("gtranslate")[0].outerHTML = html;
         done();
       });
+  }
 }
 
 //////

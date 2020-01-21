@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>outdated Browser</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+      }
+      .unsupported-browser-screen-page {
+        background-color: #302e32;
+        position: relative;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .unsupported-browser-label1,
+      .unsupported-browser-label2 {
+        color: #fff;
+      }
+
+      .unsupported-browser-label1 {
+        font-size: 35px;
+        padding: 100px 0 75px 0;
+        color: white;
+        width: 100%;
+        text-align: center;
+        text-shadow: #686868 1px 1px 0;
+      }
+      .unsupported-browser-label2 {
+        padding: 11px 0;
+        width: 100%;
+        font-size: 20px;
+        text-align: center;
+      }
+      .unsupported-browser-images-wrapper {
+        width: 700px;
+        position: relative;
+        text-align: center;
+        padding-top: 100px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 40px;
+        white-space: nowrap;
+      }
+      .unsupported-browser-list {
+        width: 150px;
+        height: 150px;
+        max-height: 100%;
+        display: inline-block;
+        /** COMMENTING OUT DUE TO REDUNDANCY float: left; **/
+      }
+      .unsupported-browser-list {
+        cursor: pointer;
+        border-radius: 15px;
+        padding-top: 15px;
+      }
+      .unsupported-browser-list:hover {
+        background: green;
+      }
+
+      .unsupported-browser-image-caption {
+        padding-top: 16px;
+        font-size: 16px;
+        color: #fff;
+      }
+      .img-class {
+        width: 80px;
+        height: 80px;
+      }
+
+      .clear {
+        clear: both;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="unsupported-browser-screen-page">
+      <div class="unsupported-browser-label1" translate>
+        Oops, it seems that your browser version is unsupported
+      </div>
+      <div class="unsupported-browser-label2" translate>
+        You are using one of the web browsers that we don't support
+      </div>
+      <div class="unsupported-browser-label2" translate>
+        To use this page, please update your browser or download the latest
+        stable version of one of the below. <br/>You can click on one to get to the
+        installer website.
+      </div>
+      <div class="unsupported-browser-images-wrapper">
+        <div
+          class="unsupported-browser-list"
+          onclick="location.href='https://www.google.com/intl/LAN/chrome/'.replace('LAN', navigator.language || navigator.userLanguage);"
+          title="install CHROME"
+        >
+          <img
+            src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_128x128.png"
+            class="img-class"
+          />
+          <div class="unsupported-browser-image-caption" translate>Chrome</div>
+        </div>
+        <div
+          class="unsupported-browser-list"
+          onclick="location.href='https://www.mozilla.org/LAN/firefox/new/'.replace('LAN', navigator.language || navigator.userLanguage);"
+          title="install FIREFOX"
+        >
+          <img
+            src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_128x128.png"
+            class="img-class"
+          />
+          <div class="unsupported-browser-image-caption" translate>Firefox</div>
+        </div>
+
+        <div
+          class="unsupported-browser-list"
+          onclick="location.href='https://www.microsoft.com/en-us/edge'.replace('LAN', navigator.language || navigator.userLanguage);"
+          title="install EDGE"
+        >
+          <img
+            src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_128x128.png"
+            class="img-class"
+          />
+          <div class="unsupported-browser-image-caption" translate>Edge</div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </body>
+</html>

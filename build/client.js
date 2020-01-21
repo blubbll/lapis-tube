@@ -2,16 +2,8 @@
 location.hash = "";
 
 //
-const { debounce, fetch, autocomplete, load, done, T, $ } = window;
+const { debounce, fetch, autocomplete, load, done, T, $, getL } = window;
 let { HOST, GEO, REGION, API, lscache } = window;
-
-//get page language
-const getL = () => {
-  let L = navigator.language || navigator.userLanguage;
-  //language has seperator
-  L.includes("-") && [(L = L.split("-")[0])];
-  return L.toLowerCase() || "en";
-};
 
 //host
 HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
@@ -84,13 +76,14 @@ const SEARCH = (str, ln) => {
       done();
       demo();
     });
-  } else
+  } else {
     fetch(tr + "/cookie.html")
       .then(res => res.text())
       .then(html => {
         $("gtranslate")[0].outerHTML = html;
         done();
       });
+  }
 }
 
 //////
