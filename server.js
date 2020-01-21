@@ -118,7 +118,7 @@ app.use("*", (req, res, next) => {
   if (
     req.originalUrl === "/app.html" ||
     req.originalUrl.startsWith("/api/") ||
-    req.originalUrl.startsWith("/templates/")
+    req.originalUrl.startsWith("/html/")
   ) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "*");
