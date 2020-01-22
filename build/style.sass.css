@@ -164,6 +164,24 @@ footer#footer {
 /**************************/
 #results {
   background: rgba(0, 0, 0, 0.3);
+  height: 75vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #E0E0E0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #9E9E9E;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #BDBDBD;
+  }
 }
 #filters {
   background: rgba(255, 255, 255, 0.75);
