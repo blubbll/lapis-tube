@@ -1,5 +1,5 @@
-const { NProgress } = window;
-let { debounce, getL, fetch } = window;
+const { $, NProgress } = window;
+let { debounce, fetch, getL } = window;
 
 function detectIEEdge() {
   const ua = window.navigator.userAgent;
@@ -79,10 +79,18 @@ getL = () => {
   //override fetch
   fetch = (url, options) => {
     //start proc (if not silent)
-    !(typeof options != "undefined" && !options.silent) && NProgress.start();
+    !(
+      typeof options != "undefined" &&
+      !options.silent &&
+      !$("#nprogress")[0]
+    ) && NProgress.start();
     return ofetch(url, options).then(response => {
       //start proc (if not silent)
-      !(typeof options != "undefined" && !options.silent) && NProgress.done();
+      !(
+        typeof options != "undefined" &&
+        !options.silent &&
+        !$("#nprogress")[0]
+      ) && NProgress.done();
       return response;
     });
   };

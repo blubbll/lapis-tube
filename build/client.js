@@ -1,7 +1,14 @@
 //RESET
 location.hash = "";
+//
+const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;
+let { API, GEO, HOST, REGION, lscache } = window;
+
 //anti-hostname (allow inplace editing though)
-!location.href.includes("?language_edit") &&
+!location.host !== "gtranslate.io" &&
+  !location.host.endsWith("glitch.me") &&
+  window.self === window.top &&
+  location.hostname.split(".").length === 3 &&
   location.hostname.split(".")[0] !==
     getL()[
       location.replace(
@@ -12,14 +19,9 @@ location.hash = "";
       )
     ];
 
-//
-const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;
-let { API, GEO, HOST, REGION, lscache } = window;
-
 //host
 HOST = `${location.protocol}//${
-  location.host.endsWith("glitch.me") &&
-  !location.href.includes("?language_edit")
+  location.host.endsWith("glitch.me") || location.host !== "gtranslate.io"
     ? ""
     : `${getL()}.`
 }${location.hostname}`;

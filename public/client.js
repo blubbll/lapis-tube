@@ -1,13 +1,29 @@
 //💜//i love you monad
 //RESET
 location.hash = "";
-
 //
 var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, load = window.load, T = window.T;
 var API = window.API, GEO = window.GEO, HOST = window.HOST, REGION = window.REGION, lscache = window.lscache;
 
+//anti-hostname (allow inplace editing though)
+!location.host !== "gtranslate.io" &&
+  !location.host.endsWith("glitch.me") &&
+  window.self === window.top &&
+  location.hostname.split(".").length === 3 &&
+  location.hostname.split(".")[0] !==
+    getL()[
+      location.replace(
+        (("" + (location.protocol)) + ("//" + (location.hostname
+          .split(".")
+          .splice(1)
+          .join("."))) + "")
+      )
+    ];
+
 //host
-HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
+HOST = (("" + (location.protocol)) + ("//" + (location.host.endsWith("glitch.me") || location.host !== "gtranslate.io"
+    ? ""
+    : (("" + (getL())) + "."))) + ("" + (location.hostname)) + "");
 //api
 API = (("//" + (location.hostname)) + "/api");
 
@@ -96,7 +112,7 @@ var SEARCH = function(str, ln)  {
 var demo = function()  {
   var q = "Günther";
   $("#top")[0].value = q;
-  SEARCH(q)
+  SEARCH(q);
 };
 
 window.onhashchange = function()  {

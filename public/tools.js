@@ -1,6 +1,6 @@
 //💜//i love you monad
-var this$0 = this;var NProgress = window.NProgress;
-var debounce = window.debounce, getL = window.getL, fetch = window.fetch;
+var this$0 = this;var $ = window.$, NProgress = window.NProgress;
+var debounce = window.debounce, fetch = window.fetch, getL = window.getL;
 
 function detectIEEdge() {
   var ua = window.navigator.userAgent;
@@ -80,10 +80,18 @@ getL = function()  {
   //override fetch
   fetch = function(url, options)  {
     //start proc (if not silent)
-    !(typeof options != "undefined" && !options.silent) && NProgress.start();
+    !(
+      typeof options != "undefined" &&
+      !options.silent &&
+      !$("#nprogress")[0]
+    ) && NProgress.start();
     return ofetch(url, options).then(function(response ) {
       //start proc (if not silent)
-      !(typeof options != "undefined" && !options.silent) && NProgress.done();
+      !(
+        typeof options != "undefined" &&
+        !options.silent &&
+        !$("#nprogress")[0]
+      ) && NProgress.done();
       return response;
     });
   };
