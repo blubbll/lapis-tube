@@ -21,10 +21,12 @@ let { API, GEO, HOST, REGION, lscache } = window;
 
 //host
 HOST = `${location.protocol}//${
-  location.host.endsWith("glitch.me") || location.host !== "gtranslate.io"
+  location.host.endsWith("glitch.me")
     ? ""
-    : `${getL()}.`
-}${location.hostname}`;
+    : location.hostname === "gtranslate.io"
+    ? location.href.split("/edit/")[1]
+    : `${getL()}.${location.hostname}`
+}`;
 //api
 API = `//${location.hostname}/api`;
 
@@ -97,7 +99,9 @@ const SEARCH = (str, ln) => {
       })
       .catch(e => {
         alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
-        setTimeout(location.reload(true), 4999);
+        setTimeout(() => {
+          location.reload(true), 4999;
+        });
       });
   } else {
     fetch(tr + "/cookie.html")
