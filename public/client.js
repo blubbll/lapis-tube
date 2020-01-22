@@ -158,8 +158,13 @@ $(document).on("click", "#usage-accept", function()  {
 var setup = function()  {
   $("gtranslate")[0].outerHTML = T.HOME;
 
-  //sync country
-  $("#yt-region").text(getL());
+  //sync language
+  $("#yt-lang").text(getL());
+  //sync region
+  $("#yt-region").html(
+    (("<img alt=\"" + (GEO.country)) + (" Flag\" src=\"https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/" + (GEO.country_code.toLowerCase())) + "\
+\n.png\" style=\"width=16px; height:11px; opacity: .5;\">")
+  );
 
   //LIVESEARCH
   {

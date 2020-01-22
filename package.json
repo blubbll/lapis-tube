@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "accept-language-parser": "^1.5.0",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "download": "^7.1.0",
     "es6-transpiler": "^0.7.18",
