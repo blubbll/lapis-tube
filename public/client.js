@@ -22,10 +22,13 @@ var API = window.API, GEO = window.GEO, HOST = window.HOST, REGION = window.REGI
 
 //host
 HOST = (("" + (location.protocol)) + ("//" + (location.host.endsWith("glitch.me")
-    ? ""
-    : location.hostname === "gtranslate.io"
+    ? //DEV ENV in ORIGINAL
+      location.hostname
+    : //GT EDITOR
+    location.hostname === "gtranslate.io"
     ? location.href.split("/edit/")[1]
-    : (("" + (getL())) + ("." + (location.hostname)) + ""))) + "");
+    : //TRANSLATED
+      (("" + (getL())) + ("." + (location.hostname)) + ""))) + "");
 //api
 API = (("//" + (location.hostname)) + "/api");
 
@@ -167,7 +170,7 @@ var setup = function()  {
   //sync region
   $("#yt-region").html(
     (("<img alt=\"" + (GEO.country)) + (" Flag\" src=\"https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/" + (GEO.country_code.toLowerCase())) + "\
-\n.png\" style=\"width=16px; height:11px; opacity: .5;\">")
+\n.png\" class=\"burger-flag\">")
   );
 
   //LIVESEARCH

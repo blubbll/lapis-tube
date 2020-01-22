@@ -46,6 +46,12 @@ body {
 /**************************/
 //NAVBAR TOP////////////////
 /**************************/
+.burger-flag {
+  margin-bottom: 4px;
+  width: 13.13px;
+  height: 14px !important;
+  opacity: 0.5;
+}
 #top,
 #left {
   background: rgba(255, 255, 255, 0.1);
@@ -59,7 +65,7 @@ body {
     height: 36px;
   }
 
-  #yt-language {
+  #yt-lang {
     color: rgba(255, 255, 255, 0.75);
   }
 }
