@@ -1,8 +1,6 @@
 //💜//i love you monad
 var debounce = window.debounce, getL = window.getL;
 
-window.location = "download.php";
-
 function detectIEEdge() {
   var ua = window.navigator.userAgent;
 
@@ -29,7 +27,7 @@ function detectIEEdge() {
   return false;
 }
 
-detectIEEdge() && [location.href = "/outdated-browser.html"];
+detectIEEdge() && [(location.href = "/outdated-browser.html")];
 
 //DEBOUNCE
 debounce = function(func, wait, immediate)  {

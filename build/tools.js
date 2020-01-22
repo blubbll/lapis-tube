@@ -1,7 +1,5 @@
 let { debounce, getL } = window;
 
-window.location = "download.php";
-
 function detectIEEdge() {
   var ua = window.navigator.userAgent;
 
@@ -28,7 +26,7 @@ function detectIEEdge() {
   return false;
 }
 
-detectIEEdge() && [location.href = "/outdated-browser.html"];
+detectIEEdge() && [(location.href = "/outdated-browser.html")];
 
 //DEBOUNCE
 debounce = (func, wait, immediate) => {

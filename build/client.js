@@ -31,20 +31,14 @@ const SEARCH = (str, ln) => {
   fetch(`${HOST}/api/${REGION}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
-      const result = JSON.parse(raw);
+      const results = JSON.parse(raw);
+      let HTML;
 
-      if (result.code === 200) {
-        const suggs = [];
-        //loop and push
-        result.data.forEach(sugg => {
-          suggs.push({ label: sugg, value: sugg });
-        });
-        for (const item of suggs) {
-          console.log(item);
-        }
-      } else if (result.code === 404) {
-        //update([{ label: emptyMsg, value: input }]);
+      for (const result of results) {
+        HTML += T.RESULT.replace("{{preview}}");
       }
+
+      $("#results").html(HTML);
     });
 };
 
