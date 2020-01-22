@@ -2,8 +2,8 @@
 location.hash = "";
 
 //
-const { debounce, fetch, autocomplete, load, done, T, $, getL } = window;
-let { HOST, GEO, REGION, API, lscache } = window;
+const { $, autocomplete, alert, debounce, done,fetch,  getL, load, T, } = window;
+let {API, GEO, HOST, REGION, lscache } = window;
 
 //host
 HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
@@ -28,6 +28,9 @@ API = `//${location.hostname}/api`;
 }
 
 const SEARCH = (str, ln) => {
+  //show resultlist
+  $("view").html(T.RESULTS);
+
   fetch(`${HOST}/api/${REGION}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
@@ -69,7 +72,10 @@ const SEARCH = (str, ln) => {
       setup();
       done();
       demo();
-    });
+    }).catch((e) =>{
+      alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
+      setTimeout(location.reload(true), 4999);
+    })
   } else {
     fetch(tr + "/cookie.html")
       .then(res => res.text())
@@ -168,8 +174,6 @@ const setup = () => {
         if (item.label !== emptyMsg) {
           //set input content
           input.value = item.label;
-          //show resultlist
-          $("view").html(T.RESULTS);
           //load results
           SEARCH(item.label);
         }

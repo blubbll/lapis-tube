@@ -1,5 +1,6 @@
 //💜//i love you monad
-var debounce = window.debounce, getL = window.getL;
+var this$0 = this;var NProgress = window.NProgress;
+var debounce = window.debounce, getL = window.getL, fetch = window.fetch;
 
 function detectIEEdge() {
   var ua = window.navigator.userAgent;
@@ -33,11 +34,11 @@ detectIEEdge() && [(location.href = "/outdated-browser.html")];
 debounce = function(func, wait, immediate)  {
   var timeout;
 
-  return function executedFunction() {
-    var context = this;
-    var args = arguments;
+  return function()  {
+    var context = this$0;
+    var args = context.arguments;
 
-    var later = function() {
+    var later = function()  {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -59,3 +60,20 @@ getL = function()  {
   L.includes("-") && [(L = L.split("-")[0])];
   return L.toLowerCase() || "en";
 };
+
+//FETCH WITH NPROGRESS- - - -
+{
+  //backup fetch
+  var ofetch = window.fetch;
+  //override fetch
+  fetch = function(url, options)  {
+    //start proc (if not silent)
+    !(typeof options != "undefined" && !options.silent) &&
+      NProgress.start({ showSpinner: false });
+    return ofetch(url, options).then(function(response ) {
+      //start proc (if not silent)
+      !(typeof options != "undefined" && !options.silent) && NProgress.done();
+      return response;
+    });
+  };
+}

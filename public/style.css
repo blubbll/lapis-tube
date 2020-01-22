@@ -107,10 +107,12 @@ footer#footer {
 
 /**************************/
 /**************************/
+#inner {
+  overflow-y: auto; }
+
 #results {
   background: rgba(0, 0, 0, 0.3);
-  height: 75vh;
-  overflow-y: auto; }
+  height: 75vh; }
   #results::-webkit-scrollbar {
     width: 16px;
     height: 16px; }

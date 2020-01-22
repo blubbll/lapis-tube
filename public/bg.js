@@ -39,5 +39,5 @@ var initBg = function()  {
   var pattern = t.generate(window.innerWidth, window.innerHeight);
   document.body.setAttribute("style", ("background-image: " + (pattern.dataUrl)));
 };
-window.onresize = debounce(initBg, 49);
+window.onresize = debounce(initBg, 999);
 //BG END

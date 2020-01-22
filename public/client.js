@@ -3,8 +3,8 @@
 location.hash = "";
 
 //
-var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, load = window.load, done = window.done, T = window.T, $ = window.$, getL = window.getL;
-var HOST = window.HOST, GEO = window.GEO, REGION = window.REGION, API = window.API, lscache = window.lscache;
+var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, load = window.load, T = window.T;
+var API = window.API, GEO = window.GEO, HOST = window.HOST, REGION = window.REGION, lscache = window.lscache;
 
 //host
 HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
@@ -27,6 +27,9 @@ API = (("//" + (location.hostname)) + "/api");
 }
 
 var SEARCH = function(str, ln)  {
+  //show resultlist
+  $("view").html(T.RESULTS);
+
   fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
     .then(function(res ) {return res.text()})
     .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
@@ -68,7 +71,10 @@ var SEARCH = function(str, ln)  {
       setup();
       done();
       demo();
-    });
+    }).catch(function(e) {
+      alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
+      setTimeout(location.reload(true), 4999);
+    })
   } else {
     fetch(tr + "/cookie.html")
       .then(function(res ) {return res.text()})
@@ -167,8 +173,6 @@ var setup = function()  {
         if (item.label !== emptyMsg) {
           //set input content
           input.value = item.label;
-          //show resultlist
-          $("view").html(T.RESULTS);
           //load results
           SEARCH(item.label);
         }
