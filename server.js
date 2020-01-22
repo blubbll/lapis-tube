@@ -148,22 +148,19 @@ app.get(`${API}/geoip`, (req, res) => {
 //SEARCH
 app.get(`${API}/:region/search/:q`, (req, res) => {
   //const L = getLanguage(req.headers["accept-language"]);
-  request(
-    {
-      uri: `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`,
-      method: "GET",
-      timeout: 3000,
-      followRedirect: true,
-      maxRedirects: 10,
-      encoding: "latin1"
-    },
-    async (error, response, body) => {
+  request({
+    uri: `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`,
+    method: "GET",
+    timeout: 3000,
+    followRedirect: true,
+    maxRedirects: 10
+  }).pipe(res);
+  /*async (error, response, body) => {
       console.log(body);
       if (!error && body) {
         console.log(body);
       } else console.warn(response);
-    }
-  );
+    }*/
 });
 
 //COMPLETE

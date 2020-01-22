@@ -3,16 +3,8 @@
 location.hash = "";
 
 //
-var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, load = window.load, done = window.done, T = window.T, $ = window.$;
+var debounce = window.debounce, fetch = window.fetch, autocomplete = window.autocomplete, load = window.load, done = window.done, T = window.T, $ = window.$, getL = window.getL;
 var HOST = window.HOST, GEO = window.GEO, REGION = window.REGION, API = window.API, lscache = window.lscache;
-
-//get page language
-var getL = function()  {
-  var L = navigator.language || navigator.userLanguage;
-  //language has seperator
-  L.includes("-") && [(L = L.split("-")[0])];
-  return L.toLowerCase() || "en";
-};
 
 //host
 HOST = (("https://" + (location.host.endsWith("glitch.me") ? "" : getL() + ".")) + ("" + (location.hostname)) + "");
@@ -38,20 +30,14 @@ var SEARCH = function(str, ln)  {
   fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
     .then(function(res ) {return res.text()})
     .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
-      var result = JSON.parse(raw);
+      var results = JSON.parse(raw);
+      var HTML;
 
-      if (result.code === 200) {
-        var suggs = [];
-        //loop and push
-        result.data.forEach(function(sugg ) {
-          suggs.push({ label: sugg, value: sugg });
-        });
-        $D$0 = GET_ITER$0(suggs);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? suggs.length : void 0);for (var item ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){item = ($D$2 ? suggs[$D$0++] : $D$1["value"]);
-          console.log(item);
-        };$D$0 = $D$1 = $D$2 = void 0;
-      } else if (result.code === 404) {
-        //update([{ label: emptyMsg, value: input }]);
-      }
+      $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
+        HTML += T.RESULT.replace("{{preview}}");
+      };$D$0 = $D$1 = $D$2 = void 0;
+
+      $("#results").html(HTML);
     });
 };
 
@@ -83,13 +69,14 @@ var SEARCH = function(str, ln)  {
       done();
       demo();
     });
-  } else
+  } else {
     fetch(tr + "/cookie.html")
       .then(function(res ) {return res.text()})
       .then(function(html ) {
         $("gtranslate")[0].outerHTML = html;
         done();
       });
+  }
 }
 
 //////
