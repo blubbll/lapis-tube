@@ -1,14 +1,27 @@
 //RESET
 location.hash = "";
+//anti-hostname (allow inplace editing though)
+location.hostname.split(".")[0] !== getL() &&
+  !location.href.includes("?language_edit")[
+    location.replace(
+      `${location.protocol}//${location.hostname
+        .split(".")
+        .splice(1)
+        .join(".")}`
+    )
+  ];
 
 //
-const { $, autocomplete, alert, debounce, done,fetch,  getL, load, T, } = window;
-let {API, GEO, HOST, REGION, lscache } = window;
+const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;
+let { API, GEO, HOST, REGION, lscache } = window;
 
 //host
-HOST = `https://${location.host.endsWith("glitch.me") ? "" : getL() + "."}${
-  location.hostname
-}`;
+HOST = `${location.protocol}//${
+  location.host.endsWith("glitch.me") &&
+  !location.href.includes("?language_edit")
+    ? ""
+    : `${getL()}.`
+}${location.hostname}`;
 //api
 API = `//${location.hostname}/api`;
 
@@ -31,11 +44,16 @@ const SEARCH = (str, ln) => {
   //show resultlist
   $("view").html(T.RESULTS);
 
+  //show "loading"-spinner on dynamic fields
+  $("param").html('<i class="fas fa-sync fa-spin"></i>');
+
   fetch(`${HOST}/api/${REGION}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
       const results = JSON.parse(raw);
-      let HTML;
+      let HTML = "";
+
+      $("param[results]")[0].outerHTML = results.length;
 
       for (const result of results) {
         HTML += T.RESULT.replace("{{preview}}");
@@ -62,20 +80,22 @@ const SEARCH = (str, ln) => {
         tr + "/result-item.html",
         tr + "/result-list.html"
       ].map(url => fetch(url).then(resp => resp.text()))
-    ).then(tx => {
-      T.HOME = tx[0];
-      (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
-      T.CHANNEL = tx[2];
-      T.PLAYER = tx[3];
-      T.RESULT = tx[4];
-      T.RESULTS = tx[5];
-      setup();
-      done();
-      demo();
-    }).catch((e) =>{
-      alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
-      setTimeout(location.reload(true), 4999);
-    })
+    )
+      .then(tx => {
+        T.HOME = tx[0];
+        (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+        T.CHANNEL = tx[2];
+        T.PLAYER = tx[3];
+        T.RESULT = tx[4];
+        T.RESULTS = tx[5];
+        setup();
+        done();
+        demo();
+      })
+      .catch(e => {
+        alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
+        setTimeout(location.reload(true), 4999);
+      });
   } else {
     fetch(tr + "/cookie.html")
       .then(res => res.text())
@@ -88,7 +108,9 @@ const SEARCH = (str, ln) => {
 
 //////
 const demo = () => {
-  //$("view").html(T.RESULTS);
+  const q = "Günther";
+  $("#top")[0].value = q;
+  SEARCH(q);
 };
 
 window.onhashchange = () => {
@@ -159,7 +181,12 @@ const setup = () => {
               const result = JSON.parse(raw);
 
               if (result.code === 200) {
-                const suggs = [];
+                const suggs = [
+                  input.toLowerCase !== result.data[0]
+                    ? { label: input, value: input.toLowerCase() }
+                    : ""
+                ];
+
                 //loop and push
                 result.data.forEach(sugg => {
                   suggs.push({ label: sugg, value: sugg });

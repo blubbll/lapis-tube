@@ -28,7 +28,13 @@ function detectIEEdge() {
   return false;
 }
 
-detectIEEdge() && [(location.href = "/outdated-browser.html")];
+if (detectIEEdge()) {
+  var host = void 0;
+  if (location.host.indexOf("glitch.me") === -1) {
+    host = location.protocol + "//" + getL() + "." + location.hostname;
+  } else host = location.protocol + "//" + location.hostname;
+  location.replace(host + "/outdated-browser.html");
+}
 
 //DEBOUNCE
 debounce = function(func, wait, immediate)  {
@@ -63,13 +69,13 @@ getL = function()  {
 
 //FETCH WITH NPROGRESS- - - -
 {
+  NProgress.configure({ showSpinner: false });
   //backup fetch
   var ofetch = window.fetch;
   //override fetch
   fetch = function(url, options)  {
     //start proc (if not silent)
-    !(typeof options != "undefined" && !options.silent) &&
-      NProgress.start({ showSpinner: false });
+    !(typeof options != "undefined" && !options.silent) && NProgress.start();
     return ofetch(url, options).then(function(response ) {
       //start proc (if not silent)
       !(typeof options != "undefined" && !options.silent) && NProgress.done();

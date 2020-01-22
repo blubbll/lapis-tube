@@ -27,7 +27,13 @@ function detectIEEdge() {
   return false;
 }
 
-detectIEEdge() && [(location.href = "/outdated-browser.html")];
+if (detectIEEdge()) {
+  let host;
+  if (location.host.indexOf("glitch.me") === -1) {
+    host = location.protocol + "//" + getL() + "." + location.hostname;
+  } else host = location.protocol + "//" + location.hostname;
+  location.replace(host + "/outdated-browser.html");
+}
 
 //DEBOUNCE
 debounce = (func, wait, immediate) => {
@@ -62,13 +68,13 @@ getL = () => {
 
 //FETCH WITH NPROGRESS- - - -
 {
+  NProgress.configure({ showSpinner: false });
   //backup fetch
   const ofetch = window.fetch;
   //override fetch
   fetch = (url, options) => {
     //start proc (if not silent)
-    !(typeof options != "undefined" && !options.silent) &&
-      NProgress.start({ showSpinner: false });
+    !(typeof options != "undefined" && !options.silent) && NProgress.start();
     return ofetch(url, options).then(response => {
       //start proc (if not silent)
       !(typeof options != "undefined" && !options.silent) && NProgress.done();

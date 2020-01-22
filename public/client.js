@@ -30,11 +30,16 @@ var SEARCH = function(str, ln)  {
   //show resultlist
   $("view").html(T.RESULTS);
 
+  //show "loading"-spinner on dynamic fields
+  $("param").html('<i class="fas fa-sync fa-spin"></i>');
+
   fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
     .then(function(res ) {return res.text()})
     .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
       var results = JSON.parse(raw);
-      var HTML;
+      var HTML = "";
+
+      $("param[results]")[0].outerHTML = results.length;
 
       $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
         HTML += T.RESULT.replace("{{preview}}");
@@ -61,20 +66,22 @@ var SEARCH = function(str, ln)  {
         tr + "/result-item.html",
         tr + "/result-list.html"
       ].map(function(url ) {return fetch(url).then(function(resp ) {return resp.text()})})
-    ).then(function(tx ) {
-      T$0.HOME = tx[0];
-      (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
-      T$0.CHANNEL = tx[2];
-      T$0.PLAYER = tx[3];
-      T$0.RESULT = tx[4];
-      T$0.RESULTS = tx[5];
-      setup();
-      done();
-      demo();
-    }).catch(function(e) {
-      alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
-      setTimeout(location.reload(true), 4999);
-    })
+    )
+      .then(function(tx ) {
+        T$0.HOME = tx[0];
+        (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+        T$0.CHANNEL = tx[2];
+        T$0.PLAYER = tx[3];
+        T$0.RESULT = tx[4];
+        T$0.RESULTS = tx[5];
+        setup();
+        done();
+        demo();
+      })
+      .catch(function(e ) {
+        alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
+        setTimeout(location.reload(true), 4999);
+      });
   } else {
     fetch(tr + "/cookie.html")
       .then(function(res ) {return res.text()})
@@ -87,7 +94,9 @@ var SEARCH = function(str, ln)  {
 
 //////
 var demo = function()  {
-  //$("view").html(T.RESULTS);
+  var q = "Günther";
+  $("#top")[0].value = q;
+  SEARCH(q)
 };
 
 window.onhashchange = function()  {
@@ -158,7 +167,12 @@ var setup = function()  {
               var result = JSON.parse(raw);
 
               if (result.code === 200) {
-                var suggs = [];
+                var suggs = [
+                  input.toLowerCase !== result.data[0]
+                    ? { label: input, value: input.toLowerCase() }
+                    : ""
+                ];
+
                 //loop and push
                 result.data.forEach(function(sugg ) {
                   suggs.push({ label: sugg, value: sugg });

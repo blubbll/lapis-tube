@@ -4,6 +4,13 @@
   --color-font-dark: rgba(24, 24, 24);
 }
 
+/* override */
+param {
+  display: inline-block;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
 body {
   background: var(--color-accent-main);
 }
@@ -162,7 +169,7 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
-#inner{
+#inner {
   overflow-y: auto;
 }
 #results {
