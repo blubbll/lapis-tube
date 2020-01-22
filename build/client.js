@@ -1,15 +1,16 @@
 //RESET
 location.hash = "";
 //anti-hostname (allow inplace editing though)
-location.hostname.split(".")[0] !== getL() &&
-  !location.href.includes("?language_edit")[
-    location.replace(
-      `${location.protocol}//${location.hostname
-        .split(".")
-        .splice(1)
-        .join(".")}`
-    )
-  ];
+!location.href.includes("?language_edit") &&
+  location.hostname.split(".")[0] !==
+    getL()[
+      location.replace(
+        `${location.protocol}//${location.hostname
+          .split(".")
+          .splice(1)
+          .join(".")}`
+      )
+    ];
 
 //
 const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;

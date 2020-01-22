@@ -28,9 +28,14 @@ function detectIEEdge() {
 }
 
 if (detectIEEdge()) {
+  const LLegacy =
+    ((navigator.language || navigator.userLanguage).indexOf("-")
+      ? (navigator.language || navigator.userLanguage).split("-")[0]
+      : navigator.language || navigator.userLanguage
+    ).toLowerCase() || "en";
   let host;
   if (location.host.indexOf("glitch.me") === -1) {
-    host = location.protocol + "//" + getL() + "." + location.hostname;
+    host = location.protocol + "//" + LLegacy + "." + location.hostname;
   } else host = location.protocol + "//" + location.hostname;
   location.replace(host + "/outdated-browser.html");
 }

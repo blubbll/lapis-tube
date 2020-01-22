@@ -78,6 +78,15 @@
         clear: both;
       }
     </style>
+    <script>
+      //get page language
+      window.getL = function() {
+        var L = navigator.language || navigator.userLanguage;
+        //language has seperator
+        L.indexOf("-") > -1 && [(L = L.split("-")[0])];
+        return L.toLowerCase() || "en";
+      };
+    </script>
   </head>
 
   <body>
@@ -90,13 +99,13 @@
       </div>
       <div class="unsupported-browser-label2" translate>
         To use this page, please update your browser or download the latest
-        stable version of one of the below. <br/>You can click on one to get to the
-        installer website.
+        stable version of one of the below. <br />You can click on one to get to
+        the installer website.
       </div>
       <div class="unsupported-browser-images-wrapper">
         <div
           class="unsupported-browser-list"
-          onclick="location.href='https://www.google.com/intl/LAN/chrome/'.replace('LAN', navigator.language || navigator.userLanguage);"
+          onclick="location.href='https://www.google.com/intl/LAN/chrome/'.replace('LAN', getL());"
           title="install CHROME"
         >
           <img
@@ -107,7 +116,7 @@
         </div>
         <div
           class="unsupported-browser-list"
-          onclick="location.href='https://www.mozilla.org/LAN/firefox/new/'.replace('LAN', navigator.language || navigator.userLanguage);"
+          onclick="location.href='https://www.mozilla.org/LAN/firefox/new/'.replace('LAN', getL());"
           title="install FIREFOX"
         >
           <img
@@ -119,7 +128,7 @@
 
         <div
           class="unsupported-browser-list"
-          onclick="location.href='https://www.microsoft.com/en-us/edge'.replace('LAN', navigator.language || navigator.userLanguage);"
+          onclick="location.href='https://www.microsoft.com/en-us/edge'.replace('LAN', getL());"
           title="install EDGE"
         >
           <img
