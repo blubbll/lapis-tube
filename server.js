@@ -58,31 +58,52 @@ const express = require("express"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser");
 
-const transpile = file => {
-  var result = es6tr.run({ filename: file });
+const transpile = (file, direct) => {
+  const result = es6tr.run({ filename: file });
   const ext = ".es5";
-  const output = `${file.replace("/build", "/public")}`;
+  const outFile = `${file.replace("/build", "/public")}`;
 
-  if (result.src)
-    [
-      fs.writeFileSync(
-        output,
-        `//💜//i love you monad\r\n${result.src.replace(/\0/gi, "")}`
-      ),
-      console.log(`Transpiled ${file} to ${output}!`)
-    ];
-  else console.warn(`Error at transpiling of file ${file}:`, result);
+  if (result.src) {
+    const betterResult = `//💜//i love you monad\r\n${result.src.replace(
+      /\0/gi,
+      ""
+    )}`;
+    if (!direct)
+      [
+        fs.writeFileSync(outFile, betterResult),
+        console.log(`Transpiled ${file} to ${outFile}!`)
+      ];
+    else {
+      //console.log(`Transpiled ${file}!`);
+      return betterResult;
+    }
+  } else console.warn(`Error at transpiling of file ${file}:`, result);
 };
 
 //BUILD
 if (process.env.PROJECT_NAME) {
-  transpile(`${__dirname}/build/tools.js`);
-  transpile(`${__dirname}/build/bg.js`);
-  transpile(`${__dirname}/build/client.js`);
+  //BUNDLE JS
+  {
+    const bundleFile = `${__dirname}/public/bundle.js`;
+    let bundle = "";
+
+    const scripts = [
+      `${__dirname}/build/_SEARCH.js`,
+      `${__dirname}/build/tools.js`,
+      `${__dirname}/build/bg.js`,
+      `${__dirname}/build/client.js`
+    ];
+    for (const script of scripts) {
+      bundle += transpile(script, true);
+    }
+    //write bundle
+    fs.writeFileSync(bundleFile, bundle, "utf8");
+    console.log(`Bundled ${scripts} into ${bundleFile}!`);
+  }
 
   //SASS
   {
-    const c = {
+    /*const c = {
       in: `${__dirname}/build/style.sass.css`,
       out: `${__dirname}/public/style.css`
     };
@@ -93,7 +114,23 @@ if (process.env.PROJECT_NAME) {
           data: fs.readFileSync(c.in, "utf8")
         })
         .css.toString("utf8")
-    );
+    );*/
+
+    const bundleFile = `${__dirname}/public/bundle.css`;
+    let bundle = "";
+
+    const styles = [
+      `${__dirname}/build/lib/bs-shards.css`,
+      `${__dirname}/build/style.sass.css`
+    ];
+    for (const style of styles) {
+      bundle += sass.renderSync({
+        data: fs.readFileSync(style, "utf8")
+      }).css.toString("utf8");
+    }
+    //write bundle
+    fs.writeFileSync(bundleFile, bundle, "utf8");
+    console.log(`Bundled ${styles} into ${bundleFile}!`);
   }
 }
 
@@ -145,15 +182,16 @@ app.get(`${API}/geoip`, (req, res) => {
   request(`http://api.petabyet.com/geoip/${req.ip}`).pipe(res);
 });
 
-
 //SEARCH
 app.get(`${API}/:region/search/:q`, (req, res) => {
   //const L = getLanguage(req.headers["accept-language"]);
-  
-  console.warn(encodeURI(
+
+  console.warn(
+    encodeURI(
       `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`
-    ))
-  
+    )
+  );
+
   request({
     uri: encodeURI(
       `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`

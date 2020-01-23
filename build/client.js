@@ -2,7 +2,7 @@
 location.hash = "";
 console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 //
-const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;
+const { $, autocomplete, alert, debounce, done, fetch, getL, load, SEARCH, T } = window;
 let { API, GEO, HOST, REGION, lscache } = window;
 
 //anti-hostname (allow inplace editing though)
@@ -48,30 +48,6 @@ API = `//${location.hostname}/api`;
     }, 199);
   });
 }
-
-const SEARCH = (str, ln) => {
-  //show resultlist
-  $("view").html(T.RESULTS);
-
-  //show "loading"-spinner on dynamic fields
-  $("param").html('<i class="fas fa-sync fa-spin"></i>');
-
-  fetch(`${HOST}/api/${REGION}/search/${str}`)
-    .then(res => res.text())
-    .then(raw => {
-      let results = JSON.parse(raw);
-      results = results.filter(v => v.length); //skip empty
-      let HTML = "";
-
-      $("param[results]")[0].outerHTML = results.length;
-
-      for (const result of results) {
-        HTML += T.RESULT.replace("{{preview}}");
-      }
-
-      $("#results").html(HTML);
-    });
-};
 
 //LOAD TEMPLATES
 {

@@ -1,9 +1,186 @@
 //💜//i love you monad
+var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, HOST = window.HOST, REGION = window.REGION, load = window.load, T = window.T;
+
+//do actual search
+var SEARCH = function(str, ln)  {
+  //show resultlist
+  $("view").html(T.RESULTS);
+
+  //show "loading"-spinner on dynamic fields
+  $("param").html('<i class="fas fa-sync fa-spin"></i>');
+
+  fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
+    .then(function(res ) {return res.text()})
+    .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
+      var results = JSON.parse(raw);
+      var HTML = "";
+
+      $("param[results]")[0].outerHTML = results.length;
+
+    var i=0;
+      $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
+        HTML += T.RESULT.replace("{{preview}}");
+        i++
+        console.log(i, result);
+      };$D$0 = $D$1 = $D$2 = void 0;
+
+      $("#results").html(HTML);
+    });
+};//💜//i love you monad
+var this$0 = this;var $ = window.$, NProgress = window.NProgress;
+var debounce = window.debounce, fetch = window.fetch, getL = window.getL, loadImage = window.loadImage;
+
+function detectIEEdge() {
+  var ua = window.navigator.userAgent;
+
+  var msie = ua.indexOf("MSIE ");
+  if (msie > 0) {
+    // IE 10 or older => return version number
+    return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)), 10);
+  }
+
+  var trident = ua.indexOf("Trident/");
+  if (trident > 0) {
+    // IE 11 => return version number
+    var rv = ua.indexOf("rv:");
+    return parseInt(ua.substring(rv + 3, ua.indexOf(".", rv)), 10);
+  }
+
+  var edge = ua.indexOf("Edge/");
+  if (edge > 0) {
+    // Edge => return version number
+    return parseInt(ua.substring(edge + 5, ua.indexOf(".", edge)), 10);
+  }
+
+  // other browser
+  return false;
+}
+
+loadImage = function(url ) {
+  return new Promise(function(r ) {
+    var i = new Image();
+    i.onload = function()  {return r(i)};
+    i.src = url;
+  });
+};
+
+if (detectIEEdge()) {
+  var LLegacy =
+    ((navigator.language || navigator.userLanguage).indexOf("-")
+      ? (navigator.language || navigator.userLanguage).split("-")[0]
+      : navigator.language || navigator.userLanguage
+    ).toLowerCase() || "en";
+  var host = void 0;
+  if (location.host.indexOf("glitch.me") === -1) {
+    host = location.protocol + "//" + LLegacy + "." + location.hostname;
+  } else host = location.protocol + "//" + location.hostname;
+  location.replace(host + "/outdated-browser.html");
+}
+
+//DEBOUNCE
+debounce = function(func, wait, immediate)  {
+  var timeout;
+
+  return function()  {
+    var context = this$0;
+    var args = context.arguments;
+
+    var later = function()  {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+
+    var callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(later, wait);
+
+    if (callNow) func.apply(context, args);
+  };
+};
+
+//get page language
+getL = function()  {
+  var L = navigator.language || navigator.userLanguage;
+  //language has seperator
+  L.includes("-") && [(L = L.split("-")[0])];
+  return L.toLowerCase() || "en";
+};
+
+//FETCH WITH NPROGRESS- - - -
+{
+  NProgress.configure({ showSpinner: false });
+  //backup fetch
+  var ofetch = window.fetch;
+  //override fetch
+  fetch = function(url, options)  {
+    //start proc (if not silent)
+    !(
+      typeof options != "undefined" &&
+      !options.silent &&
+      !$("#nprogress")[0]
+    ) && NProgress.start();
+    return ofetch(url, options).then(function(response ) {
+      //start proc (if not silent)
+      !(
+        typeof options != "undefined" &&
+        !options.silent &&
+        !$("#nprogress")[0]
+      ) && NProgress.done();
+      return response;
+    });
+  };
+}
+//💜//i love you monad
+var Trianglify = window.Trianglify, debounce = window.debounce, fetch = window.fetch;
+
+window.load = function() 
+  {return setTimeout(function()  {
+    document.querySelector("diamond").setAttribute("style", "");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "display:none;");
+  }, 999)};
+
+window.done = function() 
+  {return setTimeout(function()  {
+    document.querySelector("diamond").setAttribute("style", "display:none;");
+    document.querySelector("#wrap") &&
+      document.querySelector("#wrap").setAttribute("style", "");
+  }, 999)};
+
+//BG START
+var initBg = function()  {
+  var rn = Math.floor(Math.random() * 150 + 60);
+  var rs = Math.floor(Math.random() * 11 + 4);
+  var prim = getComputedStyle(document.documentElement).getPropertyValue(
+    "--color-accent-main"
+  );
+
+  var t = new Trianglify({
+    x_gradient: [
+      "#173b5e",
+      "#3e87d0",
+      "#1c4873",
+      "#215487",
+      "#26619c",
+      "#2b6eb1",
+      "#307bc5"
+    ], //Trianglify.colorbrewer.Spectral[rs],
+    noiseIntensity: 0,
+    cellsize: rn
+  });
+  var pattern = t.generate(window.innerWidth, window.innerHeight);
+  document.body.setAttribute("style", ("background-image: " + (pattern.dataUrl)));
+};
+window.onresize = debounce(initBg, 999);
+//BG END
+//💜//i love you monad
 //RESET
 location.hash = "";
 console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 //
-var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, load = window.load, T = window.T;
+var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, load = window.load, SEARCH = window.SEARCH, T = window.T;
 var API = window.API, GEO = window.GEO, HOST = window.HOST, REGION = window.REGION, lscache = window.lscache;
 
 //anti-hostname (allow inplace editing though)
@@ -47,30 +224,6 @@ API = (("//" + (location.hostname)) + "/api");
     }, 199);
   });
 }
-
-var SEARCH = function(str, ln)  {
-  //show resultlist
-  $("view").html(T.RESULTS);
-
-  //show "loading"-spinner on dynamic fields
-  $("param").html('<i class="fas fa-sync fa-spin"></i>');
-
-  fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
-    .then(function(res ) {return res.text()})
-    .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
-      var results = JSON.parse(raw);
-      results = results.filter(function(v ) {return v.length}); //skip empty
-      var HTML = "";
-
-      $("param[results]")[0].outerHTML = results.length;
-
-      $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
-        HTML += T.RESULT.replace("{{preview}}");
-      };$D$0 = $D$1 = $D$2 = void 0;
-
-      $("#results").html(HTML);
-    });
-};
 
 //LOAD TEMPLATES
 {
