@@ -174,7 +174,10 @@
                   const _val = line.split("=")[1];
                   //if env not exist, apply value
                   if (!process.env[_var]) {
-                    process.env[_var] = _val;
+                    process.env[_var] =
+                      _val.startsWith('"') && _val.endsWith('"')
+                        ? _val.slice(1, -1)
+                        : _val;
                     options.verbose &&
                       console.log(
                         toMono(

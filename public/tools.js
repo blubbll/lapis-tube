@@ -1,6 +1,6 @@
 //💜//i love you monad
 var this$0 = this;var $ = window.$, NProgress = window.NProgress;
-var debounce = window.debounce, fetch = window.fetch, getL = window.getL;
+var debounce = window.debounce, fetch = window.fetch, getL = window.getL, loadImage = window.loadImage;
 
 function detectIEEdge() {
   var ua = window.navigator.userAgent;
@@ -27,6 +27,14 @@ function detectIEEdge() {
   // other browser
   return false;
 }
+
+loadImage = function(url ) {
+  return new Promise(function(r ) {
+    var i = new Image();
+    i.onload = function()  {return r(i)};
+    i.src = url;
+  });
+};
 
 if (detectIEEdge()) {
   var LLegacy =

@@ -1,5 +1,5 @@
 const { $, NProgress } = window;
-let { debounce, fetch, getL } = window;
+let { debounce, fetch, getL, loadImage } = window;
 
 function detectIEEdge() {
   const ua = window.navigator.userAgent;
@@ -26,6 +26,14 @@ function detectIEEdge() {
   // other browser
   return false;
 }
+
+loadImage = url => {
+  return new Promise(r => {
+    let i = new Image();
+    i.onload = () => r(i);
+    i.src = url;
+  });
+};
 
 if (detectIEEdge()) {
   const LLegacy =

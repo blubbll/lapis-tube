@@ -101,6 +101,7 @@ const SEARCH = (str, ln) => {
         demo();
       })
       .catch(e => {
+        console.warn(e);
         alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
         setTimeout(() => {
           location.reload(true), 4999;
@@ -168,13 +169,15 @@ const setup = () => {
 
   //sync language
   $("#yt-lang").text(getL());
-  //sync region
-  $("#yt-region").html(
-    `<img alt="${
-      GEO.country
-    } Flag" src="https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}
-.png" class="burger-flag">`
-  );
+  //sync region (language background clip)
+  //$(
+  //  "#logo #flag"
+  //)[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
+  //https://stackoverflow.com/questions/41180735/can-html-and-css-only-create-an-overlay-which-ignores-transparent-area-on-an-ima
+
+  $(
+    "#logo .alpha-target"
+  )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
 
   //LIVESEARCH
   {

@@ -45,11 +45,49 @@ body {
 
 #logo {
   color: var(--color-font-light);
-  font-family: consolas; }
-  #logo img {
-    height: 36px; }
-  #logo #yt-lang {
-    color: rgba(255, 255, 255, 0.75); }
+  font-family: consolas;
+  /* #yt-lang {
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-size: contain;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.5);
+    background-position-x: center;
+    background-position-y: 2px;
+    filter: drop-shadow(0px 0px 3px black) contrast(2);
+  }*/
+  /*#logo img{
+      height: 36px;
+    width: 36px;
+    background-repeat: no-repeat;
+    -webkit-background-clip: unset;
+    background-size: 25px 25px;
+    background-blend-mode: color;
+    background-position: center;
+  }*/ }
+  #logo .dynamic-logo {
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.4)); }
+    #logo .dynamic-logo > .alpha-mask {
+      mask-image: url(./logo.png);
+      -webkit-mask-image: url(./logo.png);
+      mask-mode: alpha;
+      -webkit-mask-mode: alpha;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: round;
+      height: 42px;
+      width: 42px;
+      /* important: must follow alpha-target in html structure (or use z-index: > x) */ }
+      #logo .dynamic-logo > .alpha-mask > .alpha-target {
+        width: 42px;
+        height: 42px;
+        position: absolute; }
+      #logo .dynamic-logo > .alpha-mask > .alpha-original {
+        width: 42px;
+        height: 42px;
+        opacity: 0.75;
+        filter: brightness(2) contrast(2);
+        mix-blend-mode: luminosity; }
 
 #top {
   /* Chrome, Firefox, Opera, Safari 10.1+ */ }
