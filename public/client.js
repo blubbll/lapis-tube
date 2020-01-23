@@ -1,6 +1,7 @@
 //💜//i love you monad
 //RESET
 location.hash = "";
+console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 //
 var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, load = window.load, T = window.T;
 var API = window.API, GEO = window.GEO, HOST = window.HOST, REGION = window.REGION, lscache = window.lscache;
@@ -91,6 +92,8 @@ var SEARCH = function(str, ln)  {
       .then(function(tx ) {
         T$0.HOME = tx[0];
         (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+        console.debug(("Your Geo Information by Maxmind: "), GEO);
+        console.debug(("Your browser language: "), getL())
         T$0.CHANNEL = tx[2];
         T$0.PLAYER = tx[3];
         T$0.RESULT = tx[4];

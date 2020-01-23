@@ -1,5 +1,6 @@
 //RESET
 location.hash = "";
+console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 //
 const { $, autocomplete, alert, debounce, done, fetch, getL, load, T } = window;
 let { API, GEO, HOST, REGION, lscache } = window;
@@ -92,6 +93,8 @@ const SEARCH = (str, ln) => {
       .then(tx => {
         T.HOME = tx[0];
         (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+        console.debug(`Your Geo Information by Maxmind: `, GEO);
+        console.debug(`Your browser language: `, getL())
         T.CHANNEL = tx[2];
         T.PLAYER = tx[3];
         T.RESULT = tx[4];

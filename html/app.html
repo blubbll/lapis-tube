@@ -21,19 +21,17 @@
           <!--<img src="logo.png" class="ml-0 ml-sm-1 ml-md-2 ml-lg-3 mr-sm-1" />
           <img id="flag" />-->
 
-          <div class="dynamic-logo">
+          <div class="d-flex dynamic-logo flex-row align-items-center">
             <div class="alpha-mask">
-
+              <img class="alpha-original position-absolute" src="./logo.png" />
               <img class="alpha-target" />
-                            <img class="alpha-original position-absolute" src="./logo.png" />
-
             </div>
+            <p class="d-none d-md-flex mr-auto ml-0 mb-0 notranslate">
+              𝒍𝒂𝒑𝒊𝒔Tube
+            </p>
           </div>
+          <p id="yt-lang" class="small px-1 mb-2 pb-1">de</p>
         </div>
-
-        <p class="d-none d-md-flex mr-auto ml-0 mb-0 notranslate">𝒍𝒂𝒑𝒊𝒔Tube</p>
-
-        <p id="yt-lang" class="small px-1 mb-2 pb-1">de</p>
       </div>
       <div
         class="input-group col-7 col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-sm-auto mr-0 ml-5 pr-2"
@@ -112,7 +110,11 @@
       </div>
     </view>
   </main>
-  <footer id="footer" class="backdrop-blur flex-row d-flex border-top">
-    <div class="text-dark justify-content-center ml-1 notranslate">&copy Monad & Blu</div>
+  <footer id="footer">
+    <div class="backdrop-blur flex-row d-flex border-top">
+      <p class="text-dark justify-content-center ml-1 my-0 notranslate">
+        &copy Monad & Blu
+      </p>
+    </div>
   </footer>
 </div>

@@ -9,8 +9,12 @@ param {
   padding-right: 5px;
   padding-left: 5px; }
 
+html,
 body {
-  background: var(--color-accent-main); }
+  background: var(--color-accent-main);
+  position: fixed;
+  height: 100vh;
+  width: 100vw; }
 
 .text-accent {
   color: var(--color-accent-main); }
@@ -65,7 +69,13 @@ body {
     background-position: center;
   }*/ }
   #logo .dynamic-logo {
-    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.75)); }
+    filter: drop-shadow(0px 0px 4px rgba(127, 127, 127, 0.42));
+    cursor: pointer;
+    /*show original on hover */ }
+    #logo .dynamic-logo:hover > .alpha-mask > .alpha-original {
+      filter: none; }
+    #logo .dynamic-logo:hover > .alpha-mask > .alpha-target {
+      opacity: 0; }
     #logo .dynamic-logo > .alpha-mask {
       mask-image: url(./logo.png);
       -webkit-mask-image: url(./logo.png);
@@ -79,15 +89,17 @@ body {
       width: 42px;
       /* important: must follow alpha-target in html structure (or use z-index: > x) */ }
       #logo .dynamic-logo > .alpha-mask > .alpha-target {
+        transition: opacity 499ms ease;
+        opacity: 1;
         width: 42px;
         height: 42px;
-        position: absolute; }
+        position: absolute;
+        mix-blend-mode: color; }
       #logo .dynamic-logo > .alpha-mask > .alpha-original {
         width: 42px;
         height: 42px;
         opacity: 0.75;
-        filter: brightness(1.5) contrast(2);
-        mix-blend-mode: luminosity; }
+        filter: brightness(1.3) contrast(3); }
 
 #top {
   /* Chrome, Firefox, Opera, Safari 10.1+ */ }
