@@ -4081,12 +4081,10 @@ footer#footer {
 
 /**************************/
 /**************************/
-#inner {
-  overflow-y: auto; }
-
 #results {
   background: rgba(0, 0, 0, 0.3);
-  height: 75vh; }
+  height: 75vh;
+  overflow-y: auto; }
   #results::-webkit-scrollbar {
     width: 16px;
     height: 16px; }
@@ -4098,4 +4096,5 @@ footer#footer {
     background: #BDBDBD; }
 
 #filters {
-  background: rgba(255, 255, 255, 0.75); }
+  background: rgba(127, 127, 127, 0.5);
+  color: white; }

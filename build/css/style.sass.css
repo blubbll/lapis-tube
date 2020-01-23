@@ -236,12 +236,10 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
-#inner {
-  overflow-y: auto;
-}
 #results {
   background: rgba(0, 0, 0, 0.3);
   height: 75vh;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 16px;
@@ -260,5 +258,6 @@ footer#footer {
   }
 }
 #filters {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(127, 127, 127, 0.5);
+  color: white;
 }

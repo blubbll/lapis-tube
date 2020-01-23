@@ -1,8 +1,20 @@
 //💜//i love you monad
-var $ = window.$, autocomplete = window.autocomplete, alert = window.alert, debounce = window.debounce, done = window.done, fetch = window.fetch, getL = window.getL, HOST = window.HOST, REGION = window.REGION, load = window.load, T = window.T;
+var $ = window.$
+, autocomplete = window.autocomplete
+, alert = window.alert
+, debounce = window.debounce
+, done = window.done
+, fetch = window.fetch
+, getL = window.getL
+, HOST = window.HOST
+, REGION = window.REGION
+, load = window.load
+, T = window.T
+
+;
 
 //do actual search
-var SEARCH = function(str, ln)  {
+var SEARCH = function(str ) {
   //show resultlist
   $("view").html(T.RESULTS);
 
@@ -15,18 +27,33 @@ var SEARCH = function(str, ln)  {
       var results = JSON.parse(raw);
       var HTML = "";
 
-      $("param[results]")[0].outerHTML = results.length;
+      //$("param[results]")[0].outerHTML = results.length; delete me
 
-    var i=0;
+      // let i=0;
       $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
-        HTML += T.RESULT.replace("{{preview}}");
-        i++
-        console.log(i, result);
+        //HTML += T.RESULT.replace("{{preview}}");
+        var HTML$0 = T.RESULT.replace("{{preview}}").replace("{{title}}", result.title);
+        $("#results").attr("q", str);
+        $("#result").attr(
+          "page",
+          $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
+        );
+        $("#results").append(HTML$0);
+        // i++
+        // console.log(i, result);
       };$D$0 = $D$1 = $D$2 = void 0;
 
-      $("#results").html(HTML);
+      //$("#results").html(HTML);
     });
-};//💜//i love you monad
+};
+
+$("#results").on("scroll", function()  {
+  var that = $("#results")[0];
+  if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
+    //SEARCH($("#results").attr("q"));
+  }
+});
+//💜//i love you monad
 var this$0 = this;var $ = window.$, NProgress = window.NProgress;
 var debounce = window.debounce, fetch = window.fetch, getL = window.getL, loadImage = window.loadImage;
 

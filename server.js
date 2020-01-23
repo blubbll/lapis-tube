@@ -88,10 +88,10 @@ if (process.env.PROJECT_NAME) {
     let bundle = "";
 
     const scripts = [
-      `${__dirname}/build/_SEARCH.js`,
-      `${__dirname}/build/tools.js`,
-      `${__dirname}/build/bg.js`,
-      `${__dirname}/build/client.js`
+      `${__dirname}/build/js/_SEARCH.js`,
+      `${__dirname}/build/js/tools.js`,
+      `${__dirname}/build/js/bg.js`,
+      `${__dirname}/build/js/client.js`
     ];
     for (const script of scripts) {
       bundle += transpile(script, true);
@@ -120,8 +120,8 @@ if (process.env.PROJECT_NAME) {
     let bundle = "";
 
     const styles = [
-      `${__dirname}/build/lib/bs-shards.css`,
-      `${__dirname}/build/style.sass.css`
+      `${__dirname}/build/css/lib/bs-shards.css`,
+      `${__dirname}/build/css/style.sass.css`
     ];
     for (const style of styles) {
       bundle += sass.renderSync({
