@@ -59,7 +59,8 @@ const SEARCH = (str, ln) => {
   fetch(`${HOST}/api/${REGION}/search/${str}`)
     .then(res => res.text())
     .then(raw => {
-      const results = JSON.parse(raw);
+      let results = JSON.parse(raw);
+      results = results.filter(v => v.length); //skip empty
       let HTML = "";
 
       $("param[results]")[0].outerHTML = results.length;
@@ -94,7 +95,7 @@ const SEARCH = (str, ln) => {
         T.HOME = tx[0];
         (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
         console.debug(`Your Geo Information by Maxmind: `, GEO);
-        console.debug(`Your browser language: `, getL())
+        console.debug(`Your browser language: `, getL());
         T.CHANNEL = tx[2];
         T.PLAYER = tx[3];
         T.RESULT = tx[4];
@@ -206,17 +207,21 @@ const setup = () => {
               const result = JSON.parse(raw);
 
               if (result.code === 200) {
-                const suggs = [
+                //construct output (with input at top for convenience)
+                let suggOutput = [
                   input.toLowerCase !== result.data[0]
                     ? { label: input, value: input.toLowerCase() }
                     : ""
                 ];
 
+                //actual usable data
+                let suggData = result.data.filter(v => v.length); //skip empty
+
                 //loop and push
-                result.data.forEach(sugg => {
-                  suggs.push({ label: sugg, value: sugg });
-                  update(suggs);
+                suggData.forEach(sugg => {
+                  suggOutput.push({ label: sugg, value: sugg });
                 });
+                update(suggOutput);
               } else if (result.code === 404) {
                 update([{ label: emptyMsg, value: emptyMsg }]);
               }

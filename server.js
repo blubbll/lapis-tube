@@ -149,6 +149,11 @@ app.get(`${API}/geoip`, (req, res) => {
 //SEARCH
 app.get(`${API}/:region/search/:q`, (req, res) => {
   //const L = getLanguage(req.headers["accept-language"]);
+  
+  console.warn(encodeURI(
+      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`
+    ))
+  
   request({
     uri: encodeURI(
       `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`

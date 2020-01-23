@@ -59,6 +59,7 @@ var SEARCH = function(str, ln)  {
     .then(function(res ) {return res.text()})
     .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
       var results = JSON.parse(raw);
+      results = results.filter(function(v ) {return v.length}); //skip empty
       var HTML = "";
 
       $("param[results]")[0].outerHTML = results.length;
@@ -93,7 +94,7 @@ var SEARCH = function(str, ln)  {
         T$0.HOME = tx[0];
         (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
         console.debug(("Your Geo Information by Maxmind: "), GEO);
-        console.debug(("Your browser language: "), getL())
+        console.debug(("Your browser language: "), getL());
         T$0.CHANNEL = tx[2];
         T$0.PLAYER = tx[3];
         T$0.RESULT = tx[4];
@@ -205,17 +206,21 @@ var setup = function()  {
               var result = JSON.parse(raw);
 
               if (result.code === 200) {
-                var suggs = [
+                //construct output (with input at top for convenience)
+                var suggOutput = [
                   input.toLowerCase !== result.data[0]
                     ? { label: input, value: input.toLowerCase() }
                     : ""
                 ];
 
+                //actual usable data
+                var suggData = result.data.filter(function(v ) {return v.length}); //skip empty
+
                 //loop and push
-                result.data.forEach(function(sugg ) {
-                  suggs.push({ label: sugg, value: sugg });
-                  update(suggs);
+                suggData.forEach(function(sugg ) {
+                  suggOutput.push({ label: sugg, value: sugg });
                 });
+                update(suggOutput);
               } else if (result.code === 404) {
                 update([{ label: emptyMsg, value: emptyMsg }]);
               }
