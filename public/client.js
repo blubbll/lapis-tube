@@ -177,6 +177,8 @@ var setup = function()  {
   $(
     "#logo .alpha-target"
   )[0].src = (("https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/" + (GEO.country_code.toLowerCase())) + ".png");
+  $(".dynamic-logo")[0].setAttribute("title", ("Region: " + (GEO.country)));
+  $("#yt-lang")[0].setAttribute("title", ("App language: " + (getL())));
 
   //LIVESEARCH
   {
