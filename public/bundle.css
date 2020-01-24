@@ -4077,13 +4077,15 @@ body {
 footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
-  color: var(--color-font-dark); }
+  color: var(--color-font-dark);
+  width: 100%;
+  background-color: #f5f5f5; }
 
 /**************************/
 /**************************/
 #results {
   background: rgba(0, 0, 0, 0.3);
-  height: 75vh;
+  flex: 1 1 0rem;
   overflow-y: auto; }
   #results::-webkit-scrollbar {
     width: 16px;

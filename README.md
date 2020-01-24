@@ -1,2 +1,2 @@
-a fancy and open alternative YouTube client.
+A fancy and open alternative YouTube client.
 =================
