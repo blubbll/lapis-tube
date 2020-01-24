@@ -3924,7 +3924,8 @@ body {
   background: var(--color-accent-main);
   position: fixed;
   height: 100vh;
-  width: 100vw; }
+  width: 100vw;
+  overflow: hidden; }
 
 .text-accent {
   color: var(--color-accent-main); }
@@ -4083,6 +4084,10 @@ footer#footer {
 
 /**************************/
 /**************************/
+#filters-inner {
+  /*background: rgba(127, 127, 127, 0.5);*/
+  color: white; }
+
 #results {
   background: rgba(0, 0, 0, 0.3);
   flex: 1 1 0rem;
@@ -4096,7 +4101,3 @@ footer#footer {
     background: #9E9E9E; }
   #results::-webkit-scrollbar-thumb:hover {
     background: #BDBDBD; }
-
-#filters {
-  background: rgba(127, 127, 127, 0.5);
-  color: white; }

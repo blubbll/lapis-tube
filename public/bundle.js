@@ -38,7 +38,7 @@ var SEARCH = function(str ) {
           "page",
           $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
         );
-        $("#results").append(HTML$0);
+        $("#results-inner").append(HTML$0);
         // i++
         // console.log(i, result);
       };$D$0 = $D$1 = $D$2 = void 0;

@@ -17,6 +17,7 @@ body {
   position: fixed;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 
 .text-accent {
@@ -240,9 +241,13 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
+#filters-inner {
+  /*background: rgba(127, 127, 127, 0.5);*/
+  color: white;
+}
 #results {
   background: rgba(0, 0, 0, 0.3);
-    flex: 1 1 0rem;
+  flex: 1 1 0rem;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -260,8 +265,4 @@ footer#footer {
   &::-webkit-scrollbar-thumb:hover {
     background: #BDBDBD;
   }
-}
-#filters {
-  background: rgba(127, 127, 127, 0.5);
-  color: white;
 }

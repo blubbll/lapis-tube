@@ -37,7 +37,7 @@ const SEARCH = str => {
           "page",
           $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
         );
-        $("#results").append(HTML);
+        $("#results-inner").append(HTML);
         // i++
         // console.log(i, result);
       }
