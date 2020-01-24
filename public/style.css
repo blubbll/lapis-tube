@@ -12,9 +12,9 @@ param {
 html,
 body {
   background: var(--color-accent-main);
-  position: fixed;
-  height: 100vh;
-  width: 100vw; }
+  position: absolute;
+  height: 100%;
+  width: 100%; }
 
 .text-accent {
   color: var(--color-accent-main); }

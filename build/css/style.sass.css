@@ -14,9 +14,9 @@ param {
 html,
 body {
   background: var(--color-accent-main);
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
+  position: absolute;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -247,8 +247,13 @@ footer#footer {
 }
 #results {
   background: rgba(0, 0, 0, 0.3);
-  flex: 1 1 0rem;
+  flex: 1 0 0;
   overflow-y: auto;
+
+  #inner {
+    height: fit-content;
+    position: absolute;
+  }
 
   &::-webkit-scrollbar {
     width: 16px;
