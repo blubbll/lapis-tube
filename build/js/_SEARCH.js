@@ -26,20 +26,39 @@ const SEARCH = str => {
       let results = JSON.parse(raw);
       let HTML = "";
 
-      //$("param[results]")[0].outerHTML = results.length; delete me
-
-      // let i=0;
+    
       for (const result of results) {
+        
         //HTML += T.RESULT.replace("{{preview}}");
-        let HTML = T.RESULT.replace("{{preview}}").replace("{{title}}", result.title);
+        let HTML = T.RESULT.replace(
+          "{{title}}",
+          result.title
+        );
+
+        let srcSet = "";
+        for (const thumb of result.videoThumbnails) {
+          srcSet += `${thumb.url}\t${thumb.width}w,\n`;
+        }
+
+        //fill previewset placeholder
+        HTML = HTML.replace(
+          "{{preview}}",
+          `<img data="preview" alt="preview" srcset="${srcSet.slice(0, -1)}" />`
+        );
+
+        console.log(HTML)
+        
+        //store querystring for re-querying more data when scrolling
         $("#results").attr("q", str);
+        //update paging no for ^
         $("#result").attr(
           "page",
           $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
         );
+
+        //render results
         $("#results-inner").append(HTML);
-        // i++
-        // console.log(i, result);
+        //console.log(result);
       }
 
       //$("#results").html(HTML);

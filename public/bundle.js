@@ -23,24 +23,43 @@ var SEARCH = function(str ) {
 
   fetch((("" + HOST) + ("/api/" + REGION) + ("/search/" + str) + ""))
     .then(function(res ) {return res.text()})
-    .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;
+    .then(function(raw ) {var S_ITER$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol.iterator||'@@iterator';var S_MARK$0 = typeof Symbol!=='undefined'&&Symbol&&Symbol["__setObjectSetter__"];function GET_ITER$0(v){if(v){if(Array.isArray(v))return 0;var f;if(S_MARK$0)S_MARK$0(v);if(typeof v==='object'&&typeof (f=v[S_ITER$0])==='function'){if(S_MARK$0)S_MARK$0(void 0);return f.call(v);}if(S_MARK$0)S_MARK$0(void 0);if((v+'')==='[object Generator]')return v;}throw new Error(v+' is not iterable')};var $D$0;var $D$1;var $D$2;var $D$3;var $D$4;var $D$5;var $D$6;
       var results = JSON.parse(raw);
       var HTML = "";
 
-      //$("param[results]")[0].outerHTML = results.length; delete me
-
-      // let i=0;
+    
       $D$0 = GET_ITER$0(results);$D$2 = $D$0 === 0;$D$1 = ($D$2 ? results.length : void 0);for (var result ;$D$2 ? ($D$0 < $D$1) : !($D$1 = $D$0["next"]())["done"];){result = ($D$2 ? results[$D$0++] : $D$1["value"]);
+        
         //HTML += T.RESULT.replace("{{preview}}");
-        var HTML$0 = T.RESULT.replace("{{preview}}").replace("{{title}}", result.title);
+        var HTML$0 = T.RESULT.replace(
+          "{{title}}",
+          result.title
+        );
+
+        var srcSet = "";
+        $D$6 = (result.videoThumbnails);$D$3 = GET_ITER$0($D$6);$D$5 = $D$3 === 0;$D$4 = ($D$5 ? $D$6.length : void 0);for (var thumb ;$D$5 ? ($D$3 < $D$4) : !($D$4 = $D$3["next"]())["done"];){thumb = ($D$5 ? $D$6[$D$3++] : $D$4["value"]);
+          srcSet += (("" + (thumb.url)) + ("\t" + (thumb.width)) + "w,\n");
+        };$D$3 = $D$4 = $D$5 = $D$6 = void 0;
+
+        //fill previewset placeholder
+        HTML$0 = HTML$0.replace(
+          "{{preview}}",
+          (("<img data=\"preview\" alt=\"preview\" srcset=\"" + (srcSet.slice(0, -1))) + "\" />")
+        );
+
+        console.log(HTML$0)
+        
+        //store querystring for re-querying more data when scrolling
         $("#results").attr("q", str);
+        //update paging no for ^
         $("#result").attr(
           "page",
           $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
         );
+
+        //render results
         $("#results-inner").append(HTML$0);
-        // i++
-        // console.log(i, result);
+        //console.log(result);
       };$D$0 = $D$1 = $D$2 = void 0;
 
       //$("#results").html(HTML);

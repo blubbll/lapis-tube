@@ -4086,15 +4086,18 @@ footer#footer {
 /**************************/
 #filters-inner {
   /*background: rgba(127, 127, 127, 0.5);*/
+  border-color: rgba(255, 255, 255, 0.1) !important;
   color: white; }
 
 #results {
   background: rgba(0, 0, 0, 0.3);
   flex: 1 0 0;
   overflow-y: auto; }
-  #results #inner {
+  #results #results-inner {
     height: fit-content;
     position: absolute; }
+    #results #results-inner img {
+      width: 100%; }
   #results::-webkit-scrollbar {
     width: 16px;
     height: 16px; }
