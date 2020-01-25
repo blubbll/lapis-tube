@@ -1,6 +1,3 @@
-
-
-
 //© 2019 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -59,7 +56,8 @@ const express = require("express"),
   request = require("request"),
   sass = require("node-sass"),
   es6tr = require("es6-transpiler"),
-  regionParser = require("accept-language-parser");
+  regionParser = require("accept-language-parser"),
+  compressor = require("node-minify");
 
 const transpile = (file, direct) => {
   const result = es6tr.run({ filename: file });
@@ -127,9 +125,12 @@ if (process.env.PROJECT_NAME) {
       `${__dirname}/build/css/style.sass.css`
     ];
     for (const style of styles) {
-      bundle += sass.renderSync({
-        data: fs.readFileSync(style, "utf8")
-      }).css.toString("utf8");
+      bundle += sass
+        .renderSync({
+          data: fs.readFileSync(style, "utf8"),
+          "output-style": "minified"
+        })
+        .css.toString("utf8");
     }
     //write bundle
     fs.writeFileSync(bundleFile, bundle, "utf8");

@@ -248,19 +248,20 @@ footer#footer {
 }
 #results {
   background: rgba(0, 0, 0, 0.3);
-  flex: 1 0 0;
+  $flex: 1 0 0;
+  -webkit-flex: $flex;
+
+  -ms-flex: $flex;
+  -mz-flex: $flex;
+  flex: $flex;
   overflow-y: auto;
 
-  
-  
   #results-inner {
+    height: -moz-fit-content;
     height: fit-content;
-    position: absolute;
-    
-    img{
+    img {
       width: 100%;
     }
-    
   }
 
   &::-webkit-scrollbar {

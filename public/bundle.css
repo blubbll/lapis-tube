@@ -4091,6 +4091,9 @@ footer#footer {
 
 #results {
   background: rgba(0, 0, 0, 0.3);
+  -webkit-flex: 1 0 0;
+  -ms-flex: 1 0 0;
+  -mz-flex: 1 0 0;
   flex: 1 0 0;
   overflow-y: auto; }
   #results #results-inner {
