@@ -49,6 +49,9 @@
   } else require(`./${script}`)({ env: true }); //apply env on deployed server
 })();
 
+
+
+
 // init project
 const express = require("express"),
   app = express(),

@@ -4,35 +4,24 @@
   style="display:none!important;"
 >
   <header id="top" class="backdrop-blur flex-row border-bottom">
-    <div class="d-flex col-12 align-items-center">
+    <div class="col-12 d-flex align-items-center py-2">
       <div
         id="toggle-left"
-        class="p-1 mr-1 text-light rounded"
+        class="p-2 text-light rounded"
         style="z-index:1;opacity:.75"
       >
         <i class="fas fa-bars"></i>
       </div>
 
-      <!--
-   <div
-        id="logo"
-        class="d-flex col-3 col-md-2 col-xl-1 p-0 align-items-center"
+      <div
+        id="dynamic-logo"
+        class="col-1 col-sm-1 col-xl-2 mr-sm-3 col-md-1 mr-md-5 d-flex flex-row align-items-center pl-1 pr-0"
       >
-        <div class="ml-2 ml-sm-2 ml-xl-4 mr-sm-0 align-items-center d-flex">
--->
-
-      <!--<img src="logo.png" class="ml-0 ml-sm-1 ml-md-2 ml-lg-3 mr-sm-1" />
-          <img id="flag" />-->
-
-      <div id="dynamic-logo" class="d-flex flex-row align-items-center">
         <div class="alpha-mask">
-          <img class="alpha-original position-absolute" src="./logo.png" />
+          <img class="alpha-original position-absolute " src="./logo.png" />
           <img class="alpha-target" />
         </div>
-        <p
-          id="logo-word"
-          class="d-none d-md-flex mr-auto ml-0 mb-0 notranslate"
-        >
+        <p id="logo-word" class="d-none d-lg-flex ml-0 mb-0 notranslate">
           𝒍𝒂𝒑𝒊𝒔Tube
         </p>
         <p id="yt-lang" class="d-sm-flex small px-0 px-sm-1 mb-2 pb-1"></p>
@@ -40,7 +29,7 @@
 
       <div
         id="search"
-        class="input-group col-9 col-sm-8 col-md-7 col-xl-5 md-form my-0 mx-sm-auto pl-2 pr-0"
+        class="input-group ml-5 ml-sm-0 ml-md-4 ml-lg-5 col-7 col-sm-9 col-md-7 col-xl-6 md-form my-0 pl-2 pr-0"
       >
         <input
           id="search-input"
@@ -56,7 +45,7 @@
           >
             <i class="fas fa-search"></i>
           </button>
-        </span>
+        </div>
       </div>
     </div>
   </header>

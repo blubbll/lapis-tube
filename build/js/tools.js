@@ -29,8 +29,7 @@ function detectIEEdge() {
 
 getSize = () => {
   for (const indicator of $("size-indicators").find("size-indicator")) {
-    console.log(indicator)
-    console.log($(indicator)[0])
+    //get current "visible" indicator based on bootstrap's css rules
     if (getComputedStyle(indicator).display === "flex") {
       return indicator.classList[0].split("-")[1].replace("flex", "xs");
     }

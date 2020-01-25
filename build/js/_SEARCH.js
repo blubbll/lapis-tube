@@ -129,19 +129,33 @@ setupSearch = () => {
   //set Input on mobile to fullwidth
   {
     $("#search-input").on("focus", () => {
-      if (getSize() === "xs")
+      if (getSize() === "xs") {
+        //remove margin to logo (we dont need it here)
+        $("#search")[0].style.setProperty("margin-left", 0, "important");
+        //hide dynamic logo
         $("#dynamic-logo")[0].style.setProperty("display", "none", "important");
-      $("#search").addClass("col-11");
-      $("#search-input").addClass("rounded");
-      $("#search-btn").addClass("d-none");
+        //make search wider
+        $("#search").addClass("col-11");
+        //hide submit btn and then...
+        $("#search-btn").addClass("d-none");
+        //...fixaroo round (cuz missing submit btn)
+        $("#search-input").addClass("rounded");
+      }
     });
 
     $("#search-input").on("blur", () => {
-      if (getSize() === "xs")
+      if (getSize() === "xs") {
+        //reset margin left override
+        $("#search")[0].style.setProperty("margin-left", "");
+        //show dynamic logo again
         $("#dynamic-logo")[0].style.setProperty("display", "");
-      $("#search").removeClass("col-11");
-      $("#search-input").removeClass("rounded");
-      $("#search-btn").removeClass("d-none");
+        //reset searchelement to "normal" sizes
+        $("#search").removeClass("col-11");
+        //show search btn again and...
+        $("#search-btn").removeClass("d-none");
+        //... make it round again :3
+        $("#search-input").removeClass("rounded");
+      }
     });
   }
 };
