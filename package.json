@@ -21,7 +21,7 @@
     "glob": "^7.1.6",
     "node-sass": "^4.13.1",
     "request": "^2.88.0",
-    "uglify-js": "^3.7.6"
+    "terser": "^4.6.3"
   },
   "engines": {
     "node": "8.x"

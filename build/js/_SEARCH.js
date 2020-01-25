@@ -26,14 +26,9 @@ const SEARCH = str => {
       let results = JSON.parse(raw);
       let HTML = "";
 
-    
       for (const result of results) {
-        
         //HTML += T.RESULT.replace("{{preview}}");
-        let HTML = T.RESULT.replace(
-          "{{title}}",
-          result.title
-        );
+        let HTML = T.RESULT.replace("{{title}}", result.title);
 
         let srcSet = "";
         for (const thumb of result.videoThumbnails) {
@@ -46,8 +41,6 @@ const SEARCH = str => {
           `<img data="preview" alt="preview" srcset="${srcSet.slice(0, -1)}" />`
         );
 
-        console.log(HTML)
-        
         //store querystring for re-querying more data when scrolling
         $("#results").attr("q", str);
         //update paging no for ^
@@ -65,9 +58,13 @@ const SEARCH = str => {
     });
 };
 
+//Load more results
 $("#results").on("scroll", () => {
   const that = $("#results")[0];
   if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
     //SEARCH($("#results").attr("q"));
   }
 });
+
+//Input on mobile
+$("#top input").on("focus", () => {});

@@ -1,5 +1,5 @@
 const { $, NProgress } = window;
-let { debounce, fetch, getL, loadImage } = window;
+let { debounce, fetch, getL, getSize, loadImage } = window;
 
 function detectIEEdge() {
   const ua = window.navigator.userAgent;
@@ -26,6 +26,14 @@ function detectIEEdge() {
   // other browser
   return false;
 }
+
+getSize = () => {
+  for (const indicator in $("size-indicators")[0].find("size-indicator")) {
+    if (getComputedStyle(indicator).display === "flex") {
+      return indicator.classList[0].split("-")[1].replace("flex", "xs");
+    }
+  }
+};
 
 loadImage = url => {
   return new Promise(r => {

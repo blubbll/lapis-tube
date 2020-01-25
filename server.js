@@ -57,20 +57,20 @@ const express = require("express"),
   sass = require("node-sass"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser"),
-  UglifyJS = require("uglify-js");
+  Terser = require("terser");
 
 {
-  const atto = "/*💜/* i love you, monad*/";
+  const atto = "";
   const transpile = (file, direct) => {
     const result = es6tr.run({ filename: file });
-    const ext = ".es5";
     const outFile = `${file.replace("/build", "/public")}`;
 
     if (result.src) {
-      const outResult = result.src.replace(/\0/gi, "");
+      const outResult = result.src.replace(/\0/gi, "").replace(/\\r\n/gi, "");
+
       if (!direct)
         [
-          fs.writeFileSync(outFile, `${atto}${outResult}`),
+          fs.writeFileSync(outFile, `${atto}\r\n${outResult}`),
           console.log(`Transpiled ${file} to ${outFile}!`)
         ];
       else {
@@ -97,11 +97,7 @@ const express = require("express"),
         bundle += transpile(script, true);
       }
       //write bundle
-      const minified = UglifyJS.minify(bundle, {
-        output: {
-          comments: "/^/*!/"
-        }
-      });
+      const minified = Terser.minify(bundle);
       minified.error
         ? console.warn(minified.error)
         : fs.writeFileSync(bundleFile, `${atto}\r\n${minified.code}`, "utf8");
