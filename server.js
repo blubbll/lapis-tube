@@ -57,54 +57,60 @@ const express = require("express"),
   sass = require("node-sass"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser"),
-  compressor = require("node-minify");
+  UglifyJS = require("uglify-js");
 
-const transpile = (file, direct) => {
-  const result = es6tr.run({ filename: file });
-  const ext = ".es5";
-  const outFile = `${file.replace("/build", "/public")}`;
+{
+  const atto = "/*💜/* i love you, monad*/";
+  const transpile = (file, direct) => {
+    const result = es6tr.run({ filename: file });
+    const ext = ".es5";
+    const outFile = `${file.replace("/build", "/public")}`;
 
-  if (result.src) {
-    const betterResult = `//💜//i love you monad\r\n${result.src.replace(
-      /\0/gi,
-      ""
-    )}`;
-    if (!direct)
-      [
-        fs.writeFileSync(outFile, betterResult),
-        console.log(`Transpiled ${file} to ${outFile}!`)
+    if (result.src) {
+      const outResult = result.src.replace(/\0/gi, "");
+      if (!direct)
+        [
+          fs.writeFileSync(outFile, `${atto}${outResult}`),
+          console.log(`Transpiled ${file} to ${outFile}!`)
+        ];
+      else {
+        //console.log(`Transpiled ${file}!`);
+        return outResult;
+      }
+    } else console.warn(`Error at transpiling of file ${file}:`, result);
+  };
+
+  //BUILD
+  if (process.env.PROJECT_NAME) {
+    //BUNDLE JS
+    {
+      const bundleFile = `${__dirname}/public/bundle.js`;
+      let bundle = "";
+
+      const scripts = [
+        `${__dirname}/build/js/_SEARCH.js`,
+        `${__dirname}/build/js/tools.js`,
+        `${__dirname}/build/js/bg.js`,
+        `${__dirname}/build/js/client.js`
       ];
-    else {
-      //console.log(`Transpiled ${file}!`);
-      return betterResult;
+      for (const script of scripts) {
+        bundle += transpile(script, true);
+      }
+      //write bundle
+      const minified = UglifyJS.minify(bundle, {
+        output: {
+          comments: "/^/*!/"
+        }
+      });
+      minified.error
+        ? console.warn(minified.error)
+        : fs.writeFileSync(bundleFile, `${atto}\r\n${minified.code}`, "utf8");
+      console.log(`Bundled ${scripts} into ${bundleFile}!`);
     }
-  } else console.warn(`Error at transpiling of file ${file}:`, result);
-};
 
-//BUILD
-if (process.env.PROJECT_NAME) {
-  //BUNDLE JS
-  {
-    const bundleFile = `${__dirname}/public/bundle.js`;
-    let bundle = "";
-
-    const scripts = [
-      `${__dirname}/build/js/_SEARCH.js`,
-      `${__dirname}/build/js/tools.js`,
-      `${__dirname}/build/js/bg.js`,
-      `${__dirname}/build/js/client.js`
-    ];
-    for (const script of scripts) {
-      bundle += transpile(script, true);
-    }
-    //write bundle
-    fs.writeFileSync(bundleFile, bundle, "utf8");
-    console.log(`Bundled ${scripts} into ${bundleFile}!`);
-  }
-
-  //SASS
-  {
-    /*const c = {
+    //SASS
+    {
+      /*const c = {
       in: `${__dirname}/build/style.sass.css`,
       out: `${__dirname}/public/style.css`
     };
@@ -117,27 +123,27 @@ if (process.env.PROJECT_NAME) {
         .css.toString("utf8")
     );*/
 
-    const bundleFile = `${__dirname}/public/bundle.css`;
-    let bundle = "";
+      const bundleFile = `${__dirname}/public/bundle.css`;
+      let bundle = "";
 
-    const styles = [
-      `${__dirname}/build/css/lib/bs-shards.css`,
-      `${__dirname}/build/css/style.sass.css`
-    ];
-    for (const style of styles) {
-      bundle += sass
-        .renderSync({
-          data: fs.readFileSync(style, "utf8"),
-          "output-style": "minified"
-        })
-        .css.toString("utf8");
+      const styles = [
+        `${__dirname}/build/css/lib/bs-shards.css`,
+        `${__dirname}/build/css/style.sass.css`
+      ];
+      for (const style of styles) {
+        bundle += sass
+          .renderSync({
+            data: fs.readFileSync(style, "utf8"),
+            outputStyle: "compressed"
+          })
+          .css.toString("utf8");
+      }
+      //write bundle
+      fs.writeFileSync(bundleFile, `${atto}\r\n${bundle}`, "utf8");
+      console.log(`Bundled ${styles} into ${bundleFile}!`);
     }
-    //write bundle
-    fs.writeFileSync(bundleFile, bundle, "utf8");
-    console.log(`Bundled ${styles} into ${bundleFile}!`);
   }
 }
-
 //API
 const API = "/api";
 
