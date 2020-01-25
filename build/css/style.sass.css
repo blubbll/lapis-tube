@@ -62,53 +62,51 @@ body {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
-#logo {
+
+#dynamic-logo {
   color: var(--color-font-light);
   font-family: consolas;
-
-  & .dynamic-logo {
-    filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.42));
-    $width: 42px;
-    $height: 42px;
-    cursor: pointer;
-    /*show original on hover */
-    &:hover {
-      filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.42));
-      > .alpha-mask {
-        > .alpha-original {
-          filter: brightness(1.2) contrast(3);
-        }
-        > .alpha-target {
-          opacity: 0;
-        }
-      }
-    }
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.42));
+  $width: 39px;
+  $height: 39px; /* should be less high than search bar to prevent hopping */
+  cursor: pointer;
+  /*show original on hover */
+  &:hover {
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.42));
     > .alpha-mask {
-      mask-image: url(./logo.png);
-      -webkit-mask-image: url(./logo.png);
-      mask-mode: alpha;
-      -webkit-mask-mode: alpha;
-      mask-repeat: no-repeat;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-repeat: round;
-      height: $height;
-      width: $width;
-      /* important: must be before alpha-target in html structure (or use z-index: > x) */
       > .alpha-original {
-        width: $width;
-        height: $height;
-        opacity: 0.42;
-        filter: brightness(1.5) contrast(3);
+        filter: brightness(1.2) contrast(3);
       }
       > .alpha-target {
-        transition: opacity 499ms ease;
-        opacity: 1;
-        width: $width;
-        height: $height;
-        position: absolute;
-        mix-blend-mode: color;
+        opacity: 0;
       }
+    }
+  }
+  > .alpha-mask {
+    mask-image: url(./logo.png);
+    -webkit-mask-image: url(./logo.png);
+    mask-mode: alpha;
+    -webkit-mask-mode: alpha;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: round;
+    height: $height;
+    width: $width;
+    /* important: must be before alpha-target in html structure (or use z-index: > x) */
+    > .alpha-original {
+      width: $width;
+      height: $height;
+      opacity: 0.42;
+      filter: brightness(1.5) contrast(3);
+    }
+    > .alpha-target {
+      transition: opacity 499ms ease;
+      opacity: 1;
+      width: $width;
+      height: $height;
+      position: absolute;
+      mix-blend-mode: color;
     }
   }
 
@@ -148,35 +146,38 @@ body {
     }
   }
 
-  & input {
-    background: rgba(255, 255, 255, 0.3);
-    color: var(--color-font-light);
-  }
-
-  //Platzhalter-Styling & Fixes
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  & input {
-    &::placeholder {
+  #search {
+    & input {
+      background: rgba(255, 255, 255, 0.3);
       color: var(--color-font-light);
     }
 
-    /* Internet Explorer 10-11 */
-    :-ms-input-placeholder {
-      color: var(--color-font-light);
-    }
+    //Platzhalter-Styling & Fixes
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    & input {
+      &::placeholder {
+        color: var(--color-font-light);
+      }
 
-    /* Microsoft Edge */
-    ::-ms-input-placeholder {
-      color: var(--color-font-light);
-    }
-    /*ie no clear btn */
-    ::-ms-clear {
-      display: none;
+      /* Internet Explorer 10-11 */
+      :-ms-input-placeholder {
+        color: var(--color-font-light);
+      }
+
+      /* Microsoft Edge */
+      ::-ms-input-placeholder {
+        color: var(--color-font-light);
+      }
+      /*ie no clear btn */
+      ::-ms-clear {
+        display: none;
+      }
     }
   }
 }
 
 //SUCHLEISTE
+
 .live-search {
   background: rgba(255, 255, 255, 0.1);
 

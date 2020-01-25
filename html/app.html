@@ -4,46 +4,52 @@
   style="display:none!important;"
 >
   <header id="top" class="backdrop-blur flex-row border-bottom">
-    <div class="my-2 d-flex justify-content-around">
+    <div class="d-flex col-12 align-items-center">
       <div
+        id="toggle-left"
+        class="p-1 mr-1 text-light rounded"
+        style="z-index:1;opacity:.75"
+      >
+        <i class="fas fa-bars"></i>
+      </div>
+
+      <!--
+   <div
         id="logo"
         class="d-flex col-3 col-md-2 col-xl-1 p-0 align-items-center"
       >
         <div class="ml-2 ml-sm-2 ml-xl-4 mr-sm-0 align-items-center d-flex">
-          <div
-            id="toggle-left"
-            class="py-2 px-3 rounded"
-            style="z-index:1;opacity:.75"
-          >
-            <i class="fas fa-bars"></i>
-          </div>
+-->
 
-          <!--<img src="logo.png" class="ml-0 ml-sm-1 ml-md-2 ml-lg-3 mr-sm-1" />
+      <!--<img src="logo.png" class="ml-0 ml-sm-1 ml-md-2 ml-lg-3 mr-sm-1" />
           <img id="flag" />-->
 
-          <div class="d-flex dynamic-logo flex-row align-items-center">
-            <div class="alpha-mask">
-              <img class="alpha-original position-absolute" src="./logo.png" />
-              <img class="alpha-target" />
-            </div>
-            <p id="logo-word" class="d-none d-md-flex mr-auto ml-0 mb-0 notranslate">
-              𝒍𝒂𝒑𝒊𝒔Tube
-            </p>
-          </div>
-          <p id="yt-lang" class="d-sm-flex small px-0 px-sm-1 mb-2 pb-1"></p>
+      <div id="dynamic-logo" class="d-flex flex-row align-items-center">
+        <div class="alpha-mask">
+          <img class="alpha-original position-absolute" src="./logo.png" />
+          <img class="alpha-target" />
         </div>
+        <p
+          id="logo-word"
+          class="d-none d-md-flex mr-auto ml-0 mb-0 notranslate"
+        >
+          𝒍𝒂𝒑𝒊𝒔Tube
+        </p>
+        <p id="yt-lang" class="d-sm-flex small px-0 px-sm-1 mb-2 pb-1"></p>
       </div>
+
       <div
-        class="input-group col-7 col-sm-8 col-md-7 col-xl-5 mr-auto md-form mt-0 mb-1 pl-0 mx-sm-auto mr-0 ml-5 pr-2"
+        id="search"
+        class="input-group col-9 col-sm-8 col-md-7 col-xl-5 md-form my-0 mx-sm-auto pl-2 pr-0"
       >
         <input
-          id="search"
+          id="search-input"
           type="text"
           autocomplete="off"
           class="form-control rounded-left"
           placeholder="Search"
         />
-        <span class="input-group-btn">
+        <div id="search-btn" class="input-group-btn">
           <button
             class="btn rounded-0 rounded-right m-0 px-2 px-sm-4"
             type="button"

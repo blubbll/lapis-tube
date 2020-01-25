@@ -6,65 +6,142 @@ const {
   done,
   fetch,
   getL,
+  getSize,
   HOST,
   REGION,
   load,
   T
 } = window;
 
-//do actual search
-const SEARCH = str => {
-  //show resultlist
-  $("view").html(T.RESULTS);
+let { setupSearch, SEARCH } = window;
 
-  //show "loading"-spinner on dynamic fields
-  $("param").html('<i class="fas fa-sync fa-spin"></i>');
+setupSearch = () => {
+  //do actual search
+  SEARCH = str => {
+    //show resultlist
+    $("view").html(T.RESULTS);
 
-  fetch(`${HOST}/api/${REGION}/search/${str}`)
-    .then(res => res.text())
-    .then(raw => {
-      let results = JSON.parse(raw);
-      let HTML = "";
+    //show "loading"-spinner on dynamic fields
+    $("param").html('<i class="fas fa-sync fa-spin"></i>');
 
-      for (const result of results) {
-        //HTML += T.RESULT.replace("{{preview}}");
-        let HTML = T.RESULT.replace("{{title}}", result.title);
+    fetch(`${HOST}/api/${REGION}/search/${str}`)
+      .then(res => res.text())
+      .then(raw => {
+        let results = JSON.parse(raw);
+        let HTML = "";
 
-        let srcSet = "";
-        for (const thumb of result.videoThumbnails) {
-          srcSet += `${thumb.url}\t${thumb.width}w,\n`;
+        for (const result of results) {
+          //HTML += T.RESULT.replace("{{preview}}");
+          let HTML = T.RESULT.replace("{{title}}", result.title);
+
+          let srcSet = "";
+          for (const thumb of result.videoThumbnails) {
+            srcSet += `${thumb.url}\t${thumb.width}w,\n`;
+          }
+
+          //fill previewset placeholder
+          HTML = HTML.replace(
+            "{{preview}}",
+            `<img data="preview" alt="preview" srcset="${srcSet.slice(
+              0,
+              -1
+            )}" />`
+          );
+
+          //store querystring for re-querying more data when scrolling
+          $("#results").attr("q", str);
+          //update paging no for ^
+          $("#result").attr(
+            "page",
+            $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
+          );
+
+          //render results
+          $("#results-inner").append(HTML);
+          //console.log(result);
         }
 
-        //fill previewset placeholder
-        HTML = HTML.replace(
-          "{{preview}}",
-          `<img data="preview" alt="preview" srcset="${srcSet.slice(0, -1)}" />`
-        );
+        //$("#results").html(HTML);
+      });
+  };
 
-        //store querystring for re-querying more data when scrolling
-        $("#results").attr("q", str);
-        //update paging no for ^
-        $("#result").attr(
-          "page",
-          $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
-        );
+  //LIVESEARCH
+  {
+    const input = document.getElementById("search-input");
+    const emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
+    const l = getL();
+    const auto = autocomplete({
+      input: input,
+      showOnFocus: true, //focus = show suggestions
+      minLength: 1,
+      className: "live-search backdrop-blur", //class
+      debounceWaitMs: 500, //wait
+      fetch: (input, update) => {
+        //input
+        const text = input.toLowerCase();
 
-        //render results
-        $("#results-inner").append(HTML);
-        //console.log(result);
+        text &&
+          fetch(`${HOST}/api/${REGION}/complete/${text}`)
+            .then(res => res.text())
+            .then(raw => {
+              const result = JSON.parse(raw);
+
+              if (result.code === 200) {
+                //construct output (with input at top for convenience)
+                let suggOutput = [
+                  input.toLowerCase !== result.data[0]
+                    ? { label: input, value: input.toLowerCase() }
+                    : ""
+                ];
+
+                //actual usable data
+                let suggData = result.data.filter(v => v.length); //skip empty
+
+                //loop and push
+                suggData.forEach(sugg => {
+                  suggOutput.push({ label: sugg, value: sugg });
+                });
+                update(suggOutput);
+              } else if (result.code === 404) {
+                update([{ label: emptyMsg, value: emptyMsg }]);
+              }
+            });
+      },
+      onSelect: item => {
+        if (item.label !== emptyMsg) {
+          //set input content
+          input.value = item.label;
+          //load results
+          SEARCH(item.label);
+        }
       }
-
-      //$("#results").html(HTML);
     });
-};
-
-//Load more results
-$("#results").on("scroll", () => {
-  const that = $("#results")[0];
-  if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
-    //SEARCH($("#results").attr("q"));
   }
-});
 
-//Input on mobile
-$("#top input").on("focus", () => {});
+  //Load more results
+  $("#results").on("scroll", () => {
+    const that = $("#results")[0];
+    if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
+      //SEARCH($("#results").attr("q"));
+    }
+  });
+
+  //set Input on mobile to fullwidth
+  {
+    $("#search-input").on("focus", () => {
+      if (getSize() === "xs")
+        $("#dynamic-logo")[0].style.setProperty("display", "none", "important");
+      $("#search").addClass("col-11");
+      $("#search-input").addClass("rounded");
+      $("#search-btn").addClass("d-none");
+    });
+
+    $("#search-input").on("blur", () => {
+      if (getSize() === "xs")
+        $("#dynamic-logo")[0].style.setProperty("display", "");
+      $("#search").removeClass("col-11");
+      $("#search-input").removeClass("rounded");
+      $("#search-btn").removeClass("d-none");
+    });
+  }
+};

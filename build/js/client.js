@@ -2,7 +2,19 @@
 location.hash = "";
 console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 //
-const { $, autocomplete, alert, debounce, done, fetch, getL, load, SEARCH, T } = window;
+const {
+  $,
+  autocomplete,
+  alert,
+  debounce,
+  done,
+  fetch,
+  getL,
+  load,
+  SEARCH,
+  setupSearch,
+  T
+} = window;
 let { API, GEO, HOST, REGION, lscache } = window;
 
 //anti-hostname (allow inplace editing though)
@@ -76,7 +88,7 @@ API = `//${location.hostname}/api`;
         T.PLAYER = tx[3];
         T.RESULT = tx[4];
         T.RESULTS = tx[5];
-        setup();
+        setupClient();
         done();
         demo();
       })
@@ -99,8 +111,9 @@ API = `//${location.hostname}/api`;
 
 //////
 const demo = () => {
-  const q = "Günther";
+  const q = "New americana";
   $("#top")[0].value = q;
+  
   SEARCH(q);
 };
 
@@ -144,8 +157,14 @@ $(document).on("click", "#usage-accept", () => {
 });
 
 //wreadyy
-const setup = () => {
+const setupClient = () => {
+  //fill home view (first step in app setup)
   $("gtranslate")[0].outerHTML = T.HOME;
+
+  /////////////////////////
+  //SETUP
+  /////////////////////////
+  setupSearch();
 
   //sync language
   $("#yt-lang").text(getL());
@@ -156,61 +175,8 @@ const setup = () => {
   //https://stackoverflow.com/questions/41180735/can-html-and-css-only-create-an-overlay-which-ignores-transparent-area-on-an-ima
 
   $(
-    "#logo .alpha-target"
+    "#dynamic-logo .alpha-target"
   )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
-  $(".dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
+  $("#dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
   $("#yt-lang")[0].setAttribute("title", `App language: ${getL()}`);
-
-  //LIVESEARCH
-  {
-    const input = document.getElementById("search");
-    const emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
-    const l = getL();
-    const auto = autocomplete({
-      input: input,
-      showOnFocus: true, //focus = show suggestions
-      minLength: 1,
-      className: "live-search backdrop-blur", //class
-      debounceWaitMs: 500, //wait
-      fetch: (input, update) => {
-        //input
-        const text = input.toLowerCase();
-
-        text &&
-          fetch(`${HOST}/api/${REGION}/complete/${text}`)
-            .then(res => res.text())
-            .then(raw => {
-              const result = JSON.parse(raw);
-
-              if (result.code === 200) {
-                //construct output (with input at top for convenience)
-                let suggOutput = [
-                  input.toLowerCase !== result.data[0]
-                    ? { label: input, value: input.toLowerCase() }
-                    : ""
-                ];
-
-                //actual usable data
-                let suggData = result.data.filter(v => v.length); //skip empty
-
-                //loop and push
-                suggData.forEach(sugg => {
-                  suggOutput.push({ label: sugg, value: sugg });
-                });
-                update(suggOutput);
-              } else if (result.code === 404) {
-                update([{ label: emptyMsg, value: emptyMsg }]);
-              }
-            });
-      },
-      onSelect: item => {
-        if (item.label !== emptyMsg) {
-          //set input content
-          input.value = item.label;
-          //load results
-          SEARCH(item.label);
-        }
-      }
-    });
-  }
 };

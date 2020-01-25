@@ -28,7 +28,9 @@ function detectIEEdge() {
 }
 
 getSize = () => {
-  for (const indicator in $("size-indicators")[0].find("size-indicator")) {
+  for (const indicator of $("size-indicators").find("size-indicator")) {
+    console.log(indicator)
+    console.log($(indicator)[0])
     if (getComputedStyle(indicator).display === "flex") {
       return indicator.classList[0].split("-")[1].replace("flex", "xs");
     }
