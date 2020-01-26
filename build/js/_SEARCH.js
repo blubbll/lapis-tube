@@ -18,11 +18,14 @@ let { setupSearch, SEARCH } = window;
 setupSearch = () => {
   //do actual search
   SEARCH = str => {
-    //show resultlist
-    $("view").html(T.RESULTS);
+    const freshSearch =
+      //show resultlist
+      $("view").html(T.RESULTS);
 
     //show "loading"-spinner on dynamic fields
     $("param").html('<i class="fas fa-sync fa-spin"></i>');
+
+    //fix flexbox height for bad browser (old chromes etc)
 
     fetch(`${HOST}/api/${REGION}/search/${str}`)
       .then(res => res.text())
@@ -58,7 +61,29 @@ setupSearch = () => {
 
           //render results
           $("#results-inner").append(HTML);
-          //console.log(result);
+        }
+
+        //const wasnew = !!!$("#results").attr("q");
+        if ($("#results").height() === 0) {
+          console.warn("your browser doesn't like flexboxes too much :(");
+          const loopo = setInterval(() => {
+            if ($("#inner").height() !== 0) {
+              console.log("fixed the results flexbox...");
+              //absolute :/
+              $("#results")[0].style.position = "absolute";
+              //margin to filter
+              $("#results")[0].style.marginTop = `${
+                $("#filters")[0].clientHeight
+              }px`;
+
+              //set height >_< ouch
+              $("#results")[0].style.height = `calc(100% - ${$("#filters")[0]
+                .clientHeight +
+                $("#top")[0].clientHeight +
+                $("#footer")[0].clientHeight}px)`;
+              clearInterval(loopo);
+            }
+          }, 99);
         }
 
         //$("#results").html(HTML);
