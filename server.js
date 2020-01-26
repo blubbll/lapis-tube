@@ -1,6 +1,7 @@
 
 
 
+
 //© 2019 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -94,6 +95,7 @@ const express = require("express"),
 
       const scripts = [
         `${__dirname}/build/js/tools.js`,
+        `${__dirname}/build/js/_PLAY.js`,
         `${__dirname}/build/js/_SEARCH.js`,
         `${__dirname}/build/js/bg.js`,
         `${__dirname}/build/js/client.js`

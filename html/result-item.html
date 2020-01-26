@@ -4,17 +4,31 @@
     </p>
     {{dpreview}}-->
 
-  <div class="card p-2 p-sm-3 bg-black">
+  <card data-video="{{video}}" class="card p-2 p-sm-3 bg-black">
     <figure>
       <img class="card-img-top" srcset="{{preview-set}}" />
-      <figcaption class="backdrop-blur">{{duration}} <detailed>({{duration-detailed}})</detailed></figcaption>
+      <figcaption>
+        <duration class="backdrop-blur">
+          {{duration}} <detailed>({{duration-detailed}})</detailed>
+        </duration>
+      </figcaption>
     </figure>
 
-    <div class="card-body p-3">
-      <h5 class="card-title text-light">{{title}}</h5>
+    <div class="card-body p-3 d-flex flex-column">
+      <h6 class="card-title text-light mb-0">{{title}}</h6>
+      <hr class="my-1 w-100 border border-white" />
+      <div class="d-flex flex-row">
+        <a data-authorid="{{authorid}}" class="card-text text-muted mb-0">
+          <i class="fas fa-user"></i>&thinsp;{{author}}
+        </a>
+        <p class="ml-auto card-text text-light mb-0">
+          <i class="fas fa-eye"></i>&thinsp;{{views}}
+        </p>
+      </div>
+
       <p class="card-text text-light">
         {{preview-desc}}
       </p>
     </div>
-  </div>
+  </card>
 </div>

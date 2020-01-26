@@ -21,7 +21,7 @@ setupSearch = () => {
   SEARCH = str => {
     const freshSearch =
       //show resultlist
-      $("view").html(T.RESULTS);
+      $("#view-inner").html(T.RESULTS);
 
     //show "loading"-spinner on dynamic fields
     $("param").html('<i class="fas fa-sync fa-spin"></i>');
@@ -40,6 +40,21 @@ setupSearch = () => {
             srcSet += `${thumb.url}\t${thumb.width}w,\n`;
           }
 
+          const getDurationDetailed = () => {
+            let detailed = moment
+              .utc(
+                moment
+                  .duration(result.lengthSeconds, "seconds")
+                  .asMilliseconds()
+              )
+              .format("HH:mm:ss");
+            //slice empty hours
+            detailed.startsWith("00:") && [(detailed = detailed.slice(3))];
+            //slice empty minutes
+            detailed.startsWith("0") && [(detailed = detailed.slice(1))];
+
+            return detailed;
+          };
           //CONSTRUCT HTML
           let HTML = T.RESULT
             //FILL title
@@ -53,16 +68,15 @@ setupSearch = () => {
               "{{duration}}",
               moment.duration(result.lengthSeconds * 1000).humanize()
             ) //DURATION DETAILED
-            .replace(
-              "{{duration-detailed}}",
-              moment
-                .utc(
-                  moment
-                    .duration(result.lengthSeconds, "seconds")
-                    .asMilliseconds()
-                )
-                .format("HH:mm:ss")
-            );
+            .replace("{{duration-detailed}}", getDurationDetailed())
+            //FILL video id
+            .replace("{{video}}", result.videoId)
+            //FILL AUTHOR
+            .replace("{{author}}", result.author)
+            //FILL AUTHOR id
+            .replace("{{authorid}}", result.authorId)
+            //FILL VIEWS
+            .replace("{{views}}", result.viewCount);
 
           //store querystring for re-querying more data when scrolling
           $("#results").attr("q", str);
@@ -80,7 +94,7 @@ setupSearch = () => {
         if ($("#results").height() === 0) {
           console.warn("your browser doesn't like flexboxes too much :(");
           const loopo = setInterval(() => {
-            if ($("#inner").height() !== 0) {
+            if ($("#view-inner").height() !== 0) {
               console.log("fixed the results flexbox...");
               //absolute :/
               $("#results")[0].style.position = "absolute";
@@ -100,7 +114,16 @@ setupSearch = () => {
                 $("#footer")[0].clientHeight}px)`;
               clearInterval(loopo);
             }
-          }, 99);
+          }, 0);
+
+          //Load more results
+          $("#results").on("scroll", () => {
+            const that = this;
+            console.log(1);
+            if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
+              //SEARCH($("#results").attr("q"));
+            }
+          });
         }
 
         //$("#results").html(HTML);
@@ -159,15 +182,6 @@ setupSearch = () => {
       }
     });
   }
-
-  //Load more results
-  $("#results").on("scroll", () => {
-    const that = this;
-    console.log(1);
-    if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
-      //SEARCH($("#results").attr("q"));
-    }
-  });
 
   //set Input on mobile to fullwidth
   {
