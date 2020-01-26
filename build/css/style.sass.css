@@ -18,6 +18,7 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  font-family: "Oxygen", sans-serif;
 }
 
 .text-accent {
@@ -108,25 +109,6 @@ body {
       mix-blend-mode: color;
     }
   }
-
-  /* #yt-lang {
-    background-repeat: no-repeat;
-    -webkit-background-clip: text;
-    background-size: contain;
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.5);
-    background-position-x: center;
-    background-position-y: 2px;
-    filter: drop-shadow(0px 0px 3px black) contrast(2);
-  }*/
-  /*#logo img{
-      height: 36px;
-    width: 36px;
-    background-repeat: no-repeat;
-    -webkit-background-clip: unset;
-    background-size: 25px 25px;
-    background-blend-mode: color;
-    background-position: center;
-  }*/
 }
 
 #top {
@@ -275,9 +257,38 @@ footer#footer {
       transform: scale(1);
       transition: transform 300ms;
       background: rgba(0, 0, 0, 0.3);
-      img {
-        max-height: 12vmax;
-        object-fit: cover;
+      figure {
+        margin-bottom: 0;
+        figcaption {
+          detailed {
+            display: none;
+          }
+          opacity: 1;
+          position: absolute;
+          margin-top: -2rem;
+          white-space: nowrap;
+          margin-left: 0.2rem;
+          padding: 0.1rem 0.3rem;
+          border-radius: 0.25rem;
+          background: rgba(0, 0, 0, 0.42);
+          color: white;
+          transition: opacity 200ms;
+          &:hover {
+            opacity: 1 !important;
+            detailed {
+              display: inline-block;
+            }
+          }
+        }
+        img {
+          max-height: 12vmax;
+          object-fit: cover;
+        }
+        &:hover {
+          figcaption {
+            opacity: 0;
+          }
+        }
       }
 
       &:hover {

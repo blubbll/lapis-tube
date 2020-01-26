@@ -1,11 +1,15 @@
-<div class="mb-1 col-12 col-sm-6 col-lg-4">
+<div class="mb-1 col-12 col-sm-6 col-xl-4">
   <!--<p>
       {{dtitle}}
     </p>
     {{dpreview}}-->
 
-  <div class="card p-2 p-sm-3">
-    <img class="card-img-top" srcset="{{preview-set}}" />
+  <div class="card p-2 p-sm-3 bg-black">
+    <figure>
+      <img class="card-img-top" srcset="{{preview-set}}" />
+      <figcaption class="backdrop-blur">{{duration}} <detailed>({{duration-detailed}})</detailed></figcaption>
+    </figure>
+
     <div class="card-body p-3">
       <h5 class="card-title text-light">{{title}}</h5>
       <p class="card-text text-light">

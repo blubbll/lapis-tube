@@ -10,6 +10,7 @@ const {
   HOST,
   REGION,
   load,
+  moment,
   T
 } = window;
 
@@ -46,14 +47,29 @@ setupSearch = () => {
             //fill previewset placeholder
             .replace("{{preview-set}}", srcSet.slice(0, -1))
             //FILL DESCRIPTION
-            .replace("{{preview-desc}}", result.description);
+            .replace("{{preview-desc}}", result.description)
+            //FILL DURATION
+            .replace(
+              "{{duration}}",
+              moment.duration(result.lengthSeconds * 1000).humanize()
+            ) //DURATION DETAILED
+            .replace(
+              "{{duration-detailed}}",
+              moment
+                .utc(
+                  moment
+                    .duration(result.lengthSeconds, "seconds")
+                    .asMilliseconds()
+                )
+                .format("HH:mm:ss")
+            );
 
           //store querystring for re-querying more data when scrolling
           $("#results").attr("q", str);
           //update paging no for ^
-          $("#result").attr(
+          $("#results").attr(
             "page",
-            $("#result").attr("page") ? $("#result").attr("page") + 1 : 1
+            $("#results").attr("page") ? $("#result").attr("page") + 1 : 1
           );
 
           //render results
@@ -69,11 +85,13 @@ setupSearch = () => {
               //absolute :/
               $("#results")[0].style.position = "absolute";
               //100width :/
-               $("#results")[0].style.width = "100%";
-              //margin to filter
-              $("#results")[0].style.marginTop = `${
-                $("#filters")[0].clientHeight
-              }px`;
+              $("#results")[0].style.width = "100%";
+              //margintop to filter
+              $("#results")[0].style.setProperty(
+                "margin-top",
+                `${$("#filters")[0].clientHeight}px`,
+                "important"
+              );
 
               //set height >_< ouch
               $("#results")[0].style.height = `calc(100% - ${$("#filters")[0]
@@ -99,7 +117,7 @@ setupSearch = () => {
       showOnFocus: true, //focus = show suggestions
       minLength: 1,
       className: "live-search backdrop-blur", //class
-      debounceWaitMs: 500, //wait
+      debounceWaitMs: 399, //wait
       fetch: (input, update) => {
         //input
         const text = input.toLowerCase();
@@ -144,7 +162,8 @@ setupSearch = () => {
 
   //Load more results
   $("#results").on("scroll", () => {
-    const that = $("#results")[0];
+    const that = this;
+    console.log(1);
     if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
       //SEARCH($("#results").attr("q"));
     }

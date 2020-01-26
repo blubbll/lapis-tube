@@ -11,6 +11,7 @@ const {
   fetch,
   getL,
   load,
+  moment,
   SEARCH,
   setupSearch,
   T
@@ -113,7 +114,7 @@ API = `//${location.hostname}/api`;
 const demo = () => {
   const q = "New americana";
   $("#top")[0].value = q;
-  
+
   SEARCH(q);
 };
 
@@ -160,6 +161,9 @@ $(document).on("click", "#usage-accept", () => {
 const setupClient = () => {
   //fill home view (first step in app setup)
   $("gtranslate")[0].outerHTML = T.HOME;
+
+  //SETUP MOMENT LANGUAGE
+  moment.locale(getL());
 
   /////////////////////////
   //SETUP
