@@ -34,22 +34,19 @@ setupSearch = () => {
         let HTML = "";
 
         for (const result of results) {
-          //HTML += T.RESULT.replace("{{preview}}");
-          let HTML = T.RESULT.replace("{{title}}", result.title);
-
           let srcSet = "";
           for (const thumb of result.videoThumbnails) {
             srcSet += `${thumb.url}\t${thumb.width}w,\n`;
           }
 
-          //fill previewset placeholder
-          HTML = HTML.replace(
-            "{{preview}}",
-            `<img data="preview" alt="preview" srcset="${srcSet.slice(
-              0,
-              -1
-            )}" />`
-          );
+          //CONSTRUCT HTML
+          let HTML = T.RESULT
+            //FILL title
+            .replace("{{title}}", result.title)
+            //fill previewset placeholder
+            .replace("{{preview-set}}", srcSet.slice(0, -1))
+            //FILL DESCRIPTION
+            .replace("{{preview-desc}}", result.description);
 
           //store querystring for re-querying more data when scrolling
           $("#results").attr("q", str);
@@ -71,6 +68,8 @@ setupSearch = () => {
               console.log("fixed the results flexbox...");
               //absolute :/
               $("#results")[0].style.position = "absolute";
+              //100width :/
+               $("#results")[0].style.width = "100%";
               //margin to filter
               $("#results")[0].style.marginTop = `${
                 $("#filters")[0].clientHeight

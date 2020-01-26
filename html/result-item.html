@@ -1,8 +1,16 @@
-<div class="bg-dark flex-grow-1">
-  <div class="col-12">
-    <p>
-      {{title}}
+<div class="mb-1 col-12 col-sm-6 col-lg-4">
+  <!--<p>
+      {{dtitle}}
     </p>
-    {{preview}}
+    {{dpreview}}-->
+
+  <div class="card p-2 p-sm-3">
+    <img class="card-img-top" srcset="{{preview-set}}" />
+    <div class="card-body p-3">
+      <h5 class="card-title text-light">{{title}}</h5>
+      <p class="card-text text-light">
+        {{preview-desc}}
+      </p>
+    </div>
   </div>
 </div>

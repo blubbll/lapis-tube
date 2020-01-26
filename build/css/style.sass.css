@@ -265,10 +265,30 @@ footer#footer {
   overflow-y: auto;
 
   #results-inner {
-    height: -moz-fit-content;
-    height: fit-content;
-    img {
-      width: 100%;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
+
+    .card {
+      cursor: pointer;
+      overflow: hidden;
+      transform: scale(1);
+      transition: transform 300ms;
+      background: rgba(0, 0, 0, 0.3);
+      img {
+        max-height: 12vmax;
+        object-fit: cover;
+      }
+
+      &:hover {
+        z-index: 1;
+        transform: scale(1.1);
+      }
+
+      .card-body {
+        z-index: 1;
+        background: black;
+      }
     }
   }
 
