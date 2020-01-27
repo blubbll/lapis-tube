@@ -266,7 +266,7 @@ footer#footer {
         figcaption {
           duration {
             position: absolute;
-            margin-left: 0.2rem;
+            margin-left: 0.4rem;
             margin-top: -2rem;
 
             detailed {
@@ -281,22 +281,17 @@ footer#footer {
             background: rgba(0, 0, 0, 0.42);
             color: white;
             transition: opacity 200ms;
-            &:hover {
-              opacity: 1 !important;
-              detailed {
-                display: inline-block;
-              }
-            }
           }
         }
         img {
           max-height: 12vmax;
           object-fit: cover;
-        }
-        &:hover {
-          figcaption {
-            duration {
-              opacity: 0;
+
+          &:hover {
+            figcaption {
+              duration {
+                opacity: 0;
+              }
             }
           }
         }
@@ -305,6 +300,15 @@ footer#footer {
       &:hover {
         z-index: 1;
         transform: scale(1.1);
+      }
+
+      &:hover {
+        duration {
+          opacity: 1 !important;
+          detailed {
+            display: inline-block;
+          }
+        }
       }
 
       .card-body {

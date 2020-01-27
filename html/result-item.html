@@ -8,8 +8,11 @@
     <figure>
       <img class="card-img-top" srcset="{{preview-set}}" />
       <figcaption>
-        <duration class="backdrop-blur">
-          {{duration}} <detailed>({{duration-detailed}})</detailed>
+        <duration class="backdrop-blur notranslate">
+          <span class="notranslate">{{duration}}</span>&thinsp;<detailed
+            class="notranslate"
+            >({{duration-detailed}})</detailed
+          >
         </duration>
       </figcaption>
     </figure>
@@ -18,10 +21,13 @@
       <h6 class="card-title text-light mb-0">{{title}}</h6>
       <hr class="my-1 w-100 border border-white" />
       <div class="d-flex flex-row">
-        <a data-authorid="{{authorid}}" class="card-text text-muted mb-0">
+        <a
+          data-authorid="{{authorid}}"
+          class="card-text text-muted mb-0 notranslate"
+        >
           <i class="fas fa-user"></i>&thinsp;{{author}}
         </a>
-        <p class="ml-auto card-text text-light mb-0">
+        <p class="ml-auto card-text text-light mb-0 notranslate">
           <i class="fas fa-eye"></i>&thinsp;{{views}}
         </p>
       </div>
