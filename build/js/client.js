@@ -10,7 +10,10 @@ const {
   done,
   fetch,
   getL,
+  getSize,
+  initBg,
   load,
+  lazyload,
   moment,
   SEARCH,
   setupSearch,
@@ -32,6 +35,10 @@ let { API, GEO, HOST, REGION, lscache } = window;
           .join(".")}`
       )
     ];
+
+window.onresize = () => {
+  $("body").attr("size", getSize());
+};
 
 //host
 HOST = `${location.protocol}//${
@@ -62,54 +69,54 @@ API = `//${location.hostname}/api`;
   });
 }
 
-//LOAD TEMPLATES
-{
-  //template remote path
-  const tr = `${HOST}/html`;
-  if (lscache.get("cookie-accepted")) {
-    //template var inmemory
-    const T = (window.T = {});
+window.onload = () => {
+  //LOAD TEMPLATES
+  {
+    //template remote path
+    const tr = `${HOST}/html`;
+    if (lscache.get("cookie-accepted")) {
+      //template var inmemory
+      const T = (window.T = {});
 
-    Promise.all(
-      [
-        tr + "/app.html",
-        API + "/geoip",
-        tr + "/channel.html",
-        tr + "/player.html",
-        tr + "/result-item.html",
-        tr + "/result-list.html"
-      ].map(url => fetch(url).then(resp => resp.text()))
-    )
-      .then(tx => {
-        T.HOME = tx[0];
-        (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
-        console.debug(`Your Geo Information by Maxmind: `, GEO);
-        console.debug(`Your browser language: `, getL());
-        T.CHANNEL = tx[2];
-        T.PLAYER = tx[3];
-        T.RESULT = tx[4];
-        T.RESULTS = tx[5];
-        setupClient();
-        done();
-        demo();
-      })
-      .catch(e => {
-        console.warn(e);
-        alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
-        setTimeout(() => {
-          location.reload(true), 4999;
+      Promise.all(
+        [
+          tr + "/app.html",
+          API + "/geoip",
+          tr + "/channel.html",
+          tr + "/player.html",
+          tr + "/result-item.html",
+          tr + "/result-list.html"
+        ].map(url => fetch(url).then(resp => resp.text()))
+      )
+        .then(tx => {
+          T.HOME = tx[0];
+          (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+          console.debug(`Your Geo Information by Maxmind: `, GEO);
+          console.debug(`Your browser language: `, getL());
+          T.CHANNEL = tx[2];
+          T.PLAYER = tx[3];
+          T.RESULT = tx[4];
+          T.RESULTS = tx[5];
+          setupClient();
+          done();
+        })
+        .catch(e => {
+          console.warn(e);
+          alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
+          setTimeout(() => {
+            location.reload(true), 4999;
+          });
         });
-      });
-  } else {
-    fetch(tr + "/cookie.html")
-      .then(res => res.text())
-      .then(html => {
-        $("gtranslate")[0].outerHTML = html;
-        done();
-      });
+    } else {
+      fetch(tr + "/cookie.html")
+        .then(res => res.text())
+        .then(html => {
+          $("gtranslate")[0].outerHTML = html;
+          done();
+        });
+    }
   }
-}
-
+};
 //////
 const demo = () => {
   const q = "New americana";
@@ -162,6 +169,9 @@ const setupClient = () => {
   //fill home view (first step in app setup)
   $("gtranslate")[0].outerHTML = T.HOME;
 
+  //setup bg
+  initBg();
+  
   //SETUP MOMENT LANGUAGE
   moment.locale(getL());
 
@@ -170,17 +180,16 @@ const setupClient = () => {
   /////////////////////////
   setupSearch();
 
-  //sync language
+  //sync browser-language
   $("#yt-lang").text(getL());
   //sync region (language background clip)
-  //$(
-  //  "#logo #flag"
-  //)[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
-  //https://stackoverflow.com/questions/41180735/can-html-and-css-only-create-an-overlay-which-ignores-transparent-area-on-an-ima
 
   $(
     "#dynamic-logo .alpha-target"
   )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
   $("#dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
   $("#yt-lang")[0].setAttribute("title", `App language: ${getL()}`);
+
+  //small search demo
+  demo();
 };

@@ -2,6 +2,10 @@
 
 
 
+
+
+
+
 //© 2019 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -50,8 +54,6 @@
     };
   } else require(`./${script}`)({ env: true }); //apply env on deployed server
 })();
-
-
 
 // init project
 const express = require("express"),
@@ -130,7 +132,7 @@ const express = require("express"),
       let bundle = "";
 
       const styles = [
-        `${__dirname}/build/css/lib/bs-shards.css`,
+        `${__dirname}/build/css/lib/neumorphism-dark.css`,
         `${__dirname}/build/css/style.sass.css`
       ];
       for (const style of styles) {
@@ -220,6 +222,19 @@ app.get(`${API}/:region/search/:q`, (req, res) => {
         console.log(body);
       } else console.warn(response);
     }*/
+});
+
+//VIDEO
+app.get(`${API}/:region/:vid`, (req, res) => {
+  request({
+    uri: encodeURI(
+      `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
+    ),
+    method: "GET",
+    timeout: 3000,
+    followRedirect: true,
+    maxRedirects: 10
+  }).pipe(res);
 });
 
 //COMPLETE

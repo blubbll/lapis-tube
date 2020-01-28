@@ -1,12 +1,7 @@
-<div class="mb-1 col-12 col-sm-6 col-xl-4">
-  <!--<p>
-      {{dtitle}}
-    </p>
-    {{dpreview}}-->
-
+<div class="mb-1 col-12 col-sm-6 col-lg-6 col-xl-4">
   <card data-video="{{video}}" class="card p-2 p-sm-3 bg-black">
-    <figure>
-      <img class="card-img-top" srcset="{{preview-set}}" />
+    <figure class="card-img-top d-flex flex-column">
+      <img srcset="{{preview-set}}" />
       <figcaption>
         <duration class="backdrop-blur notranslate">
           <span class="notranslate">{{duration}}</span>&thinsp;<detailed
@@ -18,21 +13,21 @@
     </figure>
 
     <div class="card-body p-3 d-flex flex-column">
-      <h6 class="card-title text-light mb-0">{{title}}</h6>
+      <h6 class="card-title text-primary mb-0">{{title}}</h6>
       <hr class="my-1 w-100 border border-white" />
       <div class="d-flex flex-row">
         <a
           data-authorid="{{authorid}}"
-          class="card-text text-muted mb-0 notranslate"
+          class="card-text text-secondary mb-0 notranslate"
         >
           <i class="fas fa-user"></i>&thinsp;{{author}}
         </a>
-        <p class="ml-auto card-text text-light mb-0 notranslate">
+        <p class="ml-auto card-text text-secondary mb-0 notranslate">
           <i class="fas fa-eye"></i>&thinsp;{{views}}
         </p>
       </div>
 
-      <p class="card-text text-light">
+      <p class="card-text text-dark">
         {{preview-desc}}
       </p>
     </div>

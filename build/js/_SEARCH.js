@@ -10,6 +10,7 @@ const {
   HOST,
   REGION,
   load,
+  lazyload,
   moment,
   T
 } = window;
@@ -19,25 +20,62 @@ let { setupSearch, SEARCH } = window;
 setupSearch = () => {
   //do actual search
   SEARCH = str => {
-    const freshSearch =
-      //show resultlist
-      $("#view-inner").html(T.RESULTS);
+    let results = document.getElementById("results");
+    const page = results ? +results.getAttribute("page") : 1;
+
+    //reset resultlist if on page 1
+    page === 1 && $("#view-inner").html(T.RESULTS);
+
+    //redefine if not existing already
+    !results && [(results = document.getElementById("results"))];
+
+    //sync page
+    results.setAttribute("page", page + 1);
+
+    //Load more results
+    $(results).on("scroll", e => {
+      const that = results;
+      console.log(that.scrollTop + that.clientHeight);
+      console.log(that.scrollHeight);
+      console.log(that.clientHeight / 10);
+
+      if (that.scrollTop + that.clientHeight >= that.scrollHeight) {
+        const q = that.getAttribute("q");
+        console.log(
+          `Loading page ${that.getAttribute("page")} for query ${q}...`
+        );
+        SEARCH(q);
+      }
+    });
 
     //show "loading"-spinner on dynamic fields
     $("param").html('<i class="fas fa-sync fa-spin"></i>');
 
-    //fix flexbox height for bad browser (old chromes etc)
+    //update paging no
+    if (results.getAttribute("q") === str)
+      results.getAttribute("page", page + 1);
+    else results.setAttribute("page", 1);
 
-    fetch(`${HOST}/api/${REGION}/search/${str}`)
+    //store querystring for re-querying more data when scrolling
+    results.setAttribute("q", str);
+
+    console.log(results.getAttribute("q"));
+
+    fetch(`${HOST}/api/${REGION}/search/${str}?page=${page}`)
       .then(res => res.text())
       .then(raw => {
         let results = JSON.parse(raw);
         let HTML = "";
 
+        //build results
         for (const result of results) {
           let srcSet = "";
+          //build thumbnails
           for (const thumb of result.videoThumbnails) {
-            srcSet += `${thumb.url}\t${thumb.width}w,\n`;
+            var i = Object.keys(result.videoThumbnails).indexOf(thumb);
+            if (i !== 0)
+              //skip first (invidio.us)
+              srcSet += `${thumb.url}\t${thumb.width}w,\n`;
           }
 
           const getDurationDetailed = () => {
@@ -78,19 +116,14 @@ setupSearch = () => {
             //FILL VIEWS
             .replace("{{views}}", result.viewCount);
 
-          //store querystring for re-querying more data when scrolling
-          $("#results").attr("q", str);
-          //update paging no for ^
-          $("#results").attr(
-            "page",
-            $("#results").attr("page") ? $("#result").attr("page") + 1 : 1
-          );
-
           //render results
           $("#results-inner").append(HTML);
+
+          //setup lazyloading
+          lazyload(document.querySelectorAll("figure>img"));
         }
 
-        //const wasnew = !!!$("#results").attr("q");
+        //fix flexbox height for bad browser (old chromes etc)
         if ($("#results").height() === 0) {
           console.warn("your browser doesn't like flexboxes too much :(");
           const loopo = setInterval(() => {
@@ -115,18 +148,7 @@ setupSearch = () => {
               clearInterval(loopo);
             }
           }, 0);
-
-          //Load more results
-          $("#results").on("scroll", () => {
-            const that = this;
-            console.log(1);
-            if (that.scrollTop + that.clientHeight >= that.scrollHeigh) {
-              //SEARCH($("#results").attr("q"));
-            }
-          });
         }
-
-        //$("#results").html(HTML);
       });
   };
 
@@ -140,7 +162,7 @@ setupSearch = () => {
       showOnFocus: true, //focus = show suggestions
       minLength: 1,
       className: "live-search backdrop-blur", //class
-      debounceWaitMs: 399, //wait
+      debounceWaitMs: 299, //wait
       fetch: (input, update) => {
         //input
         const text = input.toLowerCase();

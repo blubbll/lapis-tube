@@ -26,7 +26,11 @@ body {
 }
 
 .text-accent {
-  color: var(--color-accent-main);
+  color: var(--color-accent-main)!important;
+}
+
+.text-black {
+  colro: black;
 }
 
 /* if backdrop support: very transparent and blurred */
@@ -235,10 +239,17 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
-#filters-inner {
-  /*background: rgba(127, 127, 127, 0.5);*/
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  color: white;
+#canvas {
+  z-index: 0;
+  position: fixed;
+}
+
+#filters {
+  z-index: 2;
+  #filters-inner {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: white;
+  }
 }
 #results {
   background: rgba(0, 0, 0, 0.3);
@@ -259,52 +270,69 @@ footer#footer {
       cursor: pointer;
       overflow: hidden;
       transform: scale(1);
-      transition: transform 300ms;
+      transition: transform 49ms ease;
       background: rgba(0, 0, 0, 0.3);
       figure {
+        background: url(loading.gif);
         margin-bottom: 0;
+        overflow: hidden;
         figcaption {
           duration {
             position: absolute;
-            margin-left: 0.4rem;
             margin-top: -2rem;
-
-            detailed {
-              display: none;
-            }
+            margin-left: 0.4rem;
             opacity: 1;
-
             white-space: nowrap;
-
             padding: 0.1rem 0.3rem;
             border-radius: 0.25rem;
             background: rgba(0, 0, 0, 0.42);
             color: white;
             transition: opacity 200ms;
+
+            detailed {
+              display: none;
+            }
+            /*show duration on direct hovering */
+            &:hover {
+              opacity: 1 !important;
+            }
           }
         }
         img {
-          max-height: 12vmax;
+          height: 15vh;
+          filter: grayscale(.42);
           object-fit: cover;
+        }
 
-          &:hover {
-            figcaption {
-              duration {
-                opacity: 0;
-              }
+        /* highlight image on hover */
+        &:hover {
+          figcaption {
+            /* hide duration when hovering on img */
+            duration {
+              opacity: 0;
             }
           }
         }
       }
 
-      &:hover {
-        z-index: 1;
-        transform: scale(1.1);
+      @keyframes progress {
+        0% {
+          transform: translate3d(-100%, 0, 0);
+        }
+        100% {
+          transform: translate3d(100%, 0, 0);
+        }
       }
 
+      /* enlarge result card on hover */
       &:hover {
+        z-index: 1;
+        transform: scale(1.05);
+        img {
+          filter: none;
+        }
         duration {
-          opacity: 1 !important;
+          opacity: 1;
           detailed {
             display: inline-block;
           }
@@ -312,8 +340,7 @@ footer#footer {
       }
 
       .card-body {
-        z-index: 1;
-        background: black;
+        background: rgba(255, 255, 255, 0.8);
       }
     }
   }
