@@ -25,37 +25,43 @@ setupSearch = () => {
   //do actual search
   SEARCH = str => {
     let results = document.getElementById("results");
-    const page = results ? +results.getAttribute("page") : 1;
+    const page = results.getAttribute("page")
+      ? +results.getAttribute("page")
+      : 1;
 
     //reset resultlist if on page 1
     page === 1 && $("#view-inner").html(T.RESULTS);
 
+    results = document.getElementById("results");
+
     //sync page
-    results.setAttribute("page", page + 1);
+    results.setAttribute("page", page);
 
     //Load more results
     $(results).on("scroll", e => {
       const that = results;
-      console.log(that.scrollTop + that.clientHeight);
+      /*console.log(that.scrollTop + that.clientHeight);
       console.log(that.scrollHeight);
-      console.log(that.clientHeight / 10);
+      console.log(that.clientHeight / 10);*/
 
-      if (that.scrollTop + that.clientHeight >= that.scrollHeight) {
+      if (
+        that.scrollTop + that.clientHeight >=
+        that.scrollHeight + that.scrollTop / 10
+      ) {
         const q = that.getAttribute("q");
-        console.log(
-          `Loading page ${that.getAttribute("page")} for query ${q}...`
-        );
+        const newpage = page++;
+        console.log(`Loading page ${newpage} for query ${q}...`);
+
+        console.log(page);
+
+        results.setAttribute("page", newpage);
+
         SEARCH(q);
       }
     });
 
     //show "loading"-spinner on dynamic fields
     $("param").html('<i class="fas fa-sync fa-spin"></i>');
-
-    //update paging no
-    if (results.getAttribute("q") === str)
-      results.getAttribute("page", page + 1);
-    else results.setAttribute("page", 1);
 
     //store querystring for re-querying more data when scrolling
     results.setAttribute("q", str);
@@ -123,39 +129,6 @@ setupSearch = () => {
           //setup lazyloading
           lazyload(document.querySelectorAll("figure>img"));
         }
-
-        //fix flexbox height for bad browser (old chromes etc)
-        waitForElement("#results-inner").then(el => {
-          //alert(window.CSS.supports('flex', '1 0 0'))
-          /*if (el.clientHeight === 0) {
-            console.warn("your browser doesn't like flexboxes too much :(");
-            const loopo = setInterval(() => {
-              if ($("#view-inner").height() !== 0) {
-                console.log("fixed the results flexbox...");
-                //absolute :/
-                $("#results")[0].style.position = "absolute";
-                //100width :/
-                $("#results")[0].style.width = "100%";
-                //margintop to filter
-                $("#results")[0].style.setProperty(
-                  "margin-top",
-                  `${$("#filters")[0].clientHeight}px`,
-                  "important"
-                );
-
-                   console.log(el.clientHeight)
-          console.log(el.offsetHeight)
-                
-                //set height >_< ouch
-                $("#results")[0].style.height = `calc(100% - ${$("#filters")[0]
-                  .clientHeight +
-                  $("#top")[0].clientHeight +
-                  $("#footer")[0].clientHeight}px)`;
-                clearInterval(loopo);
-              }
-            }, 0);
-          }*/
-        });
       });
   };
 

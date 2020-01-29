@@ -189,12 +189,10 @@ body {
     color: snow;
   }
   > div.selected {
-    backdrop-filter: blur(5rem);
     background: var(--color-accent-main);
   }
 
   > div:hover {
-    backdrop-filter: blur(4rem);
     background: rgba(0, 0, 255, 0.1) !important;
     color: white;
   }
@@ -209,6 +207,7 @@ body {
 //NAVBAR LEFT///////////////
 /**************************/
 #left {
+  z-index: 3;
   transition: left ease-out 299ms;
   &[expanded="false"] {
     left: -100%;
@@ -286,6 +285,7 @@ footer#footer {
         overflow: hidden;
         figcaption {
           duration {
+            font-size: .9rem;
             position: absolute;
             margin-top: -2rem;
             margin-left: 0.4rem;
@@ -297,7 +297,10 @@ footer#footer {
             color: white;
             transition: opacity 200ms;
 
-            detailed {
+            duration-word{
+              display: none;
+            }
+            duration-detailed {
               display: none;
             }
             /*show duration on direct hovering */
@@ -341,8 +344,11 @@ footer#footer {
           filter: none;
         }
         duration {
+          duration-word{
+            display: inline-block;
+          }
           opacity: 1;
-          detailed {
+          duration-detailed {
             display: inline-block;
           }
         }
