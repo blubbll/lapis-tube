@@ -26,53 +26,82 @@ setupSearch = () => {
   SEARCH = str => {
     let results = document.getElementById("results");
 
-    let page = 0;
-    const fresh =
-      results.getAttribute("q") === null &&
-      results.getAttribute("page") === null;
+    if (results.getAttribute("search-active") === "true") return;
 
-    if (fresh) {
+    let page = +results.getAttribute("page") || 0;
+
+    //no search, no paging
+    if (page === 0) {
+      //construct result base
       $("#view-inner").html(T.RESULTS);
       results = document.getElementById("results");
-      results.setAttribute("state", "fresh");
+      results.setAttribute("state", "search-fresh");
+      //we're on page 1
       page = 1;
     } else {
-      page = +results.getAttribute("page") + 1;
+      //same page, new querystring
+      if (results.getAttribute("q") === str) {
+        results.setAttribute("state", "search-continue");
+        page = page + 1;
+      } else {
+        $("#view-inner").html(T.RESULTS);
+        results = document.getElementById("results");
+        results.setAttribute("state", "search-new");
+        page = 1;
+      }
     }
+
+    //search active
+    results.setAttribute("search-active", true);
 
     //sync page
     results.setAttribute("page", page);
 
-    //Load more results
-    $(results).on("scroll", e => {
-      const that = results;
+    //debug msgs
+    switch (results.getAttribute("state")) {
+      case "search-fresh":
+        {
+          console.log(`Loading fresh results for query:`, {
+            q: str,
+            "": "..."
+          });
+        }
+        break;
+      case "search-new":
+        {
+          console.log(`Loading results for new query:`, { q: str, "": "..." });
+        }
+        break;
+      case "search-continue":
+        {
+          console.log(`Loading continued results for query:`, {
+            q: str,
+            page: page,
+            "": "..."
+          });
+        }
+        break;
+    }
 
-      if (
-        that.getAttribute("state") !== "loading" &&
-        that.scrollTop + that.clientHeight >=
-          that.scrollHeight - that.scrollHeight / 10
-      ) {
-        const q = that.getAttribute("q");
-        const newpage = page + 1;
-        console.log(`Loading page ${newpage} for query ${q}...`);
+    //Load more results (prevent rebind on infiniscroll)
+    if (results.getAttribute("state") !== "search-continue")
+      $(results).on("scroll", e => {
+        const that = results;
 
-        that.setAttribute("state", "loading");
-
-        //update page attr
-        results.setAttribute("page", newpage);
-
-        //requery with new page
-        SEARCH(q);
-      }
-    });
-
-    //show "loading"-spinner on dynamic fields
-    $("param").html('<i class="fas fa-sync fa-spin"></i>');
+        if (
+          results.getAttribute("search-active") !== "true" &&
+          that.scrollTop + that.clientHeight >=
+            that.scrollHeight - that.scrollHeight / 10
+        ) {
+          //search more
+          SEARCH(that.getAttribute("q"));
+        }
+      });
 
     //store querystring for re-querying more data when scrolling
     results.setAttribute("q", str);
 
-    fetch(`${HOST}/api/${REGION}/search/${str}?page=${page}`)
+    fetch(`${HOST}/api/${REGION}/search/${str}/${page}`)
       .then(res => res.text())
       .then(raw => {
         let _results = JSON.parse(raw);
@@ -130,11 +159,10 @@ setupSearch = () => {
           //render results
           $("#results-inner").append(HTML);
 
-          results.setAttribute("state", "done");
-
           //setup lazyloading
           lazyload(document.querySelectorAll("figure>img"));
         }
+        document.getElementById("results").setAttribute("search-active", false);
       });
   };
 

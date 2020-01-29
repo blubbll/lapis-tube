@@ -12,6 +12,7 @@
 
 
 
+
 //© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -204,18 +205,18 @@ app.get(`${API}/geoip`, (req, res) => {
 });
 
 //SEARCH
-app.get(`${API}/:region/search/:q`, (req, res) => {
+app.get(`${API}/:region/search/:q/:page`, (req, res) => {
   //const L = getLanguage(req.headers["accept-language"]);
 
   console.warn(
     encodeURI(
-      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`
+      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
     )
   );
 
   request({
     uri: encodeURI(
-      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}`
+      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
     ),
     method: "GET",
     timeout: 3000,

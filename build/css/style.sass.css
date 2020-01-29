@@ -274,6 +274,7 @@ footer#footer {
     height: fill-available;
 
     .card {
+      box-shadow: 0 0 0.1rem 1rem rgba(0,0,0,.1);
       cursor: pointer;
       overflow: hidden;
       transform: scale(1);
@@ -284,7 +285,10 @@ footer#footer {
         margin-bottom: 0;
         overflow: hidden;
         figcaption {
-          background: var(--color-accent-main);
+          border: 0.1rem solid rgba(255, 255, 255, 0.2);
+          border: none;
+
+          background: rgba(255,255,255,0.8);
           width: -moz-available;
           width: -webkit-fill-available;
           width: fill-available;
@@ -293,8 +297,7 @@ footer#footer {
             display: flex;
             font-size: 0.9rem;
             padding: 0.3rem 1rem;
-            background: rgba(0, 0, 0, 0.84);
-            color: white;
+            color: black;
             /*show on direct hovering */
             &:hover {
               opacity: 1 !important;
@@ -324,8 +327,8 @@ footer#footer {
           }
         }
         img {
-          height: 15vh;
-          filter: grayscale(0.42);
+          height: 17vh;
+          filter: grayscale(0.6);
           object-fit: cover;
         }
 
@@ -346,10 +349,13 @@ footer#footer {
       /* enlarge result card on hover */
       &:hover {
         z-index: 1;
-        background: white;
+
         transform: scale(1.06);
         img {
           filter: none;
+        }
+        .card-body {
+          background: white;
         }
         duration {
           duration-word {

@@ -703,9 +703,9 @@ initBg = () => {
         let n = Math.round(
         (simplex.noise2D(this.x / config.noiseZoom, this.y / config.noiseZoom) +
           1) *
-          52
+          42
       );
-      let color = `rgb(25, 25, ${n})`;
+      let color = `rgb(21, 21, ${n})`;
 
       ctx.fillStyle = color;
       ctx.strokeStyle = color;

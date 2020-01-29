@@ -175,7 +175,6 @@ const setupClient = () => {
   //setup bg
   initBg();
 
-  console.log(getL());
 
   waitForElement("#view").then(element => {
     //SETUP MOMENTJS LANGUAGE
