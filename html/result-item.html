@@ -1,12 +1,17 @@
 <div class="mb-1 col-12 col-sm-6 col-lg-6 col-xl-4">
-  <card data-video="{{video}}" class="card p-2 p-sm-3 bg-black">
+  <card data-video="{{video}}" class="card bg-black m-3">
     <figure class="card-img-top d-flex flex-column">
-      <img srcset="{{preview-set}}" />
-      <figcaption>
-        <duration class="backdrop-blur notranslate">
+      <img src="loading.gif" data-srcset="{{preview-set}}" />
+      <figcaption class="d-flex flex-column position-absolute">
+        <item-title class="notranslate">
+          <h6 class="card-title mb-0">{{title}}</h6>
+        </item-title>
+      </figcaption>
+      <figcaption class="d-flex flex-column">
+        <duration class="notranslate position-absolute">
           <duration-word>Length:</duration-word>
-          <span class="notranslate">{{duration}}</span>&thinsp;<duration-detailed
-            class="notranslate"
+          <span class="notranslate">{{duration}}</span
+          >&thinsp;<duration-detailed class="notranslate"
             >({{duration-detailed}})</duration-detailed
           >
         </duration>
@@ -14,16 +19,14 @@
     </figure>
 
     <div class="card-body p-3 d-flex flex-column">
-      <h6 class="card-title text-primary mb-0">{{title}}</h6>
-      <hr class="my-1 w-100 border border-light" />
       <div class="d-flex flex-row">
         <a
           data-authorid="{{authorid}}"
-          class="card-text text-secondary mb-0 notranslate"
+          class="card-text text-secondary mb-0 notranslate small"
         >
           <i class="fas fa-user"></i>&thinsp;{{author}}
         </a>
-        <p class="ml-auto card-text text-secondary mb-0 notranslate">
+        <p class="ml-auto card-text text-secondary mb-0 notranslate small">
           <i class="fas fa-eye"></i>&thinsp;{{views}}
         </p>
       </div>

@@ -277,33 +277,47 @@ footer#footer {
       cursor: pointer;
       overflow: hidden;
       transform: scale(1);
-      transition: transform 49ms ease;
       background: rgba(0, 0, 0, 0.3);
+      border-radius: 0.6rem;
+      transition: transform 49ms ease-out;
       figure {
-        background: url(loading.gif);
         margin-bottom: 0;
         overflow: hidden;
         figcaption {
+          background: var(--color-accent-main);
+          width: -moz-available;
+          width: -webkit-fill-available;
+          width: fill-available;
+          /* preview title */
+          item-title {
+            display: flex;
+            font-size: 0.9rem;
+            padding: 0.3rem 1rem;
+            background: rgba(0, 0, 0, 0.84);
+            color: white;
+            /*show on direct hovering */
+            &:hover {
+              opacity: 1 !important;
+            }
+          }
           duration {
-            font-size: .9rem;
-            position: absolute;
+            font-size: 0.8rem;
             margin-top: -2rem;
             margin-left: 0.4rem;
             opacity: 1;
-            white-space: nowrap;
+            width: fit-content;
             padding: 0.1rem 0.3rem;
             border-radius: 0.25rem;
-            background: rgba(0, 0, 0, 0.42);
+            background: rgba(0, 0, 0, 0.84);
             color: white;
-            transition: opacity 200ms;
 
-            duration-word{
+            duration-word {
               display: none;
             }
             duration-detailed {
               display: none;
             }
-            /*show duration on direct hovering */
+            /*show on direct hovering */
             &:hover {
               opacity: 1 !important;
             }
@@ -317,34 +331,28 @@ footer#footer {
 
         /* highlight image on hover */
         &:hover {
-          background: none; /*fix for loading bg visible on card hover */
           figcaption {
             /* hide duration when hovering on img */
             duration {
-              opacity: 0;
+              opacity: 0.4;
+            }
+            item-title {
+              opacity: 0.4;
             }
           }
-        }
-      }
-
-      @keyframes progress {
-        0% {
-          transform: translate3d(-100%, 0, 0);
-        }
-        100% {
-          transform: translate3d(100%, 0, 0);
         }
       }
 
       /* enlarge result card on hover */
       &:hover {
         z-index: 1;
-        transform: scale(1.05);
+        background: white;
+        transform: scale(1.06);
         img {
           filter: none;
         }
         duration {
-          duration-word{
+          duration-word {
             display: inline-block;
           }
           opacity: 1;

@@ -25,14 +25,20 @@ setupSearch = () => {
   //do actual search
   SEARCH = str => {
     let results = document.getElementById("results");
-    const page = results.getAttribute("page")
-      ? +results.getAttribute("page")
-      : 1;
 
-    //reset resultlist if on page 1
-    page === 1 && $("#view-inner").html(T.RESULTS);
+    let page = 0;
+    const fresh =
+      results.getAttribute("q") === null &&
+      results.getAttribute("page") === null;
 
-    results = document.getElementById("results");
+    if (fresh) {
+      $("#view-inner").html(T.RESULTS);
+      results = document.getElementById("results");
+      results.setAttribute("state", "fresh");
+      page = 1;
+    } else {
+      page = +results.getAttribute("page") + 1;
+    }
 
     //sync page
     results.setAttribute("page", page);
@@ -40,22 +46,22 @@ setupSearch = () => {
     //Load more results
     $(results).on("scroll", e => {
       const that = results;
-      /*console.log(that.scrollTop + that.clientHeight);
-      console.log(that.scrollHeight);
-      console.log(that.clientHeight / 10);*/
 
       if (
+        that.getAttribute("state") !== "loading" &&
         that.scrollTop + that.clientHeight >=
-        that.scrollHeight + that.scrollTop / 10
+          that.scrollHeight - that.scrollHeight / 10
       ) {
         const q = that.getAttribute("q");
-        const newpage = page++;
+        const newpage = page + 1;
         console.log(`Loading page ${newpage} for query ${q}...`);
 
-        console.log(page);
+        that.setAttribute("state", "loading");
 
+        //update page attr
         results.setAttribute("page", newpage);
 
+        //requery with new page
         SEARCH(q);
       }
     });
@@ -66,16 +72,14 @@ setupSearch = () => {
     //store querystring for re-querying more data when scrolling
     results.setAttribute("q", str);
 
-    console.log(results.getAttribute("q"));
-
     fetch(`${HOST}/api/${REGION}/search/${str}?page=${page}`)
       .then(res => res.text())
       .then(raw => {
-        let results = JSON.parse(raw);
+        let _results = JSON.parse(raw);
         let HTML = "";
 
         //build results
-        for (const result of results) {
+        for (const result of _results) {
           let srcSet = "";
           //build thumbnails
           for (const thumb of result.videoThumbnails) {
@@ -125,6 +129,8 @@ setupSearch = () => {
 
           //render results
           $("#results-inner").append(HTML);
+
+          results.setAttribute("state", "done");
 
           //setup lazyloading
           lazyload(document.querySelectorAll("figure>img"));

@@ -763,7 +763,8 @@ initBg = () => {
     simplex = new SimplexNoise();
     ctx.lineWidth = 1;
     config.noiseZoom = Math.random() * 400 + 200;
-    config.size = Math.random() * 15 + 6;
+    
+    config.size = Math.random() * 19 + 16; //zw 
     setupHexagons();
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, w, h);
