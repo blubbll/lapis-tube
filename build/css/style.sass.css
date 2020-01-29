@@ -29,7 +29,8 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  font-family: "Oxygen", sans-serif !important;
+  /*font-family: "Oxygen", sans-serif !important;*/
+  font-family: 'Roboto', sans-serif;
 }
 
 .text-accent {
@@ -274,7 +275,7 @@ footer#footer {
     height: fill-available;
 
     .card {
-      box-shadow: 0 0 0.1rem 1rem rgba(0,0,0,.1);
+      box-shadow: 0 0 0.1rem 1rem rgba(0, 0, 0, 0.1);
       cursor: pointer;
       overflow: hidden;
       transform: scale(1);
@@ -288,12 +289,12 @@ footer#footer {
           border: 0.1rem solid rgba(255, 255, 255, 0.2);
           border: none;
 
-          background: rgba(255,255,255,0.8);
           width: -moz-available;
           width: -webkit-fill-available;
           width: fill-available;
           /* preview title */
           item-title {
+            background: rgba(255, 255, 255, 0.8);
             display: flex;
             font-size: 0.9rem;
             padding: 0.3rem 1rem;
