@@ -1,6 +1,7 @@
 //RESET
 location.hash = "";
 console.log("%c Welcome to lapisTube 🙃", "background: blue;");
+
 //
 const {
   $,
@@ -15,9 +16,11 @@ const {
   load,
   lazyload,
   moment,
+  numeral,
   SEARCH,
   setupSearch,
-  T
+  T,
+  waitForElement
 } = window;
 let { API, GEO, HOST, REGION, lscache } = window;
 
@@ -69,7 +72,8 @@ API = `//${location.hostname}/api`;
   });
 }
 
-window.onload = () => {
+{
+  console.log("Client starting up");
   //LOAD TEMPLATES
   {
     //template remote path
@@ -98,7 +102,6 @@ window.onload = () => {
           T.RESULT = tx[4];
           T.RESULTS = tx[5];
           setupClient();
-          done();
         })
         .catch(e => {
           console.warn(e);
@@ -116,7 +119,7 @@ window.onload = () => {
         });
     }
   }
-};
+}
 //////
 const demo = () => {
   const q = "New americana";
@@ -171,25 +174,40 @@ const setupClient = () => {
 
   //setup bg
   initBg();
-  
-  //SETUP MOMENT LANGUAGE
-  moment.locale(getL());
 
-  /////////////////////////
-  //SETUP
-  /////////////////////////
-  setupSearch();
+  console.log(getL());
 
-  //sync browser-language
-  $("#yt-lang").text(getL());
-  //sync region (language background clip)
+  waitForElement("#view").then(element => {
+    //SETUP MOMENTJS LANGUAGE
+    moment.locale(getL());
 
-  $(
-    "#dynamic-logo .alpha-target"
-  )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
-  $("#dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
-  $("#yt-lang")[0].setAttribute("title", `App language: ${getL()}`);
+    /*const setupNumeral = setInterval(() => {
+      try {
+        numeral.locale(getL());
+        clearInterval(setupNumeral);
+        console.log("Numeral.js ready!");
+      } catch(e) {}
+    }, 999);*/
 
-  //small search demo
-  demo();
+    //SETUP SEARCH
+    setupSearch();
+
+    //sync browser-language
+    $("#yt-lang").text(getL());
+    //sync region (language background clip)
+
+    $(
+      "#dynamic-logo .alpha-target"
+    )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
+    $("#dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
+    $("#yt-lang")[0].setAttribute("title", `App language: ${getL()}`);
+
+    //small search demo
+    waitForElement("#results").then(demo);
+
+    //show ui
+    done();
+
+    console.log("Client done");
+  });
 };

@@ -12,12 +12,16 @@ const {
   load,
   lazyload,
   moment,
-  T
+  numeral,
+  T,
+  waitForElement
 } = window;
 
 let { setupSearch, SEARCH } = window;
 
 setupSearch = () => {
+  $("#view-inner").html(T.RESULTS);
+
   //do actual search
   SEARCH = str => {
     let results = document.getElementById("results");
@@ -25,9 +29,6 @@ setupSearch = () => {
 
     //reset resultlist if on page 1
     page === 1 && $("#view-inner").html(T.RESULTS);
-
-    //redefine if not existing already
-    !results && [(results = document.getElementById("results"))];
 
     //sync page
     results.setAttribute("page", page + 1);
@@ -113,8 +114,8 @@ setupSearch = () => {
             .replace("{{author}}", result.author)
             //FILL AUTHOR id
             .replace("{{authorid}}", result.authorId)
-            //FILL VIEWS
-            .replace("{{views}}", result.viewCount);
+            //FILL VIEWS (formatted)
+            .replace("{{views}}", numeral(result.viewCount || 0).format(`0.a`));
 
           //render results
           $("#results-inner").append(HTML);
@@ -124,38 +125,43 @@ setupSearch = () => {
         }
 
         //fix flexbox height for bad browser (old chromes etc)
-        if ($("#results").height() === 0) {
-          console.warn("your browser doesn't like flexboxes too much :(");
-          const loopo = setInterval(() => {
-            if ($("#view-inner").height() !== 0) {
-              console.log("fixed the results flexbox...");
-              //absolute :/
-              $("#results")[0].style.position = "absolute";
-              //100width :/
-              $("#results")[0].style.width = "100%";
-              //margintop to filter
-              $("#results")[0].style.setProperty(
-                "margin-top",
-                `${$("#filters")[0].clientHeight}px`,
-                "important"
-              );
+        waitForElement("#results-inner").then(el => {
+          //alert(window.CSS.supports('flex', '1 0 0'))
+          /*if (el.clientHeight === 0) {
+            console.warn("your browser doesn't like flexboxes too much :(");
+            const loopo = setInterval(() => {
+              if ($("#view-inner").height() !== 0) {
+                console.log("fixed the results flexbox...");
+                //absolute :/
+                $("#results")[0].style.position = "absolute";
+                //100width :/
+                $("#results")[0].style.width = "100%";
+                //margintop to filter
+                $("#results")[0].style.setProperty(
+                  "margin-top",
+                  `${$("#filters")[0].clientHeight}px`,
+                  "important"
+                );
 
-              //set height >_< ouch
-              $("#results")[0].style.height = `calc(100% - ${$("#filters")[0]
-                .clientHeight +
-                $("#top")[0].clientHeight +
-                $("#footer")[0].clientHeight}px)`;
-              clearInterval(loopo);
-            }
-          }, 0);
-        }
+                   console.log(el.clientHeight)
+          console.log(el.offsetHeight)
+                
+                //set height >_< ouch
+                $("#results")[0].style.height = `calc(100% - ${$("#filters")[0]
+                  .clientHeight +
+                  $("#top")[0].clientHeight +
+                  $("#footer")[0].clientHeight}px)`;
+                clearInterval(loopo);
+              }
+            }, 0);
+          }*/
+        });
       });
   };
 
   //LIVESEARCH
   {
     const input = document.getElementById("search-input");
-    const emptyMsg = "❌" + "No results"; //make dynamic w gtranslate!
     const l = getL();
     const auto = autocomplete({
       input: input,
@@ -175,32 +181,30 @@ setupSearch = () => {
 
               if (result.code === 200) {
                 //construct output (with input at top for convenience)
-                let suggOutput = [
-                  input.toLowerCase !== result.data[0]
-                    ? { label: input, value: input.toLowerCase() }
-                    : ""
-                ];
+                let suggData = [],
+                  suggOutput = [];
 
-                //actual usable data
-                let suggData = result.data.filter(v => v.length); //skip empty
+                //skip empty
+                suggData = [input, ...result.data.filter(v => v.length)];
+
+                //skip dupes
+                suggData = Object.values(
+                  Object.fromEntries(suggData.map(s => [s.toLowerCase(), s]))
+                );
 
                 //loop and push
                 suggData.forEach(sugg => {
                   suggOutput.push({ label: sugg, value: sugg });
                 });
+
                 update(suggOutput);
               } else if (result.code === 404) {
-                update([{ label: emptyMsg, value: emptyMsg }]);
+                update([{ label: input, value: input.toLowerCase() }]);
               }
             });
       },
       onSelect: item => {
-        if (item.label !== emptyMsg) {
-          //set input content
-          input.value = item.label;
-          //load results
-          SEARCH(item.label);
-        }
+        SEARCH(item.label);
       }
     });
   }

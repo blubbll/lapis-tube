@@ -1,12 +1,5 @@
 
-
-
-
-
-
-
-
-//© 2019 by blubbll
+//© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
 //DEPLOY
@@ -132,13 +125,13 @@ const express = require("express"),
       let bundle = "";
 
       const styles = [
-        `${__dirname}/build/css/lib/neumorphism-dark.css`,
+        `${__dirname}/build/css/lib/neumorphism-light.css`,
         `${__dirname}/build/css/style.sass.css`
       ];
       for (const style of styles) {
         bundle += sass
           .renderSync({
-            data: fs.readFileSync(style, "utf8"),
+            data: fs.readFileSync(style, "utf8") || "/**/",
             outputStyle: "compressed"
           })
           .css.toString("utf8");

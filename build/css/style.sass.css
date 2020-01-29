@@ -11,6 +11,13 @@ param {
   padding-left: 5px;
 }
 
+main {
+  height: intrinsic; /* Safari/WebKit verwendet einen nicht standardisierten Namen */
+  height: -moz-max-content; /* Firefox/Gecko */
+  height: -webkit-max-content; /* Chrome */
+  height: max-content;
+}
+
 body {
   background-blend-mode: hard-light;
 }
@@ -26,7 +33,7 @@ body {
 }
 
 .text-accent {
-  color: var(--color-accent-main)!important;
+  color: var(--color-accent-main) !important;
 }
 
 .text-black {
@@ -239,6 +246,7 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
+
 #canvas {
   z-index: 0;
   position: fixed;
@@ -300,12 +308,13 @@ footer#footer {
         }
         img {
           height: 15vh;
-          filter: grayscale(.42);
+          filter: grayscale(0.42);
           object-fit: cover;
         }
 
         /* highlight image on hover */
         &:hover {
+          background: none; /*fix for loading bg visible on card hover */
           figcaption {
             /* hide duration when hovering on img */
             duration {
