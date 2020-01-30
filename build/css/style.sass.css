@@ -30,7 +30,7 @@ body {
   width: 100%;
   overflow: hidden;
   /*font-family: "Oxygen", sans-serif !important;*/
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .text-accent {
@@ -76,6 +76,7 @@ body {
 }
 #top,
 #left {
+  z-index: 3;
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
@@ -246,7 +247,12 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
-
+#view-inner {
+  &.wait {
+    cursor: wait;
+    pointer-events: none;
+  }
+}
 #canvas {
   z-index: 0;
   position: fixed;
@@ -268,6 +274,28 @@ footer#footer {
   -mz-flex: $flex;
   flex: $flex;
   overflow-y: auto;
+
+  /*fake-grow before popping into player*/
+  &.growing {
+    overflow-y: hidden;
+
+    .card.grow {
+      z-index: 1;
+      transform: scale(2) translate(25%, -25%) !important;
+      position: a;
+      height: 30%;
+      width: calc(40vw);
+      position: fixed;
+      top: 50%;
+      padding: 5;
+      left: 0;
+      margin: 0 10vw !important;
+      margin: !important;
+      box-shadow: 0 0 5rem 12vh white !important;
+      background: white !important;
+      border: 0.1rem solid rgba(0, 0, 0, 0.3) !important;
+    }
+  }
 
   #results-inner {
     height: -moz-available;
@@ -309,7 +337,7 @@ footer#footer {
             margin-top: -2rem;
             margin-left: 0.4rem;
             opacity: 1;
-            
+
             padding: 0.1rem 0.3rem;
             border-radius: 0.25rem;
             background: rgba(0, 0, 0, 0.84);

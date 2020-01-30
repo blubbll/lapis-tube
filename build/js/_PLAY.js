@@ -14,34 +14,50 @@ const {
   T
 } = window;
 
-let { playVid, openPlayer, closePlayer } = window;
+let { Player } = window;
 
-playVid = id => {
-  openPlayer();
+Player = {
+  open: () => {
+    $("#view-inner")
+      .append(T.PLAYER)
+      .removeClass("wait");
+    $("#filters")[0].style.setProperty("display", "none", "important");
+    $("#results")[0].style.setProperty("display", "none", "important");
+  },
+  close: () => {
+    $("#player").remove();
+    $("#filters")[0].style.setProperty("display", "");
+    $("#results")[0].style.setProperty("display", "");
+  },
+  play: vid => {
+    Player.open();
+    fetch(`${HOST}/api/${REGION}/video/${vid}`)
+      .then(res => res.text())
+      .then(raw => {
+        let vid = JSON.parse(raw);
+        let HTML = "";
 
-  fetch(`${HOST}/api/${REGION}/video/${id}`)
-    .then(res => res.text())
-    .then(raw => {
-      let vid = JSON.parse(raw);
-      let HTML = "";
-
-      console.log(vid);
-    });
+        console.log(vid);
+      });
+  }
 };
 
-closePlayer = () => {
-  $("#player").remove();
-  $("#filters")[0].style.setProperty("display", "");
-  $("#results")[0].style.setProperty("display", "");
-};
+$(document).on("click", ".card[data-video]", e => {
+  const that = $(e.currentTarget);
 
-openPlayer = () => {
-  $("#view-inner").append(T.PLAYER);
+  $("#view-inner").addClass("wait");
 
-  $("#filters")[0].style.setProperty("display", "none", "important");
-  $("#results")[0].style.setProperty("display", "none", "important");
-};
+  $("#results").addClass("growing");
+  that.addClass("grow");
 
-$(document).on("click", ".card[data-video]", () => {
-  playVid($(this).data("video"));
+  setTimeout(() => {
+    //enlarge-animation
+    $("enlarger").html(that.html());
+
+    Player.play(that.data("video"));
+
+    $("#results").removeClass("growing");
+    that.removeClass("grow");
+ 
+  }, 9999);
 });

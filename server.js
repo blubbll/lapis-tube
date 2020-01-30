@@ -6,6 +6,13 @@
 
 
 
+
+
+
+
+
+
+
 //© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -225,7 +232,7 @@ app.get(`${API}/:region/search/:q/:page`, (req, res) => {
 });
 
 //VIDEO
-app.get(`${API}/:region/:vid`, (req, res) => {
+app.get(`${API}/:region/video/:vid`, (req, res) => {
   request({
     uri: encodeURI(
       `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
