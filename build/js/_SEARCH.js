@@ -2,6 +2,7 @@ const {
   $,
   autocomplete,
   alert,
+  createThumbs,
   debounce,
   done,
   fetch,
@@ -109,14 +110,7 @@ setupSearch = () => {
 
         //build results
         for (const result of _results) {
-          let srcSet = "";
-          //build thumbnails
-          for (const thumb of result.videoThumbnails) {
-            var i = Object.keys(result.videoThumbnails).indexOf(thumb);
-            if (i !== 0)
-              //skip first (invidio.us)
-              srcSet += `${thumb.url}\t${thumb.width}w${i !== result.videoThumbnails?",\n":""}`;
-          }
+          let srcSet = createThumbs(result.videoThumbnails)
 
           const getDurationDetailed = () => {
             let detailed = moment

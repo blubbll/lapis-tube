@@ -1,5 +1,5 @@
 const { $, NProgress } = window;
-let { debounce, fetch, getL, getSize, loadImage } = window;
+let { createThumbs, debounce, fetch, getL, getSize, loadImage } = window;
 
 function detectIEEdge() {
   const ua = window.navigator.userAgent;
@@ -27,31 +27,48 @@ function detectIEEdge() {
   return false;
 }
 
-function waitForElement(selector) {
-  return new Promise(function(resolve, reject) {
+//create  video thum srcset
+createThumbs = thumbsData => {
+  let srcSet = "";
+  //build thumbnails
+  for (const thumb of thumbsData) {
+    var i = Object.keys(thumbsData).indexOf(thumb);
+    if (i !== 0)
+      //skip first (invidio.us)
+      srcSet += `${thumb.url}\t${thumb.width}w${i !== thumbsData ? ",\n" : ""}`;
+  }
+  return srcSet;
+};
+
+//(promise) wait until element appears on dom
+const waitForElement = selector => {
+  return new Promise((resolve, reject) => {
     var element = document.querySelector(selector);
 
-    if(element) {
+    if (element) {
       resolve(element);
       return;
     }
 
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
+    var observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
         var nodes = Array.from(mutation.addedNodes);
-        for(var node of nodes) {
-          if(node.matches && node.matches(selector)) {
+        for (var node of nodes) {
+          if (node.matches && node.matches(selector)) {
             observer.disconnect();
             resolve(node);
             return;
           }
-        };
+        }
       });
     });
 
-    observer.observe(document.documentElement, { childList: true, subtree: true });
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
   });
-}
+};
 
 getSize = () => {
   for (const indicator of $("size-indicators").find("size-indicator")) {

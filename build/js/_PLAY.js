@@ -1,8 +1,8 @@
 const {
   $,
-  afterglow,
   autocomplete,
   alert,
+  createThumbs,
   debounce,
   done,
   fetch,
@@ -12,8 +12,12 @@ const {
   REGION,
   load,
   moment,
-  T
+  T,
+  waitForElement
 } = window;
+
+//afterglow player
+const { afterglow, vjs, poster } = window;
 
 let { Player } = window;
 
@@ -32,11 +36,16 @@ Player = {
   },
   play: vid => {
     Player.open();
+    afterglow.initVideoElements();
     fetch(`${HOST}/api/${REGION}/video/${vid}`)
       .then(res => res.text())
       .then(raw => {
         let vid = JSON.parse(raw);
         let HTML = "";
+
+        waitForElement(".vjs-poster").then(el => {
+          el.innerHTML = createThumbs(vid.videoThumbnails);
+        });
 
         console.log(vid);
       });
@@ -60,14 +69,11 @@ $(document).on("click", ".card[data-video]", e => {
     Player.play(that.data("video"));
 
     $("#results").removeClass("growing");
-    
-   // afterglow.initVideoElements()
-   // or
-   // afterglow.init
-    
-    afterglow.initVideoElements();
-    
-    
+
+    // afterglow.initVideoElements()
+    // or
+    // afterglow.init
+
     that.removeClass("grow");
   }, 799);
 });

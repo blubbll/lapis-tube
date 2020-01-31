@@ -58,7 +58,7 @@ const express = require("express"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser"),
   Terser = require("terser"),
-  crush = require("html-crush").crush
+  crush = require("html-crush").crush;
 
 {
   const atto = "";
@@ -156,19 +156,18 @@ const express = require("express"),
       fs.writeFileSync(bundleFile, `${atto}\r\n${bundle}`, "utf8");
       console.log(`Bundled ${styles} into ${bundleFile}!`);
     };
-    
-    //watch changes
-    fs.watch(`${__dirname}/build/css/`, COMPILE_CSS);
-    fs.watch(`${__dirname}/build/js/`, COMPILE_JS);
-    fs.watch(`${__dirname}/build/html/`, COMPILE_HTML);
-    
+
     //first compile
     {
       COMPILE_CSS();
       COMPILE_JS();
       COMPILE_HTML();
+
+      //watch changes
+      fs.watch(`${__dirname}/build/css/`, COMPILE_CSS);
+      fs.watch(`${__dirname}/build/js/`, COMPILE_JS);
+      fs.watch(`${__dirname}/build/html/`, COMPILE_HTML);
     }
-  
   }
 }
 //API
