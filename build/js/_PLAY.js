@@ -1,5 +1,6 @@
 const {
   $,
+  afterglow,
   autocomplete,
   alert,
   debounce,
@@ -54,10 +55,19 @@ $(document).on("click", ".card[data-video]", e => {
     //enlarge-animation
     $("enlarger").html(that.html());
 
+    //$("#video").html(T.PLAYER_INSIDE);
+
     Player.play(that.data("video"));
 
     $("#results").removeClass("growing");
+    
+   // afterglow.initVideoElements()
+   // or
+   // afterglow.init
+    
+    afterglow.initVideoElements();
+    
+    
     that.removeClass("grow");
- 
-  }, 9999);
+  }, 799);
 });

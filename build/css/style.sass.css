@@ -238,6 +238,7 @@ footer#footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1) !important;
   color: var(--color-font-dark);
+  z-index: 3;
 
   width: 100%;
 
@@ -277,10 +278,21 @@ footer#footer {
 
   /*fake-grow before popping into player*/
   &.growing {
-    overflow-y: hidden;
-
+    overflow: hidden;
     .card.grow {
       z-index: 1;
+      overflow: visible !important;
+      img {
+        z-index: 1;
+        transform: scale(10);
+        position: fixed;
+        align-self: center;
+        margin: 50% auto;
+      }
+      /* .card-body {
+        background: white !important;
+      }
+     z-index: 1;
       transform: scale(2) translate(25%, -25%) !important;
       position: a;
       height: 30%;
@@ -292,8 +304,7 @@ footer#footer {
       margin: 0 10vw !important;
       margin: !important;
       box-shadow: 0 0 5rem 12vh white !important;
-      background: white !important;
-      border: 0.1rem solid rgba(0, 0, 0, 0.3) !important;
+      border: 0.1rem solid rgba(0, 0, 0, 0.3) !important;*/
     }
   }
 
@@ -356,7 +367,8 @@ footer#footer {
           }
         }
         img {
-          height: 17vh;
+          transition: transform 499ms ease-out;
+          height: 15vh;
           filter: grayscale(0.6);
           object-fit: cover;
         }

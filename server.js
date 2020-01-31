@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -72,13 +57,14 @@ const express = require("express"),
   sass = require("node-sass"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser"),
-  Terser = require("terser");
+  Terser = require("terser"),
+  crush = require("html-crush").crush
 
 {
   const atto = "";
   const transpile = (file, direct) => {
     const result = es6tr.run({ filename: file });
-    const outFile = `${file.replace("/build", "/public")}`;
+    const outFile = `${file.replace("/build", "/.public")}`;
 
     if (result.src) {
       const outResult = result.src.replace(/\0/gi, "").replace(/\\r\n/gi, "");
@@ -97,9 +83,38 @@ const express = require("express"),
 
   //BUILD
   if (process.env.PROJECT_NAME) {
+    //HTML
+
+    const COMPILE_HTML = () => {
+      const htmls = [
+        `${__dirname}/build/index.html`,
+        `${__dirname}/build/html/app.html`,
+        `${__dirname}/build/html/channel.html`,
+        `${__dirname}/build/html/cookie.html`,
+        `${__dirname}/build/html/player.html`,
+        `${__dirname}/build/html/player-inside.html`,
+        `${__dirname}/build/html/result-list.html`,
+        `${__dirname}/build/html/result-item.html`,
+        `${__dirname}/build/html/what.html`
+      ];
+      for (const html of htmls) {
+        fs.writeFileSync(
+          html.replace("/build/", "/.public/"),
+          crush(fs.readFileSync(html, "utf8"), {
+            removeLineBreaks: true,
+            removeIndentations: true,
+            lineLengthLimit: Number.POSITIVE_INFINITY
+          }).result,
+          "utf8"
+        );
+        //console.log(`Minified ${html}!`);
+      }
+      console.log(`Minified html`);
+    };
+
     //BUNDLE JS
-    {
-      const bundleFile = `${__dirname}/public/bundle.js`;
+    const COMPILE_JS = () => {
+      const bundleFile = `${__dirname}/.public/bundle.js`;
       let bundle = "";
 
       const scripts = [
@@ -118,24 +133,11 @@ const express = require("express"),
         ? console.warn(minified.error)
         : fs.writeFileSync(bundleFile, `${atto}\r\n${minified.code}`, "utf8");
       console.log(`Bundled ${scripts} into ${bundleFile}!`);
-    }
+    };
 
     //SASS
-    {
-      /*const c = {
-      in: `${__dirname}/build/style.sass.css`,
-      out: `${__dirname}/public/style.css`
-    };
-    fs.writeFileSync(
-      c.out,
-      sass
-        .renderSync({
-          data: fs.readFileSync(c.in, "utf8")
-        })
-        .css.toString("utf8")
-    );*/
-
-      const bundleFile = `${__dirname}/public/bundle.css`;
+    const COMPILE_CSS = () => {
+      const bundleFile = `${__dirname}/.public/bundle.css`;
       let bundle = "";
 
       const styles = [
@@ -153,7 +155,20 @@ const express = require("express"),
       //write bundle
       fs.writeFileSync(bundleFile, `${atto}\r\n${bundle}`, "utf8");
       console.log(`Bundled ${styles} into ${bundleFile}!`);
+    };
+    
+    //watch changes
+    fs.watch(`${__dirname}/build/css/`, COMPILE_CSS);
+    fs.watch(`${__dirname}/build/js/`, COMPILE_JS);
+    fs.watch(`${__dirname}/build/html/`, COMPILE_HTML);
+    
+    //first compile
+    {
+      COMPILE_CSS();
+      COMPILE_JS();
+      COMPILE_HTML();
     }
+  
   }
 }
 //API
@@ -187,12 +202,7 @@ app.use("*", (req, res, next) => {
 });
 
 // static
-app.use(express.static("public"));
-
-// base html
-app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/build/index.html`);
-});
+app.use(express.static(".public"));
 
 //HTML-Templates
 app.get("/html/*", (req, res) => {

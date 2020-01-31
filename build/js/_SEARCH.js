@@ -115,7 +115,7 @@ setupSearch = () => {
             var i = Object.keys(result.videoThumbnails).indexOf(thumb);
             if (i !== 0)
               //skip first (invidio.us)
-              srcSet += `${thumb.url}\t${thumb.width}w,\n`;
+              srcSet += `${thumb.url}\t${thumb.width}w${i !== result.videoThumbnails?",\n":""}`;
           }
 
           const getDurationDetailed = () => {

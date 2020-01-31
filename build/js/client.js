@@ -88,6 +88,7 @@ API = `//${location.hostname}/api`;
           API + "/geoip",
           tr + "/channel.html",
           tr + "/player.html",
+          tr + "/player-inside.html",
           tr + "/result-item.html",
           tr + "/result-list.html"
         ].map(url => fetch(url).then(resp => resp.text()))
@@ -99,8 +100,10 @@ API = `//${location.hostname}/api`;
           console.debug(`Your browser language: `, getL());
           T.CHANNEL = tx[2];
           T.PLAYER = tx[3];
-          T.RESULT = tx[4];
-          T.RESULTS = tx[5];
+          T.PLAYER_INSIDE = tx[4];
+          T.RESULT = tx[5];
+          T.RESULTS = tx[6];
+
           setupClient();
         })
         .catch(e => {
@@ -126,6 +129,16 @@ const demo = () => {
   $("#top")[0].value = q;
 
   SEARCH(q);
+
+  const sel = ".card[data-video=b-eYbUVZedY]";
+
+  setTimeout(
+    () =>
+      waitForElement(sel).then(() => {
+        $(sel)[0].click();
+      }),
+    999
+  );
 };
 
 window.onhashchange = () => {
@@ -174,7 +187,6 @@ const setupClient = () => {
 
   //setup bg
   initBg();
-
 
   waitForElement("#view").then(element => {
     //SETUP MOMENTJS LANGUAGE
