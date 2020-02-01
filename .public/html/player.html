@@ -5,7 +5,7 @@
           onclick="Player.close();"> <span aria-hidden="true">&times;</span></button><div class="card-body"><h5 class="card-title">{{title}}</h5> <img
             src="./loading.gif"
             data-srcset="{{preview-set}}"
-            style="display:none;"/> <video
+            style="display:none;" id="fake-poster"/> <video
             class="afterglow"
             id="video"
             poster="./loading.gif"

@@ -84,14 +84,17 @@ const express = require("express"),
   //BUILD
   if (process.env.PROJECT_NAME) {
     //HTML
-
+    let building = false;
     const COMPILE_HTML = () => {
+      if (building) return;
+      else building = true;
       const htmls = [
         `${__dirname}/build/index.html`,
         `${__dirname}/build/html/app.html`,
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/cookie.html`,
         `${__dirname}/build/html/player.html`,
+        `${__dirname}/build/html/oudated-browser.html`,
         `${__dirname}/build/html/player-inside.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
@@ -110,10 +113,13 @@ const express = require("express"),
         //console.log(`Minified ${html}!`);
       }
       console.log(`Minified html`);
+      building = false;
     };
 
     //BUNDLE JS
     const COMPILE_JS = () => {
+      if (building) return;
+      else building = true;
       const bundleFile = `${__dirname}/.public/bundle.js`;
       let bundle = "";
 
@@ -133,10 +139,13 @@ const express = require("express"),
         ? console.warn(minified.error)
         : fs.writeFileSync(bundleFile, `${atto}\r\n${minified.code}`, "utf8");
       console.log(`Bundled ${scripts} into ${bundleFile}!`);
+      building = false;
     };
 
     //SASS
     const COMPILE_CSS = () => {
+      if (building) return;
+      else building = true;
       const bundleFile = `${__dirname}/.public/bundle.css`;
       let bundle = "";
 
@@ -155,6 +164,7 @@ const express = require("express"),
       //write bundle
       fs.writeFileSync(bundleFile, `${atto}\r\n${bundle}`, "utf8");
       console.log(`Bundled ${styles} into ${bundleFile}!`);
+      building = false;
     };
 
     //first compile

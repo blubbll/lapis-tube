@@ -44,7 +44,9 @@ Player = {
         let HTML = "";
 
         waitForElement(".vjs-poster").then(el => {
-          el.innerHTML = createThumbs(vid.videoThumbnails);
+          el.outerHTML = $("#fake-poster")
+            .html()
+            .replace("{{preview-set}}", createThumbs(vid.videoThumbnails));
         });
 
         console.log(vid);

@@ -284,7 +284,7 @@ footer#footer {
       overflow: visible !important;
       img {
         z-index: 1;
-        transform: scale(10);
+        transform: scale(25);
         position: fixed;
         align-self: center;
         margin: 50% auto;
