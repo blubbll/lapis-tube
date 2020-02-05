@@ -31,7 +31,7 @@ let { API, GEO, HOST, REGION, lscache } = window;
   !location.host.endsWith("glitch.me") &&
   window.self === window.top &&
   location.hostname.split(".").length === 3 &&
-  location.hostname.split(".")[0] !==
+  location.hostname.split(".") !==
     getL()[
       location.replace(
         `${location.protocol}//${location.hostname
@@ -70,8 +70,8 @@ API = `//${location.hostname}/api`;
     setTimeout(() => {
       //hide
       el.attr("expanded") === "false"
-        ? el.addClass("d-none")
-        : el.removeClass("d-none");
+        ? el.classList.add("d-none")
+        : el.classList.remove("d-none");
     }, 199);
   });
 }
@@ -121,7 +121,7 @@ API = `//${location.hostname}/api`;
       fetch(tr + "/cookie.html")
         .then(res => res.text())
         .then(html => {
-          $("gtranslate")[0].outerHTML = html;
+          $("gtranslate").outerHTML = html;
           done();
         });
     }
@@ -130,7 +130,7 @@ API = `//${location.hostname}/api`;
 //////
 const demo = () => {
   const q = "New americana";
-  $("#top")[0].value = q;
+  $("#top").value = q;
 
   SEARCH(q);
 
@@ -139,7 +139,7 @@ const demo = () => {
   setTimeout(
     () =>
       waitForElement(sel).then(() => {
-        $(sel)[0].click();
+        $(sel).click();
       }),
     999
   );
@@ -154,7 +154,7 @@ window.onhashchange = () => {
         fetch(tr + "/what.html")
           .then(res => res.text())
           .then(html => {
-            $("[pop]")[0].outerHTML = html;
+            $("[pop]").outerHTML = html;
             done();
           });
       }
@@ -168,7 +168,7 @@ window.onhashchange = () => {
         fetch(tr + "/cookie.html")
           .then(res => res.text())
           .then(html => {
-            $("[pop]")[0].outerHTML = html;
+            $("[pop]").outerHTML = html;
             done();
           });
       }
@@ -179,7 +179,9 @@ window.onhashchange = () => {
 };
 
 //COOKIE OK
-$("#usage-accept").addEventlistener("click", "#usage-accept", () => {
+document.addEventListener("click", e => {
+  if (e.target !== $("#usage-accept")) return;
+
   lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
   location.reload(true);
 });
@@ -187,7 +189,7 @@ $("#usage-accept").addEventlistener("click", "#usage-accept", () => {
 //wreadyy
 const setupClient = () => {
   //fill home view (first step in app setup)
-  $("gtranslate")[0].outerHTML = T.HOME;
+  $("gtranslate").outerHTML = T.HOME;
 
   //setup bg
   initBg();
@@ -208,14 +210,14 @@ const setupClient = () => {
     setupSearch();
 
     //sync browser-language
-    $("#yt-lang").text(getL());
+    $("#yt-lang").innerText = getL();
     //sync region (language background clip)
 
-    $(
-      "#dynamic-logo .alpha-target"
-    )[0].src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
-    $("#dynamic-logo")[0].setAttribute("title", `Region: ${GEO.country}`);
-    $("#yt-lang")[0].setAttribute("title", `App language: ${getL()}`);
+    for (const img of $$("#dynamic-logo .alpha-target")) {
+      img.src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
+    }
+    $("#dynamic-logo").setAttribute("title", `Region: ${GEO.country}`);
+    $("#yt-lang").setAttribute("title", `App language: ${getL()}`);
 
     //small search demo
     waitForElement("#results").then(demo);

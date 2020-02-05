@@ -1,5 +1,7 @@
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
 const {
-  $,
   autocomplete,
   alert,
   createThumbs,
@@ -21,7 +23,7 @@ const {
 let { setupSearch, SEARCH } = window;
 
 setupSearch = () => {
-  $("#view-inner").html(T.RESULTS);
+  $("#view-inner").innerHTML = T.RESULTS;
 
   //do actual search
   SEARCH = str => {
@@ -34,7 +36,7 @@ setupSearch = () => {
     //no search, no paging
     if (page === 0) {
       //construct result base
-      $("#view-inner").html(T.RESULTS);
+      $("#view-inner").innerHTML = T.RESULTS;
       results = document.getElementById("results");
       results.setAttribute("state", "search-fresh");
       //we're on page 1
@@ -45,7 +47,7 @@ setupSearch = () => {
         results.setAttribute("state", "search-continue");
         page = page + 1;
       } else {
-        $("#view-inner").html(T.RESULTS);
+        $("#view-inner").innerHTML = T.RESULTS;
         results = document.getElementById("results");
         results.setAttribute("state", "search-new");
         page = 1;
@@ -86,7 +88,7 @@ setupSearch = () => {
 
     //Load more results (prevent rebind on infiniscroll)
     if (results.getAttribute("state") !== "search-continue")
-      $(results).on("scroll", e => {
+      results.addEventListener("scroll", e => {
         const that = results;
 
         if (
@@ -110,7 +112,7 @@ setupSearch = () => {
 
         //build results
         for (const result of _results) {
-          let srcSet = createThumbs(result.videoThumbnails)
+          let srcSet = createThumbs(result.videoThumbnails);
 
           const getDurationDetailed = () => {
             let detailed = moment
@@ -150,11 +152,11 @@ setupSearch = () => {
             //FILL VIEWS (formatted)
             .replace("{{views}}", numeral(result.viewCount || 0).format(`0.a`));
 
-          //render results
-          $("#results-inner").append(HTML);
+          //render result
+          $("#results-inner").insertAdjacentHTML("afterend", HTML);
 
           //setup lazyloading
-          lazyload(document.querySelectorAll("figure>img"));
+          lazyload($$("figure>img"));
         }
         document.getElementById("results").setAttribute("search-active", false);
       });
@@ -212,33 +214,33 @@ setupSearch = () => {
 
   //set Input on mobile to fullwidth
   {
-    $("#search-input").on("focus", () => {
+    $("#search-input").addEventListener("focus", () => {
       if (getSize() === "xs") {
         //remove margin to logo (we dont need it here)
         $("#search")[0].style.setProperty("margin-left", 0, "important");
         //hide dynamic logo
         $("#dynamic-logo")[0].style.setProperty("display", "none", "important");
         //make search wider
-        $("#search").addClass("col-11");
+        $("#search").classList.add("col-11");
         //hide submit btn and then...
-        $("#search-btn").addClass("d-none");
+        $("#search-btn").classList.add("d-none");
         //...fixaroo round (cuz missing submit btn)
-        $("#search-input").addClass("rounded");
+        $("#search-input").classList.add("rounded");
       }
     });
 
-    $("#search-input").on("blur", () => {
+    $("#search-input").addEventListener("blur", () => {
       if (getSize() === "xs") {
         //reset margin left override
         $("#search")[0].style.setProperty("margin-left", "");
         //show dynamic logo again
         $("#dynamic-logo")[0].style.setProperty("display", "");
         //reset searchelement to "normal" sizes
-        $("#search").removeClass("col-11");
+        $("#search").classList.remove("col-11");
         //show search btn again and...
-        $("#search-btn").removeClass("d-none");
+        $("#search-btn").classList.remove("d-none");
         //... make it round again :3
-        $("#search-input").removeClass("rounded");
+        $("#search-input").classList.remove("rounded");
       }
     });
   }

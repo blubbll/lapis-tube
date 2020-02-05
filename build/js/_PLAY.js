@@ -48,9 +48,10 @@ Player = {
         let HTML = "";
 
         waitForElement(".vjs-poster").then(el => {
-          el.outerHTML = $("#fake-poster")
-            .html()
-            .replace("{{preview-set}}", createThumbs(vid.videoThumbnails));
+          el.outerHTML = $("#fake-poster").innerHTML.replace(
+            "{{preview-set}}",
+            createThumbs(vid.videoThumbnails)
+          );
         });
 
         console.log(vid);
@@ -63,16 +64,14 @@ document.addEventListener("click", e => {
 
   const that = $(e.currentTarget);
 
-  $("#view-inner").addClass("wait");
+  $("#view-inner").classList.add("wait");
 
-  $("#results").addClass("grow");
-  that.addClass("growing");
+  $("#results").classList.add("grow");
+  that.classList.add("growing");
 
   setTimeout(() => {
     //enlarge-animation
-    $("enlarger").html(that.html());
-
-    //$("#video").html(T.PLAYER_INSIDE);
+    $("enlarger").innerHTML = that.innerHTML;
 
     Player.play(that.data("video"));
 

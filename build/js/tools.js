@@ -74,7 +74,7 @@ const waitForElement = selector => {
 };
 
 getSize = () => {
-  for (const indicator of $("size-indicators").find("size-indicator")) {
+  for (const indicator of $$("size-indicators>size-indicator")) {
     //get current "visible" indicator based on bootstrap's css rules
     if (getComputedStyle(indicator).display === "flex") {
       return indicator.classList[0].split("-")[1].replace("flex", "xs");
@@ -145,14 +145,14 @@ getL = () => {
     !(
       typeof options != "undefined" &&
       !options.silent &&
-      !$("#nprogress")[0]
+      !$("#nprogress")
     ) && NProgress.start();
     return ofetch(url, options).then(response => {
       //start proc (if not silent)
       !(
         typeof options != "undefined" &&
         !options.silent &&
-        !$("#nprogress")[0]
+        !$("#nprogress")
       ) && NProgress.done();
       return response;
     });
