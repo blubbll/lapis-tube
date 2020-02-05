@@ -1,5 +1,4 @@
 const {
-  $,
   autocomplete,
   alert,
   createThumbs,
@@ -16,6 +15,9 @@ const {
   waitForElement
 } = window;
 
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
 //afterglow player
 const { afterglow, vjs, poster } = window;
 
@@ -30,7 +32,9 @@ Player = {
     $("#results")[0].style.setProperty("display", "none", "important");
   },
   close: () => {
-    $("#player").remove();
+    //$("#player").remove();
+    $(".growing").classList.remove("growing");
+    $(".grow").classList.remove("grow");
     $("#filters")[0].style.setProperty("display", "");
     $("#results")[0].style.setProperty("display", "");
   },
@@ -54,13 +58,15 @@ Player = {
   }
 };
 
-$(document).on("click", ".card[data-video]", e => {
+document.addEventListener("click", e => {
+  if (e.target !== $(".card[data-video]")) return;
+
   const that = $(e.currentTarget);
 
   $("#view-inner").addClass("wait");
 
-  $("#results").addClass("growing");
-  that.addClass("grow");
+  $("#results").addClass("grow");
+  that.addClass("growing");
 
   setTimeout(() => {
     //enlarge-animation
@@ -70,7 +76,7 @@ $(document).on("click", ".card[data-video]", e => {
 
     Player.play(that.data("video"));
 
-    $("#results").removeClass("growing");
+    $("#results").removeClass("grow");
 
     // afterglow.initVideoElements()
     // or

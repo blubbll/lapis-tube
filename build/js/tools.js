@@ -1,4 +1,7 @@
-const { $, NProgress } = window;
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
+const { NProgress } = window;
 let { createThumbs, debounce, fetch, getL, getSize, loadImage } = window;
 
 function detectIEEdge() {

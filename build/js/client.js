@@ -1,10 +1,12 @@
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
 //RESET
 location.hash = "";
 console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 
 //
 const {
-  $,
   autocomplete,
   alert,
   debounce,
@@ -59,7 +61,9 @@ API = `//${location.hostname}/api`;
 
 //navi switch
 {
-  $(document).on("click", "#toggle-left", () => {
+  document.addEventListener("click", e => {
+    if (e.target !== $("#toggle-left")) return;
+
     const el = $("#left");
     //slide
     el.attr("expanded", el.attr("expanded") === "false" ? "true" : "false");
@@ -175,7 +179,7 @@ window.onhashchange = () => {
 };
 
 //COOKIE OK
-$(document).on("click", "#usage-accept", () => {
+$("#usage-accept").addEventlistener("click", "#usage-accept", () => {
   lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
   location.reload(true);
 });

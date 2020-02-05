@@ -277,34 +277,20 @@ footer#footer {
   overflow-y: auto;
 
   /*fake-grow before popping into player*/
-  &.growing {
+  &.grow {
     overflow: hidden;
-    .card.grow {
+    .card.growing {
       z-index: 1;
       overflow: visible !important;
       img {
+        filter: blur(.1rem)!important; /*override default filter (grayscale) */
         z-index: 1;
         transform: scale(25);
         position: fixed;
         align-self: center;
         margin: 50% auto;
       }
-      /* .card-body {
-        background: white !important;
-      }
-     z-index: 1;
-      transform: scale(2) translate(25%, -25%) !important;
-      position: a;
-      height: 30%;
-      width: calc(40vw);
-      position: fixed;
-      top: 50%;
-      padding: 5;
-      left: 0;
-      margin: 0 10vw !important;
-      margin: !important;
-      box-shadow: 0 0 5rem 12vh white !important;
-      border: 0.1rem solid rgba(0, 0, 0, 0.3) !important;*/
+     
     }
   }
 
@@ -317,10 +303,9 @@ footer#footer {
       box-shadow: 0 0 0.1rem 1rem rgba(0, 0, 0, 0.1);
       cursor: pointer;
       overflow: hidden;
-      transform: scale(1);
       background: rgba(0, 0, 0, 0.3);
       border-radius: 0.6rem;
-      transition: transform 49ms ease-out;
+      transition: transform 10ms ease-out;
       figure {
         margin-bottom: 0;
         overflow: hidden;
@@ -367,7 +352,7 @@ footer#footer {
           }
         }
         img {
-          transition: transform 499ms ease-out;
+          transition: transform 299ms ease-in; /* growing-animation */
           height: 15vh;
           filter: grayscale(0.6);
           object-fit: cover;

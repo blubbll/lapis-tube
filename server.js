@@ -61,7 +61,7 @@ const express = require("express"),
   crush = require("html-crush").crush;
 
 {
-  const atto = "";
+  const atto = "/*!💜I love you monad.*/";
   const transpile = (file, direct) => {
     const result = es6tr.run({ filename: file });
     const outFile = `${file.replace("/build", "/.public")}`;
@@ -90,11 +90,11 @@ const express = require("express"),
       else building = true;
       const htmls = [
         `${__dirname}/build/index.html`,
+        `${__dirname}/build/outdated-browser.html`,
         `${__dirname}/build/html/app.html`,
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/cookie.html`,
         `${__dirname}/build/html/player.html`,
-        `${__dirname}/build/html/oudated-browser.html`,
         `${__dirname}/build/html/player-inside.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
