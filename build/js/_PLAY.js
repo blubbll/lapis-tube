@@ -75,7 +75,7 @@
             low: vid.formatStreams[0],
             AUDIOS: [],
             VIDEOS: [],
-            CURRENTSTREAM: {}
+            CURRENT: { AUDIO: "", VIDEO: "" }
           };
 
           for (const format of vid.adaptiveFormats) {
@@ -84,30 +84,29 @@
           }
 
           //sort by bitrate
-          STREAM.AUDIO = STREAM.AUDIO.sort((a, b) => a.bitrate - b.bitrate);
-          STREAM.VIDEO = STREAM.VIDEO.sort((a, b) => a.bitrate - b.bitrate);
+          STREAM.AUDIOS = STREAM.AUDIOS.sort((a, b) => a.bitrate - b.bitrate);
+          STREAM.VIDEOS = STREAM.VIDEOS.sort((a, b) => a.bitrate - b.bitrate);
 
+          console.log(STREAM);
           switch (speed.speed) {
             case "slow":
               {
-                STREAM.CURRENTSTREAM.AUDIO = STREAM.AUDIOS[0];
-                STREAM.CURRENTSTREAM.VIDEO = STREAM.VIDEOS[0];
+                STREAM.CURRENT.AUDIO = STREAM.AUDIOS[0];
+                STREAM.CURRENT.VIDEO = STREAM.VIDEOS[0];
               }
               break;
             case "medium":
               {
-                STREAM.CURRENTSTREAM.AUDIO =
+                STREAM.CURRENT.AUDIO =
                   STREAM.AUDIOS[Math.floor(STREAM.AUDIOS.length - 1 / 2)];
-                STREAM.CURRENTSTREAM.VIDEO =
+                STREAM.CURRENT.VIDEO =
                   STREAM.VIDEOS[Math.floor(STREAM.VIDEOS.length - 1 / 2)];
               }
               break;
             case "fast":
               {
-                STREAM.CURRENTSTREAM.AUDIO =
-                  STREAM.AUDIOS[STREAM.AUDIOS.length - 1];
-                STREAM.CURRENTSTREAM.VIDEO =
-                  STREAM.VIDEOS[STREAM.VIDEOS.length - 1];
+                STREAM.CURRENT.AUDIO = STREAM.AUDIOS[STREAM.AUDIOS.length - 1];
+                STREAM.CURRENT.VIDEO = STREAM.VIDEOS[STREAM.VIDEOS.length - 1];
               }
               break;
           }
@@ -124,9 +123,8 @@
             VIDEO = $("video");
 
             //SET MEDIA
-            AUDIO.src = STREAM.CURRENTSTEAM.AUDIO;
-
-            VIDEO.src = STREAM.CURRENTSTREAM.VIDEO;
+            AUDIO.src = STREAM.CURRENT.AUDIO.url;
+            VIDEO.src = STREAM.CURRENT.VIDEO.url;
 
             //init afterglow
             afterglow.initVideoElements();

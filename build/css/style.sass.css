@@ -291,8 +291,8 @@ footer#footer {
         position: fixed;
         align-self: center;
         margin: 50% auto;
-        left: 25%;
-        top: 25%;
+        left: 10%;
+        top: 10%;
       }
     }
   }
