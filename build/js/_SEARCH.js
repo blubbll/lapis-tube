@@ -153,7 +153,7 @@ setupSearch = () => {
             .replace("{{views}}", numeral(result.viewCount || 0).format(`0.a`));
 
           //render result
-          $("#results-inner").insertAdjacentHTML("afterend", HTML);
+          $("#results-inner").insertAdjacentHTML("beforeend", HTML);
 
           //setup lazyloading
           lazyload($$("figure>img"));
@@ -217,9 +217,9 @@ setupSearch = () => {
     $("#search-input").addEventListener("focus", () => {
       if (getSize() === "xs") {
         //remove margin to logo (we dont need it here)
-        $("#search")[0].style.setProperty("margin-left", 0, "important");
+        $("#search").style.setProperty("margin-left", 0, "important");
         //hide dynamic logo
-        $("#dynamic-logo")[0].style.setProperty("display", "none", "important");
+        $("#dynamic-logo").style.setProperty("display", "none", "important");
         //make search wider
         $("#search").classList.add("col-11");
         //hide submit btn and then...
@@ -232,9 +232,9 @@ setupSearch = () => {
     $("#search-input").addEventListener("blur", () => {
       if (getSize() === "xs") {
         //reset margin left override
-        $("#search")[0].style.setProperty("margin-left", "");
+        $("#search").style.setProperty("margin-left", "");
         //show dynamic logo again
-        $("#dynamic-logo")[0].style.setProperty("display", "");
+        $("#dynamic-logo").style.setProperty("display", "");
         //reset searchelement to "normal" sizes
         $("#search").classList.remove("col-11");
         //show search btn again and...

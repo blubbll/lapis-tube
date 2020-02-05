@@ -113,8 +113,9 @@ const express = require("express"),
         //console.log(`Minified ${html}!`);
       }
       console.log(`Minified html`);
-      building = false;
+      setTimeout(() => {building = false}, 999);
     };
+    
 
     //BUNDLE JS
     const COMPILE_JS = () => {

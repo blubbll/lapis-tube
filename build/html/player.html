@@ -16,22 +16,11 @@
         <div class="card-body">
           <h5 class="card-title">{{title}}</h5>
 
-          <img
-            src="./loading.gif"
-            data-srcset="{{preview-set}}"
-            style="display:none;"
-            id="fake-poster"
-          />
-
-          <video
-            class="afterglow"
-            id="video"
-            poster="./loading.gif"
-            height="100%"
-            width="100%"
-          >
-            {{sources}}
-          </video>
+          <lapis-player>
+            <poster><img srcset="{{preview-set}}" /> </poster>
+            <video></video>
+            <audio></audio>
+          </lapis-player>
         </div>
       </div>
     </div>

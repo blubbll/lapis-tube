@@ -142,18 +142,12 @@ getL = () => {
   //override fetch
   fetch = (url, options) => {
     //start proc (if not silent)
-    !(
-      typeof options != "undefined" &&
-      !options.silent &&
-      !$("#nprogress")
-    ) && NProgress.start();
+    !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
+      NProgress.start();
     return ofetch(url, options).then(response => {
       //start proc (if not silent)
-      !(
-        typeof options != "undefined" &&
-        !options.silent &&
-        !$("#nprogress")
-      ) && NProgress.done();
+      !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
+        NProgress.done();
       return response;
     });
   };

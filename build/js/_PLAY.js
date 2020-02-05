@@ -25,18 +25,15 @@ let { Player } = window;
 
 Player = {
   open: () => {
-    $("#view-inner")
-      .append(T.PLAYER)
-      .removeClass("wait");
-    $("#filters")[0].style.setProperty("display", "none", "important");
-    $("#results")[0].style.setProperty("display", "none", "important");
+    $("#view-inner").insertAdjacentHTML("beforeend", T.PLAYER);
+    $("#view-inner").classList.remove("wait");
+    $("#filters").style.setProperty("display", "none", "important");
+    $("#results").style.setProperty("display", "none", "important");
   },
   close: () => {
-    //$("#player").remove();
-    $(".growing").classList.remove("growing");
-    $(".grow").classList.remove("grow");
-    $("#filters")[0].style.setProperty("display", "");
-    $("#results")[0].style.setProperty("display", "");
+    $("#player").remove();
+    $("#filters").style.setProperty("display", "");
+    $("#results").style.setProperty("display", "");
   },
   play: vid => {
     Player.open();
@@ -60,9 +57,12 @@ Player = {
 };
 
 document.addEventListener("click", e => {
-  if (e.target !== $(".card[data-video]")) return;
-
-  const that = $(e.currentTarget);
+  const that = $(".card[video-id]");
+  if (!that || (that && !that.contains(e.target))) {
+    e.preventDefault();
+    return false;
+  }
+  /////////////////////////////
 
   $("#view-inner").classList.add("wait");
 
@@ -70,17 +70,9 @@ document.addEventListener("click", e => {
   that.classList.add("growing");
 
   setTimeout(() => {
-    //enlarge-animation
-    $("enlarger").innerHTML = that.innerHTML;
+    Player.play(that.getAttribute("video-id"));
 
-    Player.play(that.data("video"));
-
-    $("#results").removeClass("grow");
-
-    // afterglow.initVideoElements()
-    // or
-    // afterglow.init
-
-    that.removeClass("grow");
+    $("#results").classList.remove("grow");
+    that.classList.remove("growing");
   }, 799);
 });

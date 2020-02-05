@@ -41,9 +41,9 @@ let { API, GEO, HOST, REGION, lscache } = window;
       )
     ];
 
-window.onresize = () => {
-  $("body").attr("size", getSize());
-};
+window.onresize = debounce(() => {
+  $("body").setAttribute("size", getSize());
+}, 999);
 
 //host
 HOST = `${location.protocol}//${
@@ -62,7 +62,11 @@ API = `//${location.hostname}/api`;
 //navi switch
 {
   document.addEventListener("click", e => {
-    if (e.target !== $("#toggle-left")) return;
+    const that = $("#toggle-left");
+    if (!that || (that && !that.contains(e.target))) {
+      e.preventDefault();
+      return false;
+    }
 
     const el = $("#left");
     //slide
@@ -180,7 +184,11 @@ window.onhashchange = () => {
 
 //COOKIE OK
 document.addEventListener("click", e => {
-  if (e.target !== $("#usage-accept")) return;
+  const that = $("#usage-accept");
+  if (!that || (that && !that.contains(e.target))) {
+    e.preventDefault();
+    return false;
+  }
 
   lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
   location.reload(true);

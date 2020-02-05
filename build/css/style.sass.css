@@ -283,7 +283,7 @@ footer#footer {
       z-index: 1;
       overflow: visible !important;
       img {
-        filter: blur(.1rem)!important; /*override default filter (grayscale) */
+        filter: blur(.05rem)!important; /*override default filter (grayscale) */
         z-index: 1;
         transform: scale(25);
         position: fixed;
@@ -308,7 +308,6 @@ footer#footer {
       transition: transform 10ms ease-out;
       figure {
         margin-bottom: 0;
-        overflow: hidden;
         figcaption {
           border: 0.1rem solid rgba(255, 255, 255, 0.2);
           border: none;
@@ -353,7 +352,7 @@ footer#footer {
         }
         img {
           transition: transform 299ms ease-in; /* growing-animation */
-          height: 15vh;
+          height: 20vh;
           filter: grayscale(0.6);
           object-fit: cover;
         }
