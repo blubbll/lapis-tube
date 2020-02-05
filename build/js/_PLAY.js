@@ -244,7 +244,6 @@
 
             //keep video time in sync with audio
             const syncer = setInterval(() => {
-              console.log(AUDIO.currentTime / VIDEO.currentTime);
               AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
                 (VIDEO.currentTime = AUDIO.currentTime)
               ];

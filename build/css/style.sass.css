@@ -460,7 +460,6 @@ lapis-player {
   video,
   #mep_0 {
     height: inherit;
-    position: absolute;
     width: inherit;
     max-height: inherit;
     min-width: 0 !important;
