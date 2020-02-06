@@ -365,10 +365,13 @@ footer#footer {
           figcaption {
             /* hide duration when hovering on img */
             duration {
-              opacity: 0.4;
+              /* opacity: 0.4;*/
+              backdrop-filter: blur(1rem);
             }
             item-title {
               opacity: 0.4;
+              /* opacity: 0.4;*/
+              backdrop-filter: blur(1rem);
             }
           }
         }

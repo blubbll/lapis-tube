@@ -7,7 +7,7 @@
       <div class="card">
         <button
           type="button"
-          class="py-2 px-3 ml-auto close"
+          class="py-2 px-3 ml-auto close position-absolute w-100 d-flex justify-content-end"
           aria-label="Close"
           onclick="Player.close();"
         >
@@ -16,7 +16,7 @@
         <div class="card-body">
           <h5 class="card-title">{{title}}</h5>
 
-          <lapis-player>
+          <lapis-player class="mt-3">
             <poster><img /> </poster>
             <video></video>
             <audio></audio>

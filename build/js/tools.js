@@ -6,7 +6,7 @@ let {
   CDN,
   createThumbs,
   debounce,
-
+  LOCAL,
   fetch,
   Fullscreen,
   getL,
@@ -101,6 +101,7 @@ loadImage = url => {
 };
 
 CDN = $("base").href;
+LOCAL = location.origin;
 
 if (detectIEEdge()) {
   const LLegacy =

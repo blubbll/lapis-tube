@@ -17,6 +17,7 @@ const {
   getSize,
   initBg,
   load,
+  LOCAL,
   lazyload,
   moment,
   numeral,
@@ -64,10 +65,9 @@ API = `//${location.hostname}/api`;
 {
   document.addEventListener("click", e => {
     const that = $("#toggle-left");
-    if (!that || (that && !that.contains(e.target))) {
-      e.preventDefault();
-      return false;
-    }
+    //////////////////////////////////////////////////////////////
+    if (!that || (that && !that.contains(e.target))) return false;
+    //////////////////////////////////////////////////////////////
 
     const el = $("#left");
     //slide
@@ -126,7 +126,7 @@ API = `//${location.hostname}/api`;
       fetch(tr + "/cookie.html")
         .then(res => res.text())
         .then(html => {
-          $("gtranslate").outerHTML = html;
+          $("gtranslate").outerHTML = html.replace(/{{local}}/gi, LOCAL);
           done();
         });
     }
@@ -173,7 +173,7 @@ window.onhashchange = () => {
         fetch(tr + "/cookie.html")
           .then(res => res.text())
           .then(html => {
-            $("[pop]").outerHTML = html;
+            $("[pop]").outerHTML = html.replace(/{{local}}/gi, LOCAL);
             done();
           });
       }
@@ -186,10 +186,9 @@ window.onhashchange = () => {
 //COOKIE OK
 document.addEventListener("click", e => {
   const that = $("#usage-accept");
-  if (!that || (that && !that.contains(e.target))) {
-    e.preventDefault();
-    return false;
-  }
+  //////////////////////////////////////////////////////////////
+  if (!that || (that && !that.contains(e.target))) return false;
+  //////////////////////////////////////////////////////////////
 
   lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
   location.reload(true);
