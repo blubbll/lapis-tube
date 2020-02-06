@@ -101,8 +101,8 @@ body {
     }
   }
   > .alpha-mask {
-    mask-image: url(//lapistube.b-cdn.net/logo.png);
-    -webkit-mask-image: url(//lapistube.b-cdn.net/logo.png);
+    mask-image: var(--alpha-logo);
+    -webkit-mask-image: var(--alpha-logo);
     mask-mode: alpha;
     -webkit-mask-mode: alpha;
     mask-repeat: no-repeat;

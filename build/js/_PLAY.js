@@ -251,14 +251,14 @@
             }, 2999);
 
             //MOBILE DEVICE
-            if (typeof window.orientation !== "undefined") {
+            if (Browser.isMobileChrome) {
               document.title = TITLE;
 
               //sync audio pause on android video pause
               document.addEventListener(
                 "fullscreenchange",
                 () => {
-                  if (!document.fullscreen && VIDEO.pause && !AUDIO.paused)
+                  if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
                     AUDIO.pause();
                 },
                 false

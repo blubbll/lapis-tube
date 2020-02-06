@@ -10,6 +10,7 @@ const {
   autocomplete,
   alert,
   debounce,
+  CDN,
   done,
   fetch,
   getL,
@@ -102,7 +103,7 @@ API = `//${location.hostname}/api`;
         ].map(url => fetch(url).then(resp => resp.text()))
       )
         .then(tx => {
-          T.HOME = tx[0];
+          T.HOME = tx[0].replace(/{{cdn}}/gi, CDN);
           (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
           console.debug(`Your Geo Information by Maxmind: `, GEO);
           console.debug(`Your browser language: `, getL());
@@ -206,20 +207,17 @@ const setupClient = () => {
     //SETUP MOMENTJS LANGUAGE
     moment.locale(getL());
 
-    /*const setupNumeral = setInterval(() => {
-      try {
-        numeral.locale(getL());
-        clearInterval(setupNumeral);
-        console.log("Numeral.js ready!");
-      } catch(e) {}
-    }, 999);*/
-
     //SETUP SEARCH
     setupSearch();
 
     //sync browser-language
     $("#yt-lang").innerText = getL();
     //sync region (language background clip)
+
+    document.documentElement.style.setProperty(
+      "--alpha-logo",
+      `url(${CDN}/logo.png)`
+    );
 
     for (const img of $$("#dynamic-logo .alpha-target")) {
       img.src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;

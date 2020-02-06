@@ -64,8 +64,10 @@ const express = require("express"),
   //BUILD
   if (process.env.PROJECT_NAME) {
     const dist = "/!dist";
-    !fs.existsSync(`${__dirname}/${dist}`) && fs.mkdirSync(`${__dirname}/${dist}`);
-    !fs.existsSync(`${__dirname}/${dist}/html`) && fs.mkdirSync(`${__dirname}/${dist}/html`);
+    !fs.existsSync(`${__dirname}/${dist}`) &&
+      fs.mkdirSync(`${__dirname}/${dist}`);
+    !fs.existsSync(`${__dirname}/${dist}/html`) &&
+      fs.mkdirSync(`${__dirname}/${dist}/html`);
 
     const atto = "/*!💜I love you monad.*/";
     const transpile = (file, direct) => {
@@ -216,13 +218,18 @@ app.use("*", (req, res, next) => {
   next();
 });
 
+//index
+app.get("/", (req, res) => {
+  res.send(
+    fs
+      .readFileSync(`${__dirname}/!dist/index.html`, "utf8")
+      .replace(/{{local}}/gi, `${req.protocol}://${req.hostname}/`)
+  );
+});
+
+
 // static
 app.use(express.static(`${__dirname}/!dist`));
-
-//HTML-Templates
-app.get("/html/*", (req, res) => {
-  res.sendFile(`${__dirname}${req.originalUrl}`);
-});
 
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
