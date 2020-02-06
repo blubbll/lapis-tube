@@ -5,14 +5,18 @@
   <div id="player-inner" class="d-flex flex-column w-100 align-items-center">
     <div class="mb-1 col-12 col-sm-11 col-lg-10 col-xl-8">
       <div class="card">
-        <button
-          type="button"
-          class="py-2 px-3 ml-auto close position-absolute w-100 d-flex justify-content-end"
-          aria-label="Close"
-          onclick="Player.close();"
+        <div
+          class="py-2 px-3 ml-autoposition-absolute w-100 d-flex justify-content-end"
         >
-          <span aria-hidden="true">&times;</span>
-        </button>
+          <button
+            type="button"
+            class="py-2 px-3 ml-auto close"
+            aria-label="Close"
+            onclick="Player.close();"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <div class="card-body">
           <h5 class="card-title">{{title}}</h5>
 

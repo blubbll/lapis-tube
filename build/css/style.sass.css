@@ -423,7 +423,7 @@ footer#footer {
 }
 lapis-player {
   display: flex;
-  max-height: 75%;
+  max-height: 75vh;
   width: 100%;
   /*PLAYER*/
   audio {
@@ -453,10 +453,6 @@ lapis-player {
     filter: contrast(0.75);
   }
 
-  poster {
-    display: none;
-  }
-
   /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
   /*https://codepen.io/Varo/pen/vLdvMK*/
 
@@ -466,7 +462,6 @@ lapis-player {
     width: inherit;
     max-height: inherit;
     min-width: 0 !important;
-    border: 0.1rem solid rgba(255, 255, 255, 0.1);
   }
 
   /* customized afterglow player */

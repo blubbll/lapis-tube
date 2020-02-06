@@ -3,6 +3,7 @@
     autocomplete,
     alert,
     createThumbs,
+    CDN,
     debounce,
     done,
     fetch,
@@ -58,6 +59,17 @@
       let VIDEO = $("video");
       const AUDIO = $("audio");
 
+           $("lapis-player>poster>img").style.background = `url(${CDN}/loading.gif)`;
+            //$("video").style.background = `url(${CDN}/loading.gif)`;
+
+            //prepare player size
+            $("lapis-player>poster>img").style.height = `${
+              $("lapis-player").clientHeight
+            }px`;
+            $("lapis-player>poster>img").style.width = `${
+              $("lapis-player").clientWidth
+            }px`;
+      
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -199,7 +211,13 @@
             VIDEO.addEventListener(
               "loadedmetadata",
               e => {
-                console.log("loaded");
+                const that = e.target;
+
+                console.debug("video metadata loaded");
+
+                //reset enforced player heigth
+                $("lapis-player").style.height = "auto";
+                $("lapis-player>poster").style.display = "none";
 
                 try {
                   VIDEO.play();
@@ -219,8 +237,6 @@
                 );
 
                 const fitRatio = () => {
-                  const that = e.target;
-
                   const ratio =
                     $("lapis-player").getAttribute("ratio") ||
                     that.videoHeight / that.videoWidth;
@@ -272,7 +288,6 @@
                 VIDEO.addEventListener("pause", () => {
                   !AUDIO.paused && AUDIO.pause();
                 });
-              //: @android: FIXME
 
               //RESET EVENT
               $(".afterglow__top-control-bar").innerHTML = $(
