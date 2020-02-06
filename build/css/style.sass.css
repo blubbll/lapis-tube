@@ -291,8 +291,8 @@ footer#footer {
         position: fixed;
         align-self: center;
         margin: 50% auto;
-        left: 10%;
-        top: 10%;
+        left: 25vw;
+        top: 0;
       }
     }
   }
@@ -458,7 +458,7 @@ lapis-player {
   /*https://codepen.io/Varo/pen/vLdvMK*/
 
   video,
-  #mep_0 {
+  .afterglow__video {
     height: inherit;
     width: inherit;
     max-height: inherit;
