@@ -61,28 +61,32 @@ const express = require("express"),
   crush = require("html-crush").crush;
 
 {
-  const atto = "/*!💜I love you monad.*/";
-  const transpile = (file, direct) => {
-    const result = es6tr.run({ filename: file });
-    const outFile = `${file.replace("/build", "/.public")}`;
-
-    if (result.src) {
-      const outResult = result.src.replace(/\0/gi, "").replace(/\\r\n/gi, "");
-
-      if (!direct)
-        [
-          fs.writeFileSync(outFile, `${atto}\r\n${outResult}`),
-          console.log(`Transpiled ${file} to ${outFile}!`)
-        ];
-      else {
-        //console.log(`Transpiled ${file}!`);
-        return outResult;
-      }
-    } else console.warn(`Error at transpiling of file ${file}:`, result);
-  };
-
   //BUILD
   if (process.env.PROJECT_NAME) {
+    const dist = "/!dist";
+    !fs.existsSync(`${__dirname}/${dist}`) && fs.mkdirSync(`${__dirname}/${dist}`);
+    !fs.existsSync(`${__dirname}/${dist}/html`) && fs.mkdirSync(`${__dirname}/${dist}/html`);
+
+    const atto = "/*!💜I love you monad.*/";
+    const transpile = (file, direct) => {
+      const result = es6tr.run({ filename: file });
+      const outFile = `${file.replace("/build", dist)}`;
+
+      if (result.src) {
+        const outResult = result.src.replace(/\0/gi, "").replace(/\\r\n/gi, "");
+
+        if (!direct)
+          [
+            fs.writeFileSync(outFile, `${atto}\r\n${outResult}`),
+            console.log(`Transpiled ${file} to ${outFile}!`)
+          ];
+        else {
+          //console.log(`Transpiled ${file}!`);
+          return outResult;
+        }
+      } else console.warn(`Error at transpiling of file ${file}:`, result);
+    };
+
     //HTML
     let building = false;
     const COMPILE_HTML = () => {
@@ -102,7 +106,7 @@ const express = require("express"),
       ];
       for (const html of htmls) {
         fs.writeFileSync(
-          html.replace("/build/", "/.public/"),
+          html.replace("/build", dist),
           crush(fs.readFileSync(html, "utf8"), {
             removeLineBreaks: true,
             removeIndentations: true,
@@ -122,7 +126,7 @@ const express = require("express"),
     const COMPILE_JS = () => {
       if (building) return;
       else building = true;
-      const bundleFile = `${__dirname}/.public/bundle.js`;
+      const bundleFile = `${__dirname}/${dist}/bundle.js`;
       let bundle = "";
 
       const scripts = [
@@ -148,7 +152,7 @@ const express = require("express"),
     const COMPILE_CSS = () => {
       if (building) return;
       else building = true;
-      const bundleFile = `${__dirname}/.public/bundle.css`;
+      const bundleFile = `${__dirname}/${dist}/bundle.css`;
       let bundle = "";
 
       const styles = [
@@ -213,7 +217,7 @@ app.use("*", (req, res, next) => {
 });
 
 // static
-app.use(express.static(".public"));
+app.use(express.static(`${__dirname}/!dist`));
 
 //HTML-Templates
 app.get("/html/*", (req, res) => {

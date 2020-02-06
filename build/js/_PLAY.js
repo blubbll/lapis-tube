@@ -127,7 +127,8 @@
             VIDEO.src = STREAM.CURRENT.VIDEO.url;
 
             //init afterglow
-            afterglow.initVideoElements();
+            afterglow.initialized=false
+            afterglow.init();
 
             {
               //MIRROR VOLUME
