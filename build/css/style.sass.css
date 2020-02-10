@@ -284,10 +284,10 @@ footer#footer {
       overflow: visible !important;
       img {
         filter: blur(
-          0.05rem
+          0.25rem
         ) !important; /*override default filter (grayscale) */
         z-index: 1;
-        transform: scale(25);
+        transform: scale(15);
         position: fixed;
         align-self: center;
         margin: 50% auto;
@@ -307,7 +307,7 @@ footer#footer {
       cursor: pointer;
       overflow: hidden;
       background: rgba(0, 0, 0, 0.3);
-      border-radius: 0.6rem;
+      border-radius: 0.3rem;
       transition: transform 10ms ease-out;
       figure {
         margin-bottom: 0;
@@ -354,7 +354,7 @@ footer#footer {
           }
         }
         img {
-          transition: transform 299ms ease-in; /* growing-animation */
+          transition: transform 199ms ease-out; /* growing-animation */
           height: 18vh;
           filter: grayscale(0.6);
           object-fit: cover;
@@ -363,15 +363,11 @@ footer#footer {
         /* highlight image on hover */
         &:hover {
           figcaption {
-            /* hide duration when hovering on img */
             duration {
-              /* opacity: 0.4;*/
-              backdrop-filter: blur(1rem);
-            }
-            item-title {
-              opacity: 0.4;
-              /* opacity: 0.4;*/
-              backdrop-filter: blur(1rem);
+              opacity: 0.8;
+              backdrop-filter: blur(2rem);
+              background: rgba(0, 0, 0, 0.25);
+              color: white;
             }
           }
         }
@@ -381,20 +377,25 @@ footer#footer {
       &:hover {
         z-index: 1;
 
-        transform: scale(1.06);
+        transform: scale(1.05);
         img {
           filter: none;
         }
         .card-body {
           background: white;
         }
-        duration {
-          duration-word {
-            display: inline-block;
+        figcaption {
+          item-title {
+            background: white;
           }
-          opacity: 1;
-          duration-detailed {
-            display: inline-block;
+          duration {
+            duration-word {
+              display: inline-block;
+            }
+            opacity: 1;
+            duration-detailed {
+              display: inline-block;
+            }
           }
         }
       }
@@ -430,7 +431,12 @@ lapis-player {
     display: none;
   }
 
-  lapis-player {
+  poster {
+
+    img {
+      width: inherit;
+    }
+    width: inherit;
   }
 
   lapis-muted {
@@ -462,6 +468,14 @@ lapis-player {
     width: inherit;
     max-height: inherit;
     min-width: 0 !important;
+  }
+
+  .afterglow__video:not(:fullscreen) .afterglow__title-bar {
+    display: none;
+  }
+
+  .afterglow__container video {
+    object-fit: fill;
   }
 
   /* customized afterglow player */

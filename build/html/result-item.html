@@ -1,12 +1,13 @@
-<div class="mb-1 col-12 col-sm-6 col-lg-6 col-xl-4">
+<div class="mb-1 col-12 col-md-6 col-xl-4 mx-auto">
   <card video-id="{{video}}" class="card bg-black m-3" onclick="Player.openFromResult(this)">
     <figure class="d-flex flex-column border-bottom">
-      <img src="./loading.gif" data-srcset="{{preview-set}}" />
-      <figcaption class="d-flex flex-column position-absolute">
+      <figcaption class="d-flex flex-column">
         <item-title class="notranslate">
-          <h6 class="card-title mb-0">{{title}}</h6>
+          <h6 class="card-title mb-0 font-weight-bold">{{title}}</h6>
         </item-title>
       </figcaption>
+            <img src="./loading.gif" data-srcset="{{preview-set}}" />
+
       <figcaption class="d-flex flex-column">
         <duration class="position-absolute">
           <duration-word>Length:</duration-word>

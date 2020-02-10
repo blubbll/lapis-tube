@@ -26,7 +26,7 @@ const {
   T,
   waitForElement
 } = window;
-let { API, GEO, HOST, REGION, lscache } = window;
+let { app_start, API, GEO, HOST, REGION, lscache } = window;
 
 //anti-hostname (allow inplace editing though)
 !location.host !== "gtranslate.io" &&
@@ -87,7 +87,8 @@ API = `//${location.hostname}/api`;
   {
     //template remote path
     const tr = `${HOST}/html`;
-    if (lscache.get("cookie-accepted")) {
+
+    app_start = () => {
       //template var inmemory
       const T = (window.T = {});
 
@@ -122,11 +123,15 @@ API = `//${location.hostname}/api`;
             location.reload(true), 4999;
           });
         });
+    };
+
+    if (lscache.get("cookie-accepted")) {
+      app_start();
     } else {
       fetch(tr + "/cookie.html")
         .then(res => res.text())
         .then(html => {
-          $("gtranslate").outerHTML = html.replace(/{{local}}/gi, LOCAL);
+          $("gtranslate").innerHTML = html.replace(/{{local}}/gi, LOCAL);
           done();
         });
     }
@@ -191,7 +196,8 @@ document.addEventListener("click", e => {
   //////////////////////////////////////////////////////////////
 
   lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
-  location.reload(true);
+  app_start();
+  //location.reload(true);
 });
 
 //wreadyy

@@ -12,6 +12,7 @@
     HOST,
     REGION,
     load,
+    lazyload,
     moment,
     speed,
     T,
@@ -44,14 +45,23 @@
       $("#view-inner").classList.add("wait");
 
       $("#results").classList.add("grow");
+
+      //set preload img from enlarged result
+      /*$("#results").setAttribute(
+        "last-poster",
+        that.querySelector("img").currentSrc
+      );*/
+
       that.classList.add("growing");
+
+      $("#results").setAttribute("last-poster", $(".growing img").currentSrc);
 
       setTimeout(() => {
         Player.play(that.getAttribute("video-id"));
 
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
-      }, 799);
+      }, 299);
     },
     play: vid => {
       Player.open();
@@ -59,17 +69,23 @@
       let VIDEO = $("video");
       const AUDIO = $("audio");
 
-           $("lapis-player>poster>img").style.background = `url(${CDN}/loading.gif)`;
-            //$("video").style.background = `url(${CDN}/loading.gif)`;
+      $("lapis-player>poster>img").setAttribute(
+        "data-src",
+        $("#results").getAttribute("last-poster")
+      );
+      lazyload($("lapis-player>poster>img"));
+      //TODO DETECT DIRECT
+      //$("lapis-player>poster>img").style.background = `url(${CDN}/loading.gif)`;
+      //$("video").style.background = `url(${CDN}/loading.gif)`;
 
-            //prepare player size
-            $("lapis-player>poster>img").style.height = `${
-              $("lapis-player").clientHeight
-            }px`;
-            $("lapis-player>poster>img").style.width = `${
-              $("lapis-player").clientWidth
-            }px`;
-      
+      //prepare player size
+      /*$("lapis-player>poster").style.height = `${
+        $("lapis-player").clientHeight
+      }px`;*/
+      $("lapis-player>poster").style.width = `${
+        $("lapis-player").clientWidth
+      }px`;
+
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -78,10 +94,14 @@
 
           const TITLE = vid.title;
 
+          $(".card-title").innerText = TITLE;
+
           $("poster>img").setAttribute(
             "srcset",
             createThumbs(vid.videoThumbnails)
           );
+
+          const poster = $("poster>img").currentSrc;
 
           const STREAM = {
             low: vid.formatStreams[0],
@@ -99,7 +119,6 @@
           STREAM.AUDIOS = STREAM.AUDIOS.sort((a, b) => a.bitrate - b.bitrate);
           STREAM.VIDEOS = STREAM.VIDEOS.sort((a, b) => a.bitrate - b.bitrate);
 
-          console.log(STREAM);
           switch (speed.speed) {
             case "slow":
               {
@@ -124,10 +143,6 @@
           }
 
           if (Browser.isFirefox || Browser.isChrome) {
-            console.log(vid);
-
-            const poster = $("poster>img").currentSrc;
-
             $(
               "video"
             ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
@@ -138,6 +153,8 @@
             AUDIO.src = STREAM.CURRENT.AUDIO.url;
             VIDEO.src = STREAM.CURRENT.VIDEO.url;
 
+       
+            
             //init afterglow
             afterglow.initVideoElements();
             afterglow.controller.players = [];
@@ -214,10 +231,12 @@
                 const that = e.target;
 
                 console.debug("video metadata loaded");
+                
+                     $("lapis-player>poster").style.display = "none";
 
                 //reset enforced player heigth
                 $("lapis-player").style.height = "auto";
-                $("lapis-player>poster").style.display = "none";
+                $("lapis-player>poster").visibility = "hidden";
 
                 try {
                   VIDEO.play();
@@ -345,6 +364,9 @@
 
             $("video").src = STREAM.LOW;
           }
+        })
+        .catch(e => {
+          console.warn(e);
         });
     }
   };

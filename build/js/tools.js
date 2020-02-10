@@ -9,12 +9,13 @@ let {
   LOCAL,
   fetch,
   Fullscreen,
+  getBase64Image,
   getL,
   getSize,
   loadImage
 } = window;
 
-function detectIEEdge() {
+const detectIEEdge=()=> {
   const ua = window.navigator.userAgent;
 
   const msie = ua.indexOf("MSIE ");
@@ -38,6 +39,16 @@ function detectIEEdge() {
 
   // other browser
   return false;
+}
+
+getBase64Image = (img) =>{
+  var canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  var dataURL = canvas.toDataURL("image/png");
+  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
 
 //create  video thum srcset
