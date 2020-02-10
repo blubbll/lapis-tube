@@ -71,10 +71,13 @@ API = `//${location.hostname}/api`;
 
     const el = $("#left");
     //slide
-    el.attr("expanded", el.attr("expanded") === "false" ? "true" : "false");
+    el.setAttribute(
+      "expanded",
+      el.getAttribute("expanded") === "false" ? "true" : "false"
+    );
     setTimeout(() => {
       //hide
-      el.attr("expanded") === "false"
+      el.getAttribute("expanded") === "false"
         ? el.classList.add("d-none")
         : el.classList.remove("d-none");
     }, 199);
