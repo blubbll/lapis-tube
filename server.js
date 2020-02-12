@@ -58,8 +58,21 @@ const express = require("express"),
   es6tr = require("es6-transpiler"),
   regionParser = require("accept-language-parser"),
   Terser = require("terser"),
-  crush = require("html-crush").crush;
+  crush = require("html-crush").crush,
+  fetch = require("node-fetch");
 
+/*let PROXY;
+const getProxy = () => {
+  fetch(process.env.REMOTE_INSTANCES)
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+      //for(const prx of json)
+    });
+};
+
+getProxy();
+*/
 {
   //BUILD
   if (process.env.PROJECT_NAME) {
@@ -107,9 +120,21 @@ const express = require("express"),
         `${__dirname}/build/html/what.html`
       ];
       for (const html of htmls) {
+        let input = fs.readFileSync(html, "utf8");
+        if (html.endsWith("/build/index.html")) {
+          input = input
+            .replace(
+              /{{indicators}}/gi,
+              fs.readFileSync(`${__dirname}/build/components/indicators.html`)
+            )
+            .replace(
+              /{{loader}}/gi,
+              fs.readFileSync(`${__dirname}/build/components/loader.html`)
+            );
+        }
         fs.writeFileSync(
           html.replace("/build", dist),
-          crush(fs.readFileSync(html, "utf8"), {
+          crush(input, {
             removeLineBreaks: true,
             removeIndentations: true,
             lineLengthLimit: Number.POSITIVE_INFINITY
@@ -227,26 +252,32 @@ app.get("/", (req, res) => {
   );
 });
 
-
 // static
 app.use(express.static(`${__dirname}/!dist`));
 
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
-  request(`http://api.petabyet.com/geoip/${req.ip}`).pipe(res);
+  /*fetch(`http://api.petabyet.com/geoip/${req.ip}`).then(_res => {
+    if(_res.status){
+      _res=>_res.json.then(() =>{
+        _res.pipe
+      })
+    }
+    console.log(res.status)
+  })*/
+  const _req = request(`http://api.petabyet.com/geoip/${req.ip}`).on(
+    "response",
+    _res => {
+      if (res.statusCode === 200) {
+        _res.pipe(res);
+      } else setTimeout(_req.end, 999);
+    }
+  );
 });
 
 //SEARCH
 app.get(`${API}/:region/search/:q/:page`, (req, res) => {
-  //const L = getLanguage(req.headers["accept-language"]);
-
-  console.warn(
-    encodeURI(
-      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
-    )
-  );
-
-  request({
+  const _req = request({
     uri: encodeURI(
       `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
     ),
@@ -254,18 +285,16 @@ app.get(`${API}/:region/search/:q/:page`, (req, res) => {
     timeout: 3000,
     followRedirect: true,
     maxRedirects: 10
-  }).pipe(res);
-  /*async (error, response, body) => {
-      console.log(body);
-      if (!error && body) {
-        console.log(body);
-      } else console.warn(response);
-    }*/
+  }).on("response", _res => {
+    if (res.statusCode === 200) {
+      _res.pipe(res);
+    } else setTimeout(_req.end, 999);
+  });
 });
 
 //VIDEO
 app.get(`${API}/:region/video/:vid`, (req, res) => {
-  request({
+  const _req = request({
     uri: encodeURI(
       `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
     ),
@@ -273,7 +302,11 @@ app.get(`${API}/:region/video/:vid`, (req, res) => {
     timeout: 3000,
     followRedirect: true,
     maxRedirects: 10
-  }).pipe(res);
+  }).on("response", _res => {
+    if (res.statusCode === 200) {
+      _res.pipe(res);
+    } else setTimeout(_req.end, 999);
+  });
 });
 
 //COMPLETE
@@ -329,13 +362,13 @@ app.get(`${API}/:region/complete/:q`, (req, res) => {
 });
 
 // listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
-  console.log("Your app is listening on port " + listener.address().port);
+const listener = app.listen(process.env.PORT, () => {
+  console.log(`Your app is listening on port ${listener.address().port}`);
 });
 
 const restartHours = 6;
-setTimeout(function() {
-  process.on("exit", function() {
+setTimeout(() => {
+  process.on("exit", () => {
     require("child_process").spawn(process.argv.shift(), process.argv, {
       cwd: process.cwd(),
       detached: true,
@@ -344,3 +377,6 @@ setTimeout(function() {
   });
   process.exit();
 }, 1000 * 60 * 60 * restartHours); //restart every 6 hours
+
+
+

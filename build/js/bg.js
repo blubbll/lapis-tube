@@ -801,13 +801,12 @@ initBg = () => {
 
 window.load = () =>
   setTimeout(() => {
-    $("diamond").setAttribute("style", "");
-    $("#wrap") && $("#wrap").setAttribute("style", "display:none;");
+    $("#wrap") && $("#wrap").classList.add("loading")
     initBg();
   }, 999);
 
 window.done = () =>
   setTimeout(() => {
-    $("diamond").setAttribute("style", "display:none;");
-    $("#wrap") && $("#wrap").setAttribute("style", "");
+    $("body").classList.remove("loading");
+    $("#wrap") && $("#wrap").classList.remove("loading")
   }, 999);
