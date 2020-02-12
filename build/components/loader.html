@@ -1,8 +1,8 @@
 <style>
-  body.loading {
+  main.loading {
     filter: blur(100rem);
   }
-  body {
+  main {
     filter: none;
     transition: 499ms filter ease-out;
   }
@@ -57,9 +57,9 @@
 <script>
   try {
     var $ = document.querySelector.bind(document);
-    var shadowRoot = $("body").attachShadow({ mode: "open" });
+    var shadowRoot = $("aside").attachShadow({ mode: "closed" });
     shadowRoot.innerHTML =
-      $("style#style_loader").innerHTML + $(".loader__icon").outerHTML;
+      $("style#style_loader").outerHTML + $(".loader__icon").outerHTML;
   } catch (e) {
     console.warn(e);
   }

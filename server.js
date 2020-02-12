@@ -272,7 +272,8 @@ app.get(`${API}/geoip`, (req, res) => {
         _res.pipe(res);
       } else setTimeout(_req.end, 999);
     }
-  );
+  ).on('timeout', ()=>setTimeout(_req.end, 999));
+
 });
 
 //SEARCH
@@ -289,7 +290,7 @@ app.get(`${API}/:region/search/:q/:page`, (req, res) => {
     if (res.statusCode === 200) {
       _res.pipe(res);
     } else setTimeout(_req.end, 999);
-  });
+  }).on('timeout', ()=>setTimeout(_req.end, 999));
 });
 
 //VIDEO
@@ -306,7 +307,7 @@ app.get(`${API}/:region/video/:vid`, (req, res) => {
     if (res.statusCode === 200) {
       _res.pipe(res);
     } else setTimeout(_req.end, 999);
-  });
+  }).on('timeout', ()=>setTimeout(_req.end, 999));
 });
 
 //COMPLETE
@@ -377,6 +378,4 @@ setTimeout(() => {
   });
   process.exit();
 }, 1000 * 60 * 60 * restartHours); //restart every 6 hours
-
-
 

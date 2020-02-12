@@ -801,12 +801,21 @@ initBg = () => {
 
 window.load = () =>
   setTimeout(() => {
-    $("#wrap") && $("#wrap").classList.add("loading")
+    //show loader
+    $("aside[name=loader]").style.display = "block";
+    //hide content-inner
+    $("wrapper").style.display = "none";
+    //add blur class
+    $("content").classList.add("loading");
+    //build bg canvas
     initBg();
   }, 999);
 
 window.done = () =>
   setTimeout(() => {
-    $("body").classList.remove("loading");
-    $("#wrap") && $("#wrap").classList.remove("loading")
+    $("aside[name=loader]").style.display = "none";
+    //show content
+    $("wrapper").style.display = "";
+    //remove blur class
+    $("content").classList.remove("loading");
   }, 999);

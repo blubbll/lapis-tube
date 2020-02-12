@@ -150,11 +150,11 @@
     <link rel="stylesheet" href="{{local}}/bundle.css" />
   </head>
 
-  {{loader}}
   <body onload="initBg()" class="loading">
+    <aside name="loader"></aside>
     {{indicators}}
     <canvas id="canvas"></canvas>
-    <gtranslate></gtranslate>
+    <content></content>
 
     <script defer src="{{local}}/bundle.js"></script>
   </body>

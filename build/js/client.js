@@ -134,7 +134,7 @@ API = `//${location.hostname}/api`;
       fetch(tr + "/cookie.html")
         .then(res => res.text())
         .then(html => {
-          $("gtranslate").innerHTML = html.replace(/{{local}}/gi, LOCAL);
+          $("content").innerHTML = html.replace(/{{local}}/gi, LOCAL);
           done();
         });
     }
@@ -206,7 +206,7 @@ document.addEventListener("click", e => {
 //wreadyy
 const setupClient = () => {
   //fill home view (first step in app setup)
-  $("gtranslate").outerHTML = T.HOME;
+  $("content").innerHTML = T.HOME;
 
   //setup bg
   initBg();
