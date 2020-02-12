@@ -265,49 +265,57 @@ app.get(`${API}/geoip`, (req, res) => {
     }
     console.log(res.status)
   })*/
-  const _req = request(`http://api.petabyet.com/geoip/${req.ip}`).on(
-    "response",
-    _res => {
-      if (res.statusCode === 200) {
-        _res.pipe(res);
-      } else setTimeout(_req.end, 999);
-    }
-  ).on('timeout', ()=>setTimeout(_req.end, 999));
-
+  const get = () =>
+    request(`http://api.petabyet.com/geoip/${req.ip}`)
+      .on("response", _res => {
+        if (res.statusCode === 200) {
+          _res.pipe(res);
+        } else setTimeout(get, 999);
+      })
+      .on("error", () => setTimeout(get, 999));
+  get();
 });
 
 //SEARCH
 app.get(`${API}/:region/search/:q/:page`, (req, res) => {
-  const _req = request({
-    uri: encodeURI(
-      `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
-    ),
-    method: "GET",
-    timeout: 3000,
-    followRedirect: true,
-    maxRedirects: 10
-  }).on("response", _res => {
-    if (res.statusCode === 200) {
-      _res.pipe(res);
-    } else setTimeout(_req.end, 999);
-  }).on('timeout', ()=>setTimeout(_req.end, 999));
+  const get = () =>
+    request({
+      uri: encodeURI(
+        `https://${process.env.IV_HOST}/api/v1/search/?region=${req.params.region}&q=${req.params.q}&page=${req.params.page}`
+      ),
+      method: "GET",
+      timeout: 3000,
+      followRedirect: true,
+      maxRedirects: 10
+    })
+      .on("response", _res => {
+        if (res.statusCode === 200) {
+          _res.pipe(res);
+        } else setTimeout(get, 999);
+      })
+      .on("error", () => setTimeout(get, 999));
+  get();
 });
 
 //VIDEO
 app.get(`${API}/:region/video/:vid`, (req, res) => {
-  const _req = request({
-    uri: encodeURI(
-      `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
-    ),
-    method: "GET",
-    timeout: 3000,
-    followRedirect: true,
-    maxRedirects: 10
-  }).on("response", _res => {
-    if (res.statusCode === 200) {
-      _res.pipe(res);
-    } else setTimeout(_req.end, 999);
-  }).on('timeout', ()=>setTimeout(_req.end, 999));
+  const get = () =>
+    request({
+      uri: encodeURI(
+        `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
+      ),
+      method: "GET",
+      timeout: 3000,
+      followRedirect: true,
+      maxRedirects: 10
+    })
+      .on("response", _res => {
+        if (res.statusCode === 200) {
+          _res.pipe(res);
+        } else setTimeout(get, 999);
+      })
+      .on("error", () => setTimeout(get, 999));
+  get();
 });
 
 //COMPLETE
@@ -378,4 +386,3 @@ setTimeout(() => {
   });
   process.exit();
 }, 1000 * 60 * 60 * restartHours); //restart every 6 hours
-
