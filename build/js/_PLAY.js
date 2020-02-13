@@ -144,8 +144,6 @@
           {
             let i = 0;
 
-            console.log(vid);
-
             fetch(`${API}/getformats/`, {
               method: "POST",
               body: JSON.stringify(vid.adaptiveFormats),

@@ -158,15 +158,16 @@ getL = () => {
   return L.toLowerCase() || "en";
 };
 
-const abortControllers = [];
+const fetchControllers = [];
 
 //abort, abort abort :D
-abortFetches = () =>{
-  
-  for(const controller of abortControllers){
-    controller.abort();
+abortFetches = () => {
+  for (const fetchId in fetchControllers) {
+    const fetchItem = fetchControllers[fetchId];
+    fetchItem.status === "active" && [(fetchItem.status = "aborted")];
   }
-}
+  console.debug("controllers were aborted");
+};
 
 //FETCH WITH NPROGRESS- - - -
 {
@@ -175,12 +176,9 @@ abortFetches = () =>{
   const ofetch = window.fetch;
   //override fetch
   fetch = (url, options) => {
-    const abortController = new AbortController();
-    abortControllers.push(abortController);
-    //make abortable
-    fetch.options
-      ? (fetch.options.signal = abortController.signal)
-      : (fetch.options = { signal: abortController.signal });
+    const fetchId = +new Date();
+    fetchControllers[fetchId] = { status: "active", url, options };
+
     //start proc (if not silent)
     !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
       LOADED &&
@@ -190,9 +188,10 @@ abortFetches = () =>{
       !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
         LOADED &&
         NProgress.done();
-      //delete abortControllers[abortController];
-      abortControllers.splice(abortControllers.indexOf(abortController),1);
-      return response;
+      if (fetchControllers[fetchId].status !== "aborted") {
+        fetchControllers[fetchId].status = "done";
+        return response;
+      } else throw "aborted";
     });
   };
 }
