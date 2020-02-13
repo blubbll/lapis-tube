@@ -255,6 +255,11 @@ footer#footer {
 /**************************/
 //CONTENT///////////////////
 /**************************/
+content {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+}
 #view-inner {
   &.wait {
     cursor: wait;
@@ -361,7 +366,7 @@ footer#footer {
           }
         }
         img {
-          transition: transform 199ms ease-out; /* growing-animation */
+          transition: transform 299ms ease-out; /* growing-animation */
           height: 18vh;
           filter: grayscale(0.6);
           object-fit: cover;
@@ -436,6 +441,10 @@ lapis-player {
   /*PLAYER*/
   audio {
     display: none;
+  }
+  video {
+    position: absolute;
+    width: 100%;
   }
 
   poster {

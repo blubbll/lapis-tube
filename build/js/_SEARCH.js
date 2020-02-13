@@ -207,6 +207,7 @@ setupSearch = () => {
             });
       },
       onSelect: item => {
+        $("#search-input").value = item.label;
         SEARCH(item.label);
       }
     });

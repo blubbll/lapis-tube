@@ -799,20 +799,9 @@ initBg = () => {
   setup();
 };
 
-setTimeout(() => {
-  //show loader
-  $("aside[name=loader]").style.display = "block";
-  //add blur class
-  $("content").classList.add("loading");
-  //build bg canvas
-  initBg();
-}, 0);
-
 window.done = () =>
   setTimeout(() => {
     $("aside[name=loader]").style.display = "none";
-    //show content
-    $("wrapper").style.display = "block";
     //remove blur class
     $("content").classList.remove("loading");
     LOADED=true;

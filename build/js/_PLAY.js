@@ -63,7 +63,7 @@
 
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
-      }, 399);
+      }, 499);
     },
     play: vid => {
       Player.open();
@@ -85,7 +85,9 @@
             "src",
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="
           );
-         $(".afterglow__video") && [$(".afterglow__video").style.display = "none"];
+        $(".afterglow__video") && [
+          ($(".afterglow__video").style.display = "none")
+        ];
       }
 
       const IMG_LOADER = $("poster>img.poster-loader");
@@ -126,7 +128,7 @@
           }
 
           const STREAM = {
-            low: vid.formatStreams[0],
+            LOW: vid.formatStreams[0],
             AUDIOS: [],
             VIDEOS: [],
             CURRENT: { AUDIO: "", VIDEO: "" }
@@ -149,21 +151,6 @@
                 STREAM.VIDEOS = formats.VIDEOS;
                 applyStreams();
               });
-            /*for (const format of vid.adaptiveFormats) {
-              //fetch(format.url, { mode: "no-cors", method: "HEAD" }).then(
-              fetch(`${API}/check/${encodeURIComponent(format.url)}`)
-                .then(res => {
-                  i++;
-                  if (res.status === 200) {
-                    if (format.type.startsWith("video"))
-                      STREAM.VIDEOS.push(format);
-                    if (format.type.startsWith("audio"))
-                      STREAM.AUDIOS.push(format);
-                  }
-                  if (i === vid.adaptiveFormats.length) applyStreams();
-                })
-                .catch(e => console.warn(e));
-            }*/
           }
 
           const applyStreams = () => {
@@ -296,7 +283,7 @@
 
                     //reset enforced player heigth
                     $("lapis-player").style.height = "auto";
-                    
+
                     $(".afterglow__video").style.display = "block";
 
                     try {
@@ -404,6 +391,9 @@
       !!navigator.platform &&
       /iPad|iPhone|iPod/.test(navigator.platform)
     ) */ else {
+              $("video").outerHTML =
+                "<video autoplay preload controls playsinline></video>";
+
               {
                 const VIDEO = $("video");
                 const AUDIO = $("audio");
@@ -425,12 +415,13 @@
                   VIDEO.addEventListener("pause", () => {
                     !AUDIO.paused && AUDIO.pause();
                   });
+
+                $("video").src = STREAM.LOW.url;
+
+                VIDEO.style.position = "relative";
+                $("poster").style.position = "relative";
+                $("poster").style.display = "none";
               }
-
-              $("video").outerHTML =
-                "<video preload controls playsinline></video>";
-
-              $("video").src = STREAM.LOW;
             }
           };
         })

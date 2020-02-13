@@ -208,6 +208,9 @@ const setupClient = () => {
   //fill home view (first step in app setup)
   $("content").innerHTML = T.HOME;
 
+  //show content
+  $("wrapper").style.display = "block";
+
   //setup bg
   initBg();
 
