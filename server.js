@@ -61,6 +61,9 @@ const express = require("express"),
   crush = require("html-crush").crush,
   fetch = require("node-fetch");
 
+//configure bodyparser
+app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
+
 /*let PROXY;
 const getProxy = () => {
   fetch(process.env.REMOTE_INSTANCES)
@@ -255,10 +258,31 @@ app.get("/", (req, res) => {
 app.use(express.static(`${__dirname}/!dist`));
 
 //check format urls
-app.get(`${API}/check/:formaturl`, (req, res) => {
+/*app.get(`${API}/check/:formaturl`, (req, res) => {
   request(decodeURIComponent(req.params.formaturl)).on("response", _res => {
     res.json(_res.statusCode);
   });
+});*/
+app.post(`${API}/getformats`, (req, res) => {
+  let OUTPUT = {
+    AUDIOS: [],
+    VIDEOS: []
+  };
+  let i = 0;
+  for (const format of req.body) {
+    fetch(format.url)
+      .then(_res => {
+        i++;
+        if (_res.status === 200) {
+          if (format.type.startsWith("video")) OUTPUT.VIDEOS.push(format);
+          if (format.type.startsWith("audio")) OUTPUT.AUDIOS.push(format);
+        }
+        if (i === req.body.length) {
+          res.json(OUTPUT);
+        }
+      })
+      .catch(e => console.warn(e));
+  }
 });
 
 //simple geo ip

@@ -123,8 +123,20 @@
           {
             let i = 0;
 
-          
-            for (const format of vid.adaptiveFormats) {
+            console.log(vid);
+
+            fetch(`${API}/getformats/`, {
+              method: "POST",
+              body: JSON.stringify(vid.adaptiveFormats),
+              headers: { "content-type": "application/json" }
+            })
+              .then(res => res.json())
+              .then(formats => {
+                STREAM.AUDIOS = formats.AUDIOS;
+                STREAM.VIDEOS = formats.VIDEOS;
+              applyStreams();
+              });
+            /*for (const format of vid.adaptiveFormats) {
               //fetch(format.url, { mode: "no-cors", method: "HEAD" }).then(
               fetch(`${API}/check/${encodeURIComponent(format.url)}`)
                 .then(res => {
@@ -138,7 +150,7 @@
                   if (i === vid.adaptiveFormats.length) applyStreams();
                 })
                 .catch(e => console.warn(e));
-            }
+            }*/
           }
 
           const applyStreams = () => {
