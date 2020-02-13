@@ -104,7 +104,7 @@
 
           const TITLE = vid.title;
 
-          $(".card-title").innerText = TITLE;
+          $("#player .card-title").innerText = TITLE;
 
           const IMG_LOADER = $("poster>img.poster-loader");
           let IMG_BLEND = $("poster>img.poster-blend");
