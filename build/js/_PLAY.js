@@ -44,7 +44,7 @@
     },
     close: () => {
       $("#player").style.setProperty("display", "none", "important");
-      $("video").pause();
+      $("video") && $("video").pause();
       $("#filters").style.setProperty("display", "");
       $("#results").style.setProperty("display", "");
     },
@@ -76,19 +76,17 @@
       let VIDEO = $("video");
       const AUDIO = $("audio");
 
-      //lazyload($("lapis-player>poster>img"));
-      //TODO DETECT DIRECT
-      //$("lapis-player>poster>img").style.background = `url(${CDN}/loading.gif)`;
-      //$("video").style.background = `url(${CDN}/loading.gif)`;
-
-      //prepare player size
-      /*$("lapis-player>poster").style.height = `${
-        $("lapis-player").clientHeight
-      }px`;*/
       $("lapis-player>poster").style.width = `${
         $("lapis-player").clientWidth
       }px`;
 
+      $("lapis-player>poster").style.display = "block";
+
+      const IMG_LOADER = $("poster>img.poster-loader");
+      let IMG_BLEND = $("poster>img.poster-blend");
+
+      //clear blendpic
+      IMG_BLEND && IMG_BLEND.setAttribute("src", "");
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -99,22 +97,24 @@
 
           $(".card-title").innerText = TITLE;
 
-          const IMG_LOADER = $("poster>img.poster-loader");
-          let IMG_BLEND = $("poster>img.poster-blend");
           const poster = IMG_LOADER.src;
 
           if ($("#results")) {
             const dynposter = $("#results").getAttribute("last-poster");
 
-            IMG_LOADER.insertAdjacentHTML(
-              "afterend",
-              `<img class="poster-blend" src="${dynposter}"/>`
-            );
-            IMG_BLEND = $("poster>img.poster-blend");
-            //fit blend's left offset
-            IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-            //fit blend's heigth
-            IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
+            if (!IMG_BLEND) {
+              IMG_LOADER.insertAdjacentHTML(
+                "afterend",
+                `<img class="poster-blend" src="${dynposter}"/>`
+              );
+              IMG_BLEND = $("poster>img.poster-blend");
+              //fit blend's left offset
+              IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+              //fit blend's heigth
+              IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
+            } else {
+              IMG_BLEND.setAttribute("src", dynposter);
+            }
           } else {
             IMG_LOADER.setAttribute(
               "srcset",
@@ -165,6 +165,12 @@
           }
 
           const applyStreams = () => {
+            
+            if(STREAM.VIDEOS.length === 0){
+              $("#player .card-body").innerHTML = UI.warnings.nosource;
+              return false;
+            }
+            
             //sort by bitrate
             STREAM.AUDIOS = STREAM.AUDIOS.sort((a, b) => a.bitrate - b.bitrate);
             STREAM.VIDEOS = STREAM.VIDEOS.sort((a, b) => a.bitrate - b.bitrate);
@@ -200,7 +206,6 @@
                   "video"
                 ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
 
-               
                 VIDEO = $("video");
 
                 {
@@ -280,7 +285,6 @@
 
                     //reset enforced player heigth
                     $("lapis-player").style.height = "auto";
-                    $("lapis-player>poster").visibility = "hidden";
 
                     try {
                       VIDEO.play();
@@ -315,15 +319,11 @@
                 );
               }
 
-              //SET MEDIA
+              //SET MEDIA & init afterglow
               AUDIO.src = STREAM.CURRENT.AUDIO.url;
               VIDEO.src = STREAM.CURRENT.VIDEO.url;
-              
-               afterglow.initVideoElements();
 
-              //init afterglow
-              //afterglow.initVideoElements();
-              //afterglow.controller.players = [];
+              afterglow.initVideoElements();
 
               //load vid
               VIDEO.load();
