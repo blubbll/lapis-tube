@@ -126,10 +126,17 @@ getProxy();
         if (html.endsWith("/build/index.html")) {
           input = input
             .replace(
+              //size indicators
               /{{indicators}}/gi,
               fs.readFileSync(`${__dirname}/build/components/indicators.html`)
             )
             .replace(
+              //ui titles for js
+              /#ui-words/gi,
+              fs.readFileSync(`${__dirname}/build/components/ui-words.js`)
+            )
+            .replace(
+              //loading animation instructions
               /{{loader}}/gi,
               fs.readFileSync(`${__dirname}/build/components/loader.html`)
             );

@@ -16,6 +16,7 @@
     lazyload,
     moment,
     speed,
+    UI,
     T,
     afterglow,
     Browser,
@@ -32,13 +33,18 @@
 
   Player = {
     open: () => {
-      $("#view-inner").insertAdjacentHTML("beforeend", T.PLAYER);
+      if (!$("#player"))
+        $("#view-inner").insertAdjacentHTML("beforeend", T.PLAYER);
+      else {
+        $("#player").style.setProperty("display", "block");
+      }
       $("#view-inner").classList.remove("wait");
       $("#filters").style.setProperty("display", "none", "important");
       $("#results").style.setProperty("display", "none", "important");
     },
     close: () => {
-      $("#player").remove();
+      $("#player").style.setProperty("display", "none", "important");
+      $("video").pause();
       $("#filters").style.setProperty("display", "");
       $("#results").style.setProperty("display", "");
     },
@@ -66,7 +72,7 @@
     },
     play: vid => {
       Player.open();
-      afterglow.initVideoElements();
+
       let VIDEO = $("video");
       const AUDIO = $("audio");
 
@@ -93,23 +99,28 @@
 
           $(".card-title").innerText = TITLE;
 
-          const poster = $("poster>img.poster-loader").src;
+          const IMG_LOADER = $("poster>img.poster-loader");
+          let IMG_BLEND = $("poster>img.poster-blend");
+          const poster = IMG_LOADER.src;
 
           if ($("#results")) {
             const dynposter = $("#results").getAttribute("last-poster");
 
-            $("poster>img").insertAdjacentHTML(
+            IMG_LOADER.insertAdjacentHTML(
               "afterend",
               `<img class="poster-blend" src="${dynposter}"/>`
             );
+            IMG_BLEND = $("poster>img.poster-blend");
             //fit blend's left offset
-            $("poster>.poster-blend").style.left = `${
-              $("poster>.poster-loader").offsetLeft
-            }px`;
+            IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
             //fit blend's heigth
-            $("poster>.poster-blend").style.height = `${
-              $("poster>.poster-loader").clientHeight
-            }px`;
+            IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
+          } else {
+            IMG_LOADER.setAttribute(
+              "srcset",
+              createThumbs(vid.videoThumbnails)
+            );
+            lazyload(IMG_BLEND);
           }
 
           const STREAM = {
@@ -134,7 +145,7 @@
               .then(formats => {
                 STREAM.AUDIOS = formats.AUDIOS;
                 STREAM.VIDEOS = formats.VIDEOS;
-              applyStreams();
+                applyStreams();
               });
             /*for (const format of vid.adaptiveFormats) {
               //fetch(format.url, { mode: "no-cors", method: "HEAD" }).then(
@@ -184,132 +195,137 @@
             }
 
             if (Browser.isFirefox || Browser.isChrome) {
-              $(
-                "video"
-              ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
+              if (afterglow.controller.players.length === 0) {
+                $(
+                  "video"
+                ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
 
-              VIDEO = $("video");
+               
+                VIDEO = $("video");
+
+                {
+                  //MIRROR VOLUME
+                  Object.defineProperty(VIDEO, "volume", {
+                    set: val => {
+                      VIDEO._volume = val;
+                      //!
+                      AUDIO.volume = val;
+                    },
+                    get: () => {
+                      return VIDEO._volume;
+                    }
+                  });
+
+                  //MIRROR MUTED
+                  Object.defineProperty(VIDEO, "muted", {
+                    set: val => {
+                      VIDEO._muted = val;
+                      //!
+                      AUDIO.muted = val;
+                    },
+                    get: () => {
+                      return VIDEO._muted;
+                    }
+                  });
+
+                  //SYNC PLAY
+                  VIDEO._play = VIDEO.play;
+                  Object.defineProperty(VIDEO, "play", {
+                    get: () => {
+                      AUDIO.paused && AUDIO.play();
+
+                      if (AUDIO.paused) {
+                        console.debug("muted");
+                        $(".afterglow__video").insertAdjacentHTML(
+                          "afterbegin",
+                          "<lapis-muted></lapis-muted>"
+                        );
+
+                        const MUTED_WARNING = $("lapis-muted");
+                        MUTED_WARNING.innerHTML = UI.warnings.muted;
+                        MUTED_WARNING.style.display = "flex";
+                        MUTED_WARNING.addEventListener("click", () => {
+                          MUTED_WARNING.remove();
+                          AUDIO.muted = false;
+                          VIDEO.currentTime = 0;
+                          AUDIO.play();
+                          !AUDIO.muted &&
+                            !AUDIO.paused &&
+                            VIDEO.play() &&
+                            console.debug("unmuted.");
+                        });
+                      }
+
+                      return VIDEO._play;
+                    }
+                  });
+                  //SYNC PAUSE
+                  VIDEO._pause = VIDEO.pause;
+                  Object.defineProperty(VIDEO, "pause", {
+                    get: () => {
+                      AUDIO.pause();
+                      return VIDEO._pause;
+                    }
+                  });
+                }
+
+                VIDEO.addEventListener(
+                  "loadedmetadata",
+                  e => {
+                    const that = e.target;
+
+                    console.debug("video metadata loaded");
+
+                    $("lapis-player>poster").style.display = "none";
+
+                    //reset enforced player heigth
+                    $("lapis-player").style.height = "auto";
+                    $("lapis-player>poster").visibility = "hidden";
+
+                    try {
+                      VIDEO.play();
+                    } catch (e) {
+                      console.warn(e);
+                    }
+
+                    //fancy title
+                    $(".afterglow__controls").insertAdjacentHTML(
+                      "afterbegin",
+                      `<div class="afterglow__title-bar">${TITLE}</div>`
+                    );
+                    //fancy control area
+                    $(".afterglow__controls").insertAdjacentHTML(
+                      "beforeend",
+                      `<div class="afterglow__control-bar"></div>`
+                    );
+
+                    const fitRatio = () => {
+                      const ratio =
+                        $("lapis-player").getAttribute("ratio") ||
+                        that.videoHeight / that.videoWidth;
+                      $("lapis-player").setAttribute("ratio", ratio);
+                      $(".afterglow__video").style.height = `${$(
+                        ".afterglow__video"
+                      ).clientWidth * ratio}px`;
+                    };
+                    setTimeout(fitRatio, 0);
+                    window.addEventListener("resize", fitRatio);
+                  },
+                  false
+                );
+              }
 
               //SET MEDIA
               AUDIO.src = STREAM.CURRENT.AUDIO.url;
               VIDEO.src = STREAM.CURRENT.VIDEO.url;
+              
+               afterglow.initVideoElements();
 
               //init afterglow
-              afterglow.initVideoElements();
-              afterglow.controller.players = [];
+              //afterglow.initVideoElements();
+              //afterglow.controller.players = [];
 
-              {
-                //MIRROR VOLUME
-                Object.defineProperty(VIDEO, "volume", {
-                  set: val => {
-                    VIDEO._volume = val;
-                    //!
-                    AUDIO.volume = val;
-                  },
-                  get: () => {
-                    return VIDEO._volume;
-                  }
-                });
-
-                //MIRROR MUTED
-                Object.defineProperty(VIDEO, "muted", {
-                  set: val => {
-                    VIDEO._muted = val;
-                    //!
-                    AUDIO.muted = val;
-                  },
-                  get: () => {
-                    return VIDEO._muted;
-                  }
-                });
-
-                //SYNC PLAY
-                VIDEO._play = VIDEO.play;
-                Object.defineProperty(VIDEO, "play", {
-                  get: () => {
-                    AUDIO.paused && AUDIO.play();
-
-                    if (AUDIO.paused) {
-                      console.debug("muted");
-                      $(".afterglow__video").insertAdjacentHTML(
-                        "afterbegin",
-                        "<lapis-muted></lapis-muted>"
-                      );
-
-                      const MUTED_WARNING = $("lapis-muted");
-                      MUTED_WARNING.innerHTML =
-                        "THE VIDEO IS MUTED. CLICK ME TO UNMUTE";
-                      MUTED_WARNING.style.display = "flex";
-                      MUTED_WARNING.addEventListener("click", () => {
-                        MUTED_WARNING.remove();
-                        AUDIO.muted = false;
-                        VIDEO.currentTime = 0;
-                        AUDIO.play();
-                        !AUDIO.muted &&
-                          !AUDIO.paused &&
-                          console.debug("unmuted.");
-                      });
-                    }
-
-                    return VIDEO._play;
-                  }
-                });
-                //SYNC PAUSE
-                VIDEO._pause = VIDEO.pause;
-                Object.defineProperty(VIDEO, "pause", {
-                  get: () => {
-                    AUDIO.pause();
-                    return VIDEO._pause;
-                  }
-                });
-              }
-
-              VIDEO.addEventListener(
-                "loadedmetadata",
-                e => {
-                  const that = e.target;
-
-                  console.debug("video metadata loaded");
-
-                  $("lapis-player>poster").style.display = "none";
-
-                  //reset enforced player heigth
-                  $("lapis-player").style.height = "auto";
-                  $("lapis-player>poster").visibility = "hidden";
-
-                  try {
-                    VIDEO.play();
-                  } catch (e) {
-                    console.warn(e);
-                  }
-
-                  //fancy title
-                  $(".afterglow__controls").insertAdjacentHTML(
-                    "afterbegin",
-                    `<div class="afterglow__title-bar">${TITLE}</div>`
-                  );
-                  //fancy control area
-                  $(".afterglow__controls").insertAdjacentHTML(
-                    "beforeend",
-                    `<div class="afterglow__control-bar"></div>`
-                  );
-
-                  const fitRatio = () => {
-                    const ratio =
-                      $("lapis-player").getAttribute("ratio") ||
-                      that.videoHeight / that.videoWidth;
-                    $("lapis-player").setAttribute("ratio", ratio);
-                    $(".afterglow__video").style.height = `${$(
-                      ".afterglow__video"
-                    ).clientWidth * ratio}px`;
-                  };
-                  setTimeout(fitRatio, 0);
-                  window.addEventListener("resize", fitRatio);
-                },
-                false
-              );
-
-              //load vidn
+              //load vid
               VIDEO.load();
 
               try {
