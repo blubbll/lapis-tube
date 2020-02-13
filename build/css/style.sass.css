@@ -22,6 +22,13 @@ body {
   background-blend-mode: hard-light;
 }
 
+.close {
+  z-index: 3000;
+  &:hover {
+    background-color: yellow;
+  }
+}
+
 html,
 body {
   background: var(--color-accent-main);
@@ -443,24 +450,36 @@ lapis-player {
     width: inherit;
   }
 
-  lapis-muted {
+  lapis-warning {
+    &[name="nosource"] {
+      background: red;
+      cursor: no-drop;
+    }
+    &[name="muted"] {
+      background: yellow;
+      cursor: pointer;
+    }
+    font-size: 150%;
+    font-weight: bold;
     display: none;
-    width: inherit;
+    left: 0;
+    top: 0;
     height: 100%;
-    background: yellow;
+    width: inherit;
     position: absolute;
     color: black;
     align-items: center;
     justify-content: center;
     z-index: 4;
     cursor: pointer;
-  }
-  lapis-muted:hover {
-    filter: contrast(0.8);
-  }
-  lapis-muted:focus,
-  lapis-muted:active {
-    filter: contrast(0.75);
+
+    &:hover {
+      filter: contrast(0.8);
+    }
+    &:focus,
+    &:active {
+      filter: contrast(0.75);
+    }
   }
 
   /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/

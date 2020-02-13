@@ -80,13 +80,16 @@
         $("lapis-player").clientWidth
       }px`;
 
+      //reset
       $("lapis-player>poster").style.display = "block";
 
       const IMG_LOADER = $("poster>img.poster-loader");
       let IMG_BLEND = $("poster>img.poster-blend");
 
       //clear blendpic
-      IMG_BLEND && IMG_BLEND.setAttribute("src", "");
+      IMG_BLEND && IMG_BLEND.removeAttribute("src");
+      //remove warning
+      $("lapis-warning") && $("lapis-warning").remove();
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -165,12 +168,19 @@
           }
 
           const applyStreams = () => {
-            
-            if(STREAM.VIDEOS.length === 0){
-              $("#player .card-body").innerHTML = UI.warnings.nosource;
+            if (STREAM.VIDEOS.length === 0) {
+              //$("#player .card-body").innerHTML = UI.warnings.nosource;
+              ($(".afterglow__video") || $("lapis-player")).insertAdjacentHTML(
+                "afterbegin",
+                `<lapis-warning name="nosource"></lapis-warning>`
+              );
+              const WARNING_NOSOURCE = $("lapis-warning");
+              WARNING_NOSOURCE.innerHTML = UI.warnings.nosource;
+              WARNING_NOSOURCE.style.display = "flex";
+              $("poster").style.display = "none";
               return false;
             }
-            
+
             //sort by bitrate
             STREAM.AUDIOS = STREAM.AUDIOS.sort((a, b) => a.bitrate - b.bitrate);
             STREAM.VIDEOS = STREAM.VIDEOS.sort((a, b) => a.bitrate - b.bitrate);
@@ -241,16 +251,18 @@
 
                       if (AUDIO.paused) {
                         console.debug("muted");
+
                         $(".afterglow__video").insertAdjacentHTML(
                           "afterbegin",
-                          "<lapis-muted></lapis-muted>"
+                          `<lapis-warning name="muted"></lapis-warning>`
                         );
 
-                        const MUTED_WARNING = $("lapis-muted");
-                        MUTED_WARNING.innerHTML = UI.warnings.muted;
-                        MUTED_WARNING.style.display = "flex";
-                        MUTED_WARNING.addEventListener("click", () => {
-                          MUTED_WARNING.remove();
+                        const WARNING_MUTED = $("lapis-warning[name=muted]");
+
+                        WARNING_MUTED.innerHTML = UI.warnings.muted;
+                        WARNING_MUTED.style.display = "flex";
+                        WARNING_MUTED.addEventListener("click", () => {
+                          WARNING_MUTED.remove();
                           AUDIO.muted = false;
                           VIDEO.currentTime = 0;
                           AUDIO.play();
