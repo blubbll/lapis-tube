@@ -1,6 +1,7 @@
 {
   const {
     API,
+    abortFetches,
     autocomplete,
     alert,
     createThumbs,
@@ -43,6 +44,7 @@
       $("#results").style.setProperty("display", "none", "important");
     },
     close: () => {
+      abortFetches();
       $("#player").style.setProperty("display", "none", "important");
       $("video") && $("video").pause();
       $("#filters").style.setProperty("display", "");
@@ -77,6 +79,7 @@
 
       //reset
       {
+        const IMG_BLEND = $("poster>img.poster-blend");
         $("lapis-player>poster").style.display = "block";
         //remove warning
         $("lapis-warning") && $("lapis-warning").remove();
@@ -90,8 +93,8 @@
         ];
       }
 
-      const IMG_LOADER = $("poster>img.poster-loader");
-      let IMG_BLEND = $("poster>img.poster-blend");
+      //fake title
+      $("#player .card-title").innerText = UI.labels.loading;
 
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
@@ -102,6 +105,9 @@
           const TITLE = vid.title;
 
           $(".card-title").innerText = TITLE;
+
+          const IMG_LOADER = $("poster>img.poster-loader");
+          let IMG_BLEND = $("poster>img.poster-blend");
 
           const poster = IMG_LOADER.src;
 
@@ -160,6 +166,9 @@
                 "afterbegin",
                 `<lapis-warning name="nosource"></lapis-warning>`
               );
+              $(".afterglow__video") && [
+                ($(".afterglow__video").style.display = "")
+              ];
               const WARNING_NOSOURCE = $("lapis-warning");
               WARNING_NOSOURCE.innerHTML = UI.warnings.nosource;
               WARNING_NOSOURCE.style.display = "flex";
@@ -292,11 +301,14 @@
                       console.warn(e);
                     }
 
+                    //normal title
+                    $("#player .card-title").innerText = TITLE;
                     //fancy title
                     $(".afterglow__controls").insertAdjacentHTML(
                       "afterbegin",
                       `<div class="afterglow__title-bar">${TITLE}</div>`
                     );
+
                     //fancy control area
                     $(".afterglow__controls").insertAdjacentHTML(
                       "beforeend",

@@ -1,8 +1,9 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { NProgress, LOADED } = window;
+const { AbortController, NProgress, LOADED } = window;
 let {
+  abortFetches,
   CDN,
   createThumbs,
   debounce,
@@ -157,6 +158,16 @@ getL = () => {
   return L.toLowerCase() || "en";
 };
 
+const abortControllers = [];
+
+//abort, abort abort :D
+abortFetches = () =>{
+  
+  for(const controller of abortControllers){
+    controller.abort();
+  }
+}
+
 //FETCH WITH NPROGRESS- - - -
 {
   NProgress.configure({ showSpinner: false });
@@ -164,6 +175,12 @@ getL = () => {
   const ofetch = window.fetch;
   //override fetch
   fetch = (url, options) => {
+    const abortController = new AbortController();
+    abortControllers.push(abortController);
+    //make abortable
+    fetch.options
+      ? (fetch.options.signal = abortController.signal)
+      : (fetch.options = { signal: abortController.signal });
     //start proc (if not silent)
     !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
       LOADED &&
@@ -173,6 +190,8 @@ getL = () => {
       !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
         LOADED &&
         NProgress.done();
+      //delete abortControllers[abortController];
+      abortControllers.splice(abortControllers.indexOf(abortController),1);
       return response;
     });
   };

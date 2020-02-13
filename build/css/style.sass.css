@@ -434,6 +434,8 @@ content {
     background: #BDBDBD;
   }
 }
+
+/* PLAYER ELEMENTS */
 lapis-player {
   display: flex;
   max-height: 75vh;
@@ -453,13 +455,14 @@ lapis-player {
       width: inherit;
     }
     img.poster-blend {
-      height: intrinsic; /* Safari/WebKit uses a non-standard name */
-      height: -moz-max-content; /* Firefox/Gecko */
-      height: -webkit-max-content;
       width: inherit;
       position: absolute;
+      height: 100%;
+      width: inherit;
+      object-fit: scale-down;
+      position: absolute;
       top: 0;
-      mix-blend-mode: color-dodge;
+      mix-blend-mode: soft-light;
     }
     width: inherit;
   }
