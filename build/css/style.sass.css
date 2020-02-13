@@ -11,7 +11,7 @@ param {
   padding-left: 5px;
 }
 
-wrapper {
+content {
   height: intrinsic; /* Safari/WebKit verwendet einen nicht standardisierten Namen */
   height: -moz-max-content; /* Firefox/Gecko */
   height: -webkit-max-content; /* Chrome */
@@ -432,8 +432,13 @@ lapis-player {
   }
 
   poster {
-    img {
+    img.poster-loader {
       width: inherit;
+    }
+    img.poster-blend {
+      width: inherit;
+      position: absolute;
+      mix-blend-mode: color-dodge;
     }
     width: inherit;
   }

@@ -15,7 +15,7 @@ let {
   loadImage
 } = window;
 
-const detectIEEdge=()=> {
+const detectIEEdge = () => {
   const ua = window.navigator.userAgent;
 
   const msie = ua.indexOf("MSIE ");
@@ -39,9 +39,9 @@ const detectIEEdge=()=> {
 
   // other browser
   return false;
-}
+};
 
-getBase64Image = (img) =>{
+getBase64Image = img => {
   var canvas = document.createElement("canvas");
   canvas.width = img.width;
   canvas.height = img.height;
@@ -49,16 +49,15 @@ getBase64Image = (img) =>{
   ctx.drawImage(img, 0, 0);
   var dataURL = canvas.toDataURL("image/png");
   return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-}
+};
 
 //create  video thum srcset
 createThumbs = thumbsData => {
   let srcSet = "";
   //build thumbnails
-  for (const thumb of thumbsData) {
-    var i = Object.keys(thumbsData).indexOf(thumb);
+  for (const [i, thumb] of thumbsData.entries()) {
     if (i !== 0)
-      //skip first (invidio.us)
+      //skip first
       srcSet += `${thumb.url}\t${thumb.width}w${i !== thumbsData ? ",\n" : ""}`;
   }
   return srcSet;

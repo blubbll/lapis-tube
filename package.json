@@ -19,10 +19,10 @@
     "express": "^4.17.1",
     "ftp": "^0.3.10",
     "glob": "^7.1.6",
-    "html-crush": "^1.9.20",
+    "html-crush": "^1.9.21",
     "node-fetch": "^2.6.0",
     "node-sass": "^4.13.1",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "terser": "^4.6.3"
   },
   "engines": {

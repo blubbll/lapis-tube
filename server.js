@@ -114,7 +114,6 @@ getProxy();
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/cookie.html`,
         `${__dirname}/build/html/player.html`,
-        `${__dirname}/build/html/player-inside.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
         `${__dirname}/build/html/what.html`
@@ -254,6 +253,13 @@ app.get("/", (req, res) => {
 
 // static
 app.use(express.static(`${__dirname}/!dist`));
+
+//check format urls
+app.get(`${API}/check/:formaturl`, (req, res) => {
+  request(decodeURIComponent(req.params.formaturl)).on("response", _res => {
+    res.json(_res.statusCode);
+  });
+});
 
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
