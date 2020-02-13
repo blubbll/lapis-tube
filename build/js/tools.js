@@ -1,7 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { NProgress } = window;
+const { NProgress, LOADED } = window;
 let {
   CDN,
   createThumbs,
@@ -166,10 +166,12 @@ getL = () => {
   fetch = (url, options) => {
     //start proc (if not silent)
     !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
+      LOADED &&
       NProgress.start();
     return ofetch(url, options).then(response => {
       //start proc (if not silent)
       !(typeof options != "undefined" && !options.silent && !$("#nprogress")) &&
+        LOADED &&
         NProgress.done();
       return response;
     });

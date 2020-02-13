@@ -11,7 +11,7 @@ param {
   padding-left: 5px;
 }
 
-content {
+#content {
   height: intrinsic; /* Safari/WebKit verwendet einen nicht standardisierten Namen */
   height: -moz-max-content; /* Firefox/Gecko */
   height: -webkit-max-content; /* Chrome */
@@ -439,12 +439,17 @@ lapis-player {
   }
 
   poster {
+    overflow: hidden;
     img.poster-loader {
       width: inherit;
     }
     img.poster-blend {
+      height: intrinsic; /* Safari/WebKit uses a non-standard name */
+      height: -moz-max-content; /* Firefox/Gecko */
+      height: -webkit-max-content;
       width: inherit;
       position: absolute;
+      top: 0;
       mix-blend-mode: color-dodge;
     }
     width: inherit;
@@ -485,16 +490,19 @@ lapis-player {
   /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
   /*https://codepen.io/Varo/pen/vLdvMK*/
 
+  .afterglow__video {
+    display: none;
+    /* show player title in fullscreen only */
+    &:not(:fullscreen) .afterglow__title-bar {
+      display: none;
+    }
+  }
   video,
   .afterglow__video {
     height: inherit;
     width: inherit;
     max-height: inherit;
     min-width: 0 !important;
-  }
-
-  .afterglow__video:not(:fullscreen) .afterglow__title-bar {
-    display: none;
   }
 
   .afterglow__container video {

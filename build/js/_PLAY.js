@@ -53,12 +53,7 @@
 
       $("#results").classList.add("grow");
 
-      //set preload img from enlarged result
-      /*$("#results").setAttribute(
-        "last-poster",
-        that.querySelector("img").currentSrc
-      );*/
-
+      //mark the clicked card as growing
       that.classList.add("growing");
 
       $("#results").setAttribute("last-poster", $(".growing img").currentSrc);
@@ -68,7 +63,7 @@
 
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
-      }, 299);
+      }, 399);
     },
     play: vid => {
       Player.open();
@@ -81,15 +76,21 @@
       }px`;
 
       //reset
-      $("lapis-player>poster").style.display = "block";
+      {
+        $("lapis-player>poster").style.display = "block";
+        //remove warning
+        $("lapis-warning") && $("lapis-warning").remove();
+        IMG_BLEND && //clear blendpic
+          IMG_BLEND.setAttribute(
+            "src",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="
+          );
+         $(".afterglow__video") && [$(".afterglow__video").style.display = "none"];
+      }
 
       const IMG_LOADER = $("poster>img.poster-loader");
       let IMG_BLEND = $("poster>img.poster-blend");
 
-      //clear blendpic
-      IMG_BLEND && IMG_BLEND.removeAttribute("src");
-      //remove warning
-      $("lapis-warning") && $("lapis-warning").remove();
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -113,8 +114,6 @@
               IMG_BLEND = $("poster>img.poster-blend");
               //fit blend's left offset
               IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-              //fit blend's heigth
-              IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
             } else {
               IMG_BLEND.setAttribute("src", dynposter);
             }
@@ -297,6 +296,8 @@
 
                     //reset enforced player heigth
                     $("lapis-player").style.height = "auto";
+                    
+                    $(".afterglow__video").style.display = "block";
 
                     try {
                       VIDEO.play();

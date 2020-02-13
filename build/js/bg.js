@@ -1,5 +1,5 @@
 const { debounce } = window;
-let { initBg } = window;
+let { initBg, LOADED } = window;
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 /*const { Trianglify, debounce, fetch } = window;
@@ -799,23 +799,21 @@ initBg = () => {
   setup();
 };
 
-window.load = () =>
-  setTimeout(() => {
-    //show loader
-    $("aside[name=loader]").style.display = "block";
-    //hide content-inner
-    $("wrapper").style.display = "none";
-    //add blur class
-    $("content").classList.add("loading");
-    //build bg canvas
-    initBg();
-  }, 999);
+setTimeout(() => {
+  //show loader
+  $("aside[name=loader]").style.display = "block";
+  //add blur class
+  $("content").classList.add("loading");
+  //build bg canvas
+  initBg();
+}, 0);
 
 window.done = () =>
   setTimeout(() => {
     $("aside[name=loader]").style.display = "none";
     //show content
-    $("wrapper").style.display = "";
+    $("wrapper").style.display = "block";
     //remove blur class
     $("content").classList.remove("loading");
+    LOADED=true;
   }, 999);
