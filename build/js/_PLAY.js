@@ -165,7 +165,7 @@
                       console.debug("AUDIO OK", format.url);
                       STREAM.AUDIOS.push(format);
                     } else {
-                      console.warn("AUDIO NOT OK");
+                      console.warn("AUDIO NOT OK", format.url);
                     }
                     clearInterval(checkInterval);
                     audio = void 0;
@@ -180,13 +180,13 @@
                 video.src = format.url;
 
                 const checkInterval = setInterval(() => {
-                  i++;
                   if (video.error || !isNaN(video.duration)) {
+                    i++;
                     if (video.duration) {
                       console.debug("VIDEO OK", format.url);
                       STREAM.VIDEOS.push(format);
                     } else {
-                      console.warn("VIDEO NOT OK");
+                      console.warn("VIDEO NOT OK", format.url);
                     }
 
                     clearInterval(checkInterval);

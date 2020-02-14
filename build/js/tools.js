@@ -166,7 +166,7 @@ abortFetches = () => {
     const fetchItem = fetchControllers[fetchId];
     fetchItem.status === "active" && [(fetchItem.status = "aborted")];
   }
-  console.debug("controllers were aborted");
+  console.debug("fetchcontrollers were aborted");
 };
 
 //FETCH WITH NPROGRESS- - - -
