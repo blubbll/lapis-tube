@@ -271,7 +271,7 @@ app.use(express.static(`${__dirname}/!dist`));
     res.json(_res.statusCode);
   });
 });*/
-app.post(`${API}/getformats`, (req, res) => {
+/*app.post(`${API}/getformats`, (req, res) => {
   let OUTPUT = {
     AUDIOS: [],
     VIDEOS: []
@@ -291,7 +291,7 @@ app.post(`${API}/getformats`, (req, res) => {
       })
       .catch(e => console.warn(e));
   }
-});
+});*/
 
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {

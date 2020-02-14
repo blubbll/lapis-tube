@@ -144,17 +144,57 @@
           {
             let i = 0;
 
-            fetch(`${API}/getformats/`, {
-              method: "POST",
-              body: JSON.stringify(vid.adaptiveFormats),
-              headers: { "content-type": "application/json" }
-            })
-              .then(res => res.json())
-              .then(formats => {
-                STREAM.AUDIOS = formats.AUDIOS;
-                STREAM.VIDEOS = formats.VIDEOS;
-                applyStreams();
-              });
+            for (const format of vid.adaptiveFormats) {
+              i++;
+              if (format.type.startsWith("video")) {
+                let video = document.createElement("video");
+
+                video.src = format.url;
+                /*setTimeout(() => {
+                  if (video && video.readyState === 0) {
+                    console.error("VIDEO NOT OK");
+                  }
+                }, 20000);*/
+                const check = setInterval(() => {
+                  if (!isNaN(video.duration)) {
+                    console.debug("VIDEO OK");
+                    clearInterval(check);
+                    video = void 0;
+                  } else if(video.error && video.error.code === 4){
+                    console.error("VIDEO NOT OK")
+                  }
+                }, 999);
+                //document.body.appendChild(video);
+              }
+              if (format.type.startsWith("audio")) {
+                let audio = document.createElement("audio");
+
+                audio.src = format.url;
+
+                //document.body.appendChild(audio);
+
+                /*const notOkTimeout = setTimeout(() => {
+                  if (audio && audio.readyState === 0) {
+                    console.error("AUDIO NOT OK");
+                  }
+                }, 20000);*/
+                const checkInterval = setInterval(() => {
+                  
+                  console.log(audio.error)
+                  
+                  if (!isNaN(audio.duration)) {
+                    console.debug("AUDIO OK");
+
+                    clearInterval(checkInterval)
+                    audio = void 0;
+                  }
+                  
+                  else if(audio.error && audio.error.code === 4){
+                    console.error("VIDEO NOT OK")
+                  }
+                }, 999);
+              }
+            }
           }
 
           const applyStreams = () => {
