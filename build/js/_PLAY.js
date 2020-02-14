@@ -96,6 +96,8 @@
       //fake title
       $("#player .card-title").innerText = UI.labels.loading;
 
+      const isnew = !$("#player");
+
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
@@ -144,59 +146,58 @@
           {
             let i = 0;
 
-            for (const format of vid.adaptiveFormats) {
-              i++;
-              if (format.type.startsWith("video")) {
-                let video = document.createElement("video");
+            const canPlay = () => i === vid.adaptiveFormats.length;
 
-                video.src = format.url;
-                /*setTimeout(() => {
-                  if (video && video.readyState === 0) {
-                    console.error("VIDEO NOT OK");
-                  }
-                }, 20000);*/
-                const check = setInterval(() => {
-                  if (!isNaN(video.duration)) {
-                    console.debug("VIDEO OK");
-                    clearInterval(check);
-                    video = void 0;
-                  } else if(video.error && video.error.code === 4){
-                    console.error("VIDEO NOT OK")
-                  }
-                }, 999);
-                //document.body.appendChild(video);
-              }
-              if (format.type.startsWith("audio")) {
+            for (const _format of vid.adaptiveFormats) {
+              const format = _format; //clone bz of async :/
+              const TYPE = format.type.split("/")[0].toUpperCase();
+
+              //check audios
+              if (TYPE === "AUDIO") {
                 let audio = document.createElement("audio");
 
                 audio.src = format.url;
 
-                //document.body.appendChild(audio);
-
-                /*const notOkTimeout = setTimeout(() => {
-                  if (audio && audio.readyState === 0) {
-                    console.error("AUDIO NOT OK");
-                  }
-                }, 20000);*/
                 const checkInterval = setInterval(() => {
-                  
-                  console.log(audio.error)
-                  
-                  if (!isNaN(audio.duration)) {
-                    console.debug("AUDIO OK");
-
-                    clearInterval(checkInterval)
+                  if (audio.error || !isNaN(audio.duration)) {
+                    i++;
+                    if (audio.duration) {
+                      console.debug("AUDIO OK", format.url);
+                      STREAM.AUDIOS.push(format);
+                    } else {
+                      console.warn("AUDIO NOT OK");
+                    }
+                    clearInterval(checkInterval);
                     audio = void 0;
+                    canPlay() && applyStreams();
                   }
-                  
-                  else if(audio.error && audio.error.code === 4){
-                    console.error("VIDEO NOT OK")
+                }, 999);
+              }
+              //check videos
+              if (TYPE === "VIDEO") {
+                let video = document.createElement("video");
+
+                video.src = format.url;
+
+                const checkInterval = setInterval(() => {
+                  i++;
+                  if (video.error || !isNaN(video.duration)) {
+                    if (video.duration) {
+                      console.debug("VIDEO OK", format.url);
+                      STREAM.VIDEOS.push(format);
+                    } else {
+                      console.warn("VIDEO NOT OK");
+                    }
+
+                    clearInterval(checkInterval);
+                    video = void 0;
+                    canPlay() && applyStreams();
                   }
                 }, 999);
               }
             }
           }
-
+          //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = () => {
             if (STREAM.VIDEOS.length === 0) {
               //$("#player .card-body").innerHTML = UI.warnings.nosource;
@@ -367,6 +368,12 @@
                   },
                   false
                 );
+                //keep video time in sync with audio
+                setInterval(() => {
+                  AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
+                    (VIDEO.currentTime = AUDIO.currentTime)
+                  ];
+                }, 2999);
               }
 
               //SET MEDIA & init afterglow
@@ -384,56 +391,51 @@
               {
               }
 
-              //keep video time in sync with audio
-              const syncer = setInterval(() => {
-                AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
-                  (VIDEO.currentTime = AUDIO.currentTime)
-                ];
-              }, 2999);
-
               //MOBILE DEVICE
               if (Browser.isMobileChrome) {
                 document.title = TITLE;
 
-                //sync audio pause on android video pause
-                document.addEventListener(
-                  "fullscreenchange",
-                  () => {
-                    if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
-                      AUDIO.pause();
-                  },
-                  false
-                );
+                if (isnew) {
+                  //sync audio pause on android video pause
+                  document.addEventListener(
+                    "fullscreenchange",
+                    () => {
+                      if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
+                        AUDIO.pause();
+                    },
+                    false
+                  );
 
-                //sync video war playNpause with audio
-                VIDEO.addEventListener("play", () => {
-                  AUDIO.play();
-                }),
-                  VIDEO.addEventListener("pause", () => {
-                    !AUDIO.paused && AUDIO.pause();
-                  });
-
-                //RESET EVENT
-                $(".afterglow__top-control-bar").innerHTML = $(
-                  ".afterglow__top-control-bar"
-                ).innerHTML;
-                //ADD NEW EVENT
-                $(
-                  ".afterglow__button.afterglow__fullscreen-toggle"
-                ).addEventListener("click", e => {
-                  const that = e.target;
-
-                  if (document.fullscreen) {
-                    Fullscreen.exit();
-                  } else {
-                    setTimeout(() => {
-                      $(".afterglow__video").classList.remove(
-                        "afterglow__container"
-                      );
-                      Fullscreen.enter($("video"));
+                  //sync video war playNpause with audio
+                  VIDEO.addEventListener("play", () => {
+                    AUDIO.play();
+                  }),
+                    VIDEO.addEventListener("pause", () => {
+                      !AUDIO.paused && AUDIO.pause();
                     });
-                  }
-                });
+
+                  //RESET EVENT
+                  $(".afterglow__top-control-bar").innerHTML = $(
+                    ".afterglow__top-control-bar"
+                  ).innerHTML;
+                  //ADD NEW EVENT
+                  $(
+                    ".afterglow__button.afterglow__fullscreen-toggle"
+                  ).addEventListener("click", e => {
+                    const that = e.target;
+
+                    if (document.fullscreen) {
+                      Fullscreen.exit();
+                    } else {
+                      setTimeout(() => {
+                        $(".afterglow__video").classList.remove(
+                          "afterglow__container"
+                        );
+                        Fullscreen.enter($("video"));
+                      });
+                    }
+                  });
+                }
               }
 
               //IOS
@@ -450,21 +452,23 @@
 
                 document.title = TITLE;
 
-                //sync audio playNpause with video
-                AUDIO.addEventListener("play", () => {
-                  VIDEO.paused && VIDEO.play();
-                }),
-                  AUDIO.addEventListener("pause", () => {
-                    !VIDEO.paused && VIDEO.pause();
-                  });
+                if (isnew) {
+                  //sync audio playNpause with video
+                  AUDIO.addEventListener("play", () => {
+                    VIDEO.paused && VIDEO.play();
+                  }),
+                    AUDIO.addEventListener("pause", () => {
+                      !VIDEO.paused && VIDEO.pause();
+                    });
 
-                //sync video playNpause with audio
-                VIDEO.addEventListener("play", () => {
-                  AUDIO.paused && AUDIO.play();
-                }),
-                  VIDEO.addEventListener("pause", () => {
-                    !AUDIO.paused && AUDIO.pause();
-                  });
+                  //sync video playNpause with audio
+                  VIDEO.addEventListener("play", () => {
+                    AUDIO.paused && AUDIO.play();
+                  }),
+                    VIDEO.addEventListener("pause", () => {
+                      !AUDIO.paused && AUDIO.pause();
+                    });
+                }
 
                 $("video").src = STREAM.LOW.url;
 
