@@ -402,6 +402,12 @@
                 document.onfullscreenchange = () => {
                   if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
                     AUDIO.pause();
+
+                  //re-fix player (re-add controls)
+                  !document.fullscreen &&
+                    $(".afterglow__video").classList.add(
+                      "afterglow__container"
+                    );
                 };
 
                 //sync video war playNpause with audio
