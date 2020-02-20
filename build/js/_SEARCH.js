@@ -27,7 +27,7 @@ setupSearch = () => {
 
   //do actual search
   SEARCH = str => {
-    let results = document.getElementById("results");
+    let results = $("#results");
 
     if (results.getAttribute("search-active") === "true") return;
 
@@ -37,7 +37,7 @@ setupSearch = () => {
     if (page === 0) {
       //construct result base
       $("#view-inner").innerHTML = T.RESULTS;
-      results = document.getElementById("results");
+      results = $("#results");
       results.setAttribute("state", "search-fresh");
       //we're on page 1
       page = 1;
@@ -48,7 +48,7 @@ setupSearch = () => {
         page = page + 1;
       } else {
         $("#view-inner").innerHTML = T.RESULTS;
-        results = document.getElementById("results");
+        results = $("#results");
         results.setAttribute("state", "search-new");
         page = 1;
       }

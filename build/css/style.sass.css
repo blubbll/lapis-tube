@@ -455,6 +455,9 @@ lapis-player {
       width: inherit;
     }
     img.poster-blend {
+      width: 200%;
+      filter: blur(5px);
+      height: 200%;
       width: inherit;
       position: absolute;
       height: 100%;
@@ -505,8 +508,11 @@ lapis-player {
   .afterglow__video {
     display: none;
     /* show player title in fullscreen only */
-    &:not(:fullscreen) .afterglow__title-bar {
+    .afterglow__title-bar {
       display: none;
+    }
+    &:fullscreen .afterglow__title-bar {
+      display: flex;
     }
   }
   video,
@@ -517,9 +523,9 @@ lapis-player {
     min-width: 0 !important;
   }
 
-  .afterglow__container video {
+  /*.afterglow__container video {
     object-fit: fill;
-  }
+  }*/
 
   /* customized afterglow player */
   .afterglow__control-bar,
@@ -549,5 +555,15 @@ lapis-player {
     color: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(1rem);
     top: 0;
+  }
+  /* black fullscreen toggle */
+  .afterglow__top-control-bar a {
+    margin-left: 0;
+  }
+  .afterglow__top-control-bar {
+    background: black;
+    padding: 0.3rem;
+    backdrop-filter: blur(1rem);
+    border-radius: 3rem;
   }
 }

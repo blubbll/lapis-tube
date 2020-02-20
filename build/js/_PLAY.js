@@ -34,9 +34,9 @@
 
   Player = {
     open: () => {
-      if (!$("#player"))
+      if (!$("#player")) {
         $("#view-inner").insertAdjacentHTML("beforeend", T.PLAYER);
-      else {
+      } else {
         $("#player").style.setProperty("display", "block");
       }
       $("#view-inner").classList.remove("wait");
@@ -96,17 +96,17 @@
       //fake title
       $("#player .card-title").innerText = UI.labels.loading;
 
-      const isnew = !$("#player");
-
       fetch(`${HOST}/api/${REGION}/video/${vid}`)
         .then(res => res.text())
         .then(raw => {
           let vid = JSON.parse(raw);
           let HTML = "";
 
-          const TITLE = vid.title;
+          let TITLE = vid.title;
 
-          $("#player .card-title").innerText = TITLE;
+          $(
+            "#player .card-title"
+          ).innerText = `${TITLE} (${UI.labels.buffering})`;
 
           const IMG_LOADER = $("poster>img.poster-loader");
           let IMG_BLEND = $("poster>img.poster-blend");
@@ -342,6 +342,9 @@
 
                     //normal title
                     $("#player .card-title").innerText = TITLE;
+
+                    console.log(TITLE);
+
                     //fancy title
                     $(".afterglow__controls").insertAdjacentHTML(
                       "afterbegin",
@@ -395,47 +398,39 @@
               if (Browser.isMobileChrome) {
                 document.title = TITLE;
 
-                if (isnew) {
-                  //sync audio pause on android video pause
-                  document.addEventListener(
-                    "fullscreenchange",
-                    () => {
-                      if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
-                        AUDIO.pause();
-                    },
-                    false
-                  );
+                //sync audio pause on android video pause
+                document.onfullscreenchange = () => {
+                  if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
+                    AUDIO.pause();
+                };
 
-                  //sync video war playNpause with audio
-                  VIDEO.addEventListener("play", () => {
-                    AUDIO.play();
-                  }),
-                    VIDEO.addEventListener("pause", () => {
-                      !AUDIO.paused && AUDIO.pause();
-                    });
-
-                  //RESET EVENT
-                  $(".afterglow__top-control-bar").innerHTML = $(
-                    ".afterglow__top-control-bar"
-                  ).innerHTML;
-                  //ADD NEW EVENT
-                  $(
-                    ".afterglow__button.afterglow__fullscreen-toggle"
-                  ).addEventListener("click", e => {
-                    const that = e.target;
-
-                    if (document.fullscreen) {
-                      Fullscreen.exit();
-                    } else {
-                      setTimeout(() => {
-                        $(".afterglow__video").classList.remove(
-                          "afterglow__container"
-                        );
-                        Fullscreen.enter($("video"));
-                      });
-                    }
+                //sync video war playNpause with audio
+                (VIDEO.onplay = AUDIO.play),
+                  (VIDEO.onpause = () => {
+                    !AUDIO.paused && AUDIO.pause();
                   });
-                }
+
+                //RESET EVENT
+                $(".afterglow__top-control-bar").innerHTML = $(
+                  ".afterglow__top-control-bar"
+                ).innerHTML;
+                //ADD NEW EVENT
+                $(
+                  ".afterglow__button.afterglow__fullscreen-toggle"
+                ).addEventListener("click", e => {
+                  const that = e.target;
+
+                  if (document.fullscreen) {
+                    Fullscreen.exit();
+                  } else {
+                    setTimeout(() => {
+                      $(".afterglow__video").classList.remove(
+                        "afterglow__container"
+                      );
+                      Fullscreen.enter($("video"));
+                    });
+                  }
+                });
               }
 
               //IOS
@@ -452,31 +447,24 @@
 
                 document.title = TITLE;
 
-                if (isnew) {
-                  //sync audio playNpause with video
-                  AUDIO.addEventListener("play", () => {
-                    VIDEO.paused && VIDEO.play();
-                  }),
-                    AUDIO.addEventListener("pause", () => {
-                      !VIDEO.paused && VIDEO.pause();
-                    });
+                //sync audio playNpause with video
+                AUDIO.onplay = () => VIDEO.paused && VIDEO.play();
 
-                  //sync video playNpause with audio
-                  VIDEO.addEventListener("play", () => {
-                    AUDIO.paused && AUDIO.play();
-                  }),
-                    VIDEO.addEventListener("pause", () => {
-                      !AUDIO.paused && AUDIO.pause();
-                    });
-                }
-
-                $("video").src = STREAM.LOW.url;
-
-                VIDEO.style.position = "relative";
-                $("poster").style.position = "relative";
-                $("poster").style.display = "none";
+                AUDIO.onpause = () => !VIDEO.paused && VIDEO.pause();
               }
+
+              //sync video playNpause with audio
+              (VIDEO.onplay = () => AUDIO.paused && AUDIO.play()),
+                (VIDEO.onpause = () => {
+                  !AUDIO.paused && AUDIO.pause();
+                });
             }
+
+            $("video").src = STREAM.LOW.url;
+
+            VIDEO.style.position = "relative";
+            $("poster").style.position = "relative";
+            $("poster").style.display = "none";
           };
         })
         .catch(e => {

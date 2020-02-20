@@ -13,4 +13,6 @@ A fancy and open alternative YouTube client.
 
 - custom community-driven Categories (coming up)
 
+- using Invidiou.us and YT Servers
+
 [https://lapis.tube](https://lapis.tube)

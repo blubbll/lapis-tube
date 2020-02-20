@@ -162,6 +162,7 @@ const fetchControllers = [];
 
 //abort, abort abort :D
 abortFetches = () => {
+  NProgress.done();
   for (const fetchId in fetchControllers) {
     const fetchItem = fetchControllers[fetchId];
     fetchItem.status === "active" && [(fetchItem.status = "aborted")];
