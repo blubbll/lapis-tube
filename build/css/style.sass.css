@@ -561,9 +561,8 @@ lapis-player {
     margin-left: 0;
   }
   .afterglow__top-control-bar {
-    background: black;
-    padding: 0.3rem;
-    backdrop-filter: blur(1rem);
+    padding: 0.3rem 0.5rem;
     border-radius: 3rem;
+    backdrop-filter: blur(2rem);
   }
 }
