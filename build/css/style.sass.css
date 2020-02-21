@@ -450,24 +450,19 @@ lapis-player {
   }
 
   poster {
+    width: inherit;
     overflow: hidden;
     img.poster-loader {
       width: inherit;
     }
     img.poster-blend {
-      width: 200%;
       filter: blur(5px);
-      height: 200%;
-      width: inherit;
-      position: absolute;
       height: 100%;
       width: inherit;
-      object-fit: scale-down;
-      position: absolute;
-      top: 0;
-      mix-blend-mode: soft-light;
+      object-fit: cover;
+      transform: translateY(-100%);
+      mix-blend-mode: hard-light;
     }
-    width: inherit;
   }
 
   lapis-warning {
