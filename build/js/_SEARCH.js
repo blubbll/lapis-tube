@@ -2,6 +2,7 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 const {
+  addView,
   autocomplete,
   alert,
   createThumbs,
@@ -16,6 +17,7 @@ const {
   lazyload,
   moment,
   numeral,
+  setActiveView,
   T,
   waitForElement
 } = window;
@@ -23,20 +25,23 @@ const {
 let { setupSearch, SEARCH } = window;
 
 setupSearch = () => {
-  $("#view-inner").innerHTML = T.RESULTS;
+  //$("#view-inner").innerHTML = T.RESULTS;
 
   //do actual search
   SEARCH = str => {
+    !$("#results") && addView(T.RESULTS);
+
     let results = $("#results");
 
-    if (results.getAttribute("search-active") === "true") return;
+    if (results && results.getAttribute("search-active") === "true") return;
 
-    let page = +results.getAttribute("page") || 0;
+    let page = results ? +results.getAttribute("page") : 0;
 
     //no search, no paging
     if (page === 0) {
       //construct result base
-      $("#view-inner").innerHTML = T.RESULTS;
+
+      setActiveView("results");
       results = $("#results");
       results.setAttribute("state", "search-fresh");
       //we're on page 1
@@ -47,8 +52,6 @@ setupSearch = () => {
         results.setAttribute("state", "search-continue");
         page = page + 1;
       } else {
-        $("#view-inner").innerHTML = T.RESULTS;
-        results = $("#results");
         results.setAttribute("state", "search-new");
         page = 1;
       }

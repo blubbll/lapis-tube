@@ -1,4 +1,3 @@
-
 //© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -120,6 +119,7 @@ getProxy();
         `${__dirname}/build/html/player.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
+        `${__dirname}/build/html/start.html`,
         `${__dirname}/build/html/what.html`
       ];
       for (const html of htmls) {
@@ -134,7 +134,7 @@ getProxy();
             .replace(
               //ui titles for js
               /#ui-words/gi,
-              fs.readFileSync(`${__dirname}/build/components/ui-words.js`)
+              fs.readFileSync(`${__dirname}/build/components/ui-words.html`)
             )
             .replace(
               //loading animation instructions
@@ -424,5 +424,6 @@ setTimeout(() => {
   });
   process.exit();
 }, 1000 * 60 * 60 * restartHours); //restart every 6 hours
+
 
 

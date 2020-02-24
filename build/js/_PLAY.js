@@ -1,5 +1,6 @@
 {
   const {
+    addView,
     API,
     abortFetches,
     autocomplete,
@@ -35,11 +36,11 @@
   Player = {
     open: () => {
       if (!$("#player")) {
-        $("#view-inner").insertAdjacentHTML("beforeend", T.PLAYER);
+        addView(T.PLAYER);
       } else {
         $("#player").style.setProperty("display", "block");
       }
-      $("#view-inner").classList.remove("wait");
+      $("#views").classList.remove("wait");
       $("#filters").style.setProperty("display", "none", "important");
       $("#results").style.setProperty("display", "none", "important");
     },
@@ -51,7 +52,7 @@
       $("#results").style.setProperty("display", "");
     },
     openFromResult: that => {
-      $("#view-inner").classList.add("wait");
+      $("#views").classList.add("wait");
 
       $("#results").classList.add("grow");
 

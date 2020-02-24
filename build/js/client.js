@@ -7,6 +7,7 @@ console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 
 //
 const {
+  addView,
   autocomplete,
   alert,
   debounce,
@@ -22,6 +23,7 @@ const {
   moment,
   numeral,
   SEARCH,
+  setActiveView,
   setupSearch,
   T,
   waitForElement
@@ -99,6 +101,7 @@ API = `//${location.hostname}/api`;
         [
           tr + "/app.html",
           API + "/geoip",
+          tr + "/start.html",
           tr + "/channel.html",
           tr + "/player.html",
           tr + "/player-inside.html",
@@ -107,15 +110,16 @@ API = `//${location.hostname}/api`;
         ].map(url => fetch(url).then(resp => resp.text()))
       )
         .then(tx => {
-          T.HOME = tx[0].replace(/{{cdn}}/gi, CDN);
+          T.WRAPPER = tx[0].replace(/{{cdn}}/gi, CDN);
           (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
           console.debug(`Your Geo Information by Maxmind: `, GEO);
           console.debug(`Your browser language: `, getL());
-          T.CHANNEL = tx[2];
-          T.PLAYER = tx[3];
-          T.PLAYER_INSIDE = tx[4];
-          T.RESULT = tx[5];
-          T.RESULTS = tx[6];
+          T.START = tx[2];
+          T.CHANNEL = tx[3];
+          T.PLAYER = tx[4];
+          T.PLAYER_INSIDE = tx[5];
+          T.RESULT = tx[6];
+          T.RESULTS = tx[7];
 
           setupClient();
         })
@@ -205,8 +209,12 @@ document.addEventListener("click", e => {
 
 //wreadyy
 const setupClient = () => {
-  //fill home view (first step in app setup)
-  $("content").innerHTML = T.HOME;
+  //fill content (first step in app setup)
+  $("content").innerHTML = T.WRAPPER;
+
+  addView(T.START);
+
+  setActiveView("start");
 
   //show content
   $("wrapper").style.display = "block";
@@ -214,7 +222,7 @@ const setupClient = () => {
   //setup bg
   initBg();
 
-  waitForElement("#view").then(element => {
+  waitForElement("views").then(element => {
     //SETUP MOMENTJS LANGUAGE
     moment.locale(getL());
 

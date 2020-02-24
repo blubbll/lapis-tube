@@ -3,6 +3,7 @@ const $$ = document.querySelectorAll.bind(document);
 
 const { AbortController, NProgress, LOADED } = window;
 let {
+  addView,
   abortFetches,
   CDN,
   createThumbs,
@@ -13,8 +14,20 @@ let {
   getBase64Image,
   getL,
   getSize,
-  loadImage
+  loadImage,
+  setActiveView
 } = window;
+
+addView = HTML =>
+  $("views") && $("views").insertAdjacentHTML("beforeend", HTML);
+
+/* hide views but (id) */
+setActiveView = id => {
+  for (const view of $$("views>view"))
+    view.id !== "id"
+      ? [view.style.setProperty("display", "none", "important")]
+      : [(view.style.display = "")];
+};
 
 const detectIEEdge = () => {
   const ua = window.navigator.userAgent;

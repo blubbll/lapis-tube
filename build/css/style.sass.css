@@ -260,7 +260,7 @@ content {
   width: inherit;
   height: inherit;
 }
-#view-inner {
+#start-inner {
   &.wait {
     cursor: wait;
     pointer-events: none;
