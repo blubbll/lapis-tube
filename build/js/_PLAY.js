@@ -46,8 +46,9 @@
     },
     close: () => {
       abortFetches();
+      $("audio") && [($("audio").src = "")];
       $("#player").style.setProperty("display", "none", "important");
-      $("video") && $("video").pause();
+      $("video") && [($("video").src = "")];
       $("#filters").style.setProperty("display", "");
       $("#results").style.setProperty("display", "");
     },
@@ -468,13 +469,13 @@
                 (VIDEO.onpause = () => {
                   !AUDIO.paused && AUDIO.pause();
                 });
+
+              $("video").src = STREAM.LOW.url;
+
+              VIDEO.style.position = "relative";
+              $("poster").style.position = "relative";
+              $("poster").style.display = "none";
             }
-
-            $("video").src = STREAM.LOW.url;
-
-            VIDEO.style.position = "relative";
-            $("poster").style.position = "relative";
-            $("poster").style.display = "none";
           };
         })
         .catch(e => {

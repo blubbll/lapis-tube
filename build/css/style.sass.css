@@ -269,7 +269,8 @@ content {
 }
 
 #filters {
-  z-index: 2;
+  z-index: 1;
+    width: 103%!important;
   #filters-inner {
     border-color: rgba(255, 255, 255, 0.1) !important;
     color: white;
