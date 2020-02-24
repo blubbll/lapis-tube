@@ -12,10 +12,7 @@ param {
 }
 
 #content {
-  height: intrinsic; /* Safari/WebKit verwendet einen nicht standardisierten Namen */
-  height: -moz-max-content; /* Firefox/Gecko */
-  height: -webkit-max-content; /* Chrome */
-  height: max-content;
+  height: inherit;
 }
 
 body {

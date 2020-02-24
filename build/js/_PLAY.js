@@ -40,7 +40,7 @@
       } else {
         $("#player").style.setProperty("display", "block");
       }
-      $("#views").classList.remove("wait");
+      $("views").classList.remove("wait");
       $("#filters").style.setProperty("display", "none", "important");
       $("#results").style.setProperty("display", "none", "important");
     },
@@ -52,7 +52,7 @@
       $("#results").style.setProperty("display", "");
     },
     openFromResult: that => {
-      $("#views").classList.add("wait");
+      $("views").classList.add("wait");
 
       $("#results").classList.add("grow");
 

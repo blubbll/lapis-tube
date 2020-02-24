@@ -30,6 +30,8 @@ setupSearch = () => {
   //do actual search
   SEARCH = str => {
     !$("#results") && addView(T.RESULTS);
+    
+    setActiveView("results")
 
     let results = $("#results");
 

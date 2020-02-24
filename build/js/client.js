@@ -244,11 +244,11 @@ const setupClient = () => {
     $("#dynamic-logo").setAttribute("title", `Region: ${GEO.country}`);
     $("#yt-lang").setAttribute("title", `App language: ${getL()}`);
 
-    //small search demo
-    waitForElement("#results").then(demo);
-
     //show ui
     done();
+
+    //small search demo
+    demo();
 
     console.log("Client done");
   });

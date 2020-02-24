@@ -24,7 +24,7 @@ addView = HTML =>
 /* hide views but (id) */
 setActiveView = id => {
   for (const view of $$("views>view"))
-    view.id !== "id"
+    view.id !== id //hide all views but (id)
       ? [view.style.setProperty("display", "none", "important")]
       : [(view.style.display = "")];
 };
