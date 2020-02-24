@@ -551,10 +551,11 @@ lapis-player {
     backdrop-filter: blur(1rem);
     top: 0;
   }
-  /* black fullscreen toggle */
+  /* custom fullscreen toggle */
   .afterglow__top-control-bar a {
     margin-left: 0;
   }
+
   .afterglow__top-control-bar {
     padding: 0.3rem 0.5rem;
     border-radius: 3rem;

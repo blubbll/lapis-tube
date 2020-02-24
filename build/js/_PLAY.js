@@ -67,7 +67,7 @@
         that.classList.remove("growing");
       }, 499);
     },
-    play: vid => {
+    play: id => {
       Player.open();
 
       let VIDEO = $("video");
@@ -96,11 +96,14 @@
       //fake title
       $("#player .card-title").innerText = UI.labels.loading;
 
-      fetch(`${HOST}/api/${REGION}/video/${vid}`)
+      fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
         .then(raw => {
           let vid = JSON.parse(raw);
           let HTML = "";
+
+          //repeat when instance is blocked
+          vid.error && Player.play(id);
 
           let TITLE = vid.title;
 
@@ -211,7 +214,7 @@
               const WARNING_NOSOURCE = $("lapis-warning");
               WARNING_NOSOURCE.innerHTML = UI.warnings.nosource;
               WARNING_NOSOURCE.style.display = "flex";
-              $("poster").style.display = "none";
+              //$("poster").style.display = "none";
               return false;
             }
 
