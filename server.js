@@ -62,7 +62,7 @@ const express = require("express"),
   fetch = require("node-fetch");
 
 //configure bodyparser
-app.use([bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
+app.use(cors(), [bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
 
 /*let PROXY;
 const getProxy = () => {
@@ -102,11 +102,9 @@ getProxy();
         html += `</cat>`;
       }
       html += `</ui-words>`;
-      console.log(html);
       fs.writeFileSync(`${__dirname}/${dist}/html/ui-words.html`, html, "utf8");
     }
 
-    
     const atto = "/*!💜I love you monad.*/";
     const transpile = (file, direct) => {
       const result = es6tr.run({ filename: file });
@@ -134,16 +132,19 @@ getProxy();
       else building = true;
       const htmls = [
         `${__dirname}/build/index.html`,
+        `${__dirname}/build/cookie.html`,
         `${__dirname}/build/outdated-browser.html`,
         `${__dirname}/build/html/app.html`,
         `${__dirname}/build/html/channel.html`,
-        `${__dirname}/build/html/cookie.html`,
         `${__dirname}/build/html/player.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
         `${__dirname}/build/html/start.html`,
         `${__dirname}/build/html/what.html`
       ];
+      const templateFile = `${__dirname}/${dist}/html/templates.html`;
+      fs.writeFileSync(templateFile, "<templates>"); //clear bundlefile
+
       for (const html of htmls) {
         let input = fs.readFileSync(html, "utf8");
         if (html.endsWith("/build/index.html")) {
@@ -159,17 +160,37 @@ getProxy();
               fs.readFileSync(`${__dirname}/build/components/loader.html`)
             );
         }
-        fs.writeFileSync(
-          html.replace("/build", dist),
-          crush(input, {
-            removeLineBreaks: true,
-            removeIndentations: true,
-            lineLengthLimit: Number.POSITIVE_INFINITY
-          }).result,
-          "utf8"
-        );
+
+        if (
+          html
+            .split("/build/")
+            .pop()
+            .startsWith("html/")
+        ) {
+          //bundle output html
+          fs.appendFileSync(
+            templateFile,
+            `<template name="${html.split("html/")[1].split(".")[0]}">${
+              crush(input, {
+                removeLineBreaks: true,
+                removeIndentations: true,
+                lineLengthLimit: Number.POSITIVE_INFINITY
+              }).result
+            }</template>`
+          );
+        } else
+          fs.writeFileSync(
+            html.replace("/build", dist),
+            crush(input, {
+              removeLineBreaks: true,
+              removeIndentations: true,
+              lineLengthLimit: Number.POSITIVE_INFINITY
+            }).result,
+            "utf8"
+          );
         //console.log(`Minified ${html}!`);
       }
+      fs.appendFileSync(templateFile, "</templates>");
       console.log(`Minified html`);
       setTimeout(() => {
         building = false;

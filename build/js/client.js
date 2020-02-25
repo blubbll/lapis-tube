@@ -99,30 +99,42 @@ API = `//${location.hostname}/api`;
       const T = (window.T = {});
 
       Promise.all(
-        [
-          tr + "/ui-words.html",
-          tr + "/app.html",
-          API + "/geoip",
-          tr + "/start.html",
-          tr + "/channel.html",
-          tr + "/player.html",
-          tr + "/player-inside.html",
-          tr + "/result-item.html",
-          tr + "/result-list.html"
-        ].map(url => fetch(url).then(resp => resp.text()))
+        [tr + "/ui-words.html", API + "/geoip", tr + "/templates.html"].map(
+          url => fetch(url).then(resp => resp.text())
+        )
       )
         .then(tx => {
-          applyWords(tx[0])
-          T.WRAPPER = tx[1].replace(/{{cdn}}/gi, CDN);
-          (GEO = JSON.parse(tx[2])), (REGION = GEO.country_code.toLowerCase());
+          applyWords(tx[0]);
+
+          (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
           console.debug(`Your Geo Information by Maxmind: `, GEO);
           console.debug(`Your browser language: `, getL());
-          T.START = tx[3];
-          T.CHANNEL = tx[4];
-          T.PLAYER = tx[5];
-          T.PLAYER_INSIDE = tx[6];
-          T.RESULT = tx[7];
-          T.RESULTS = tx[8];
+
+          for (const template of new DOMParser()
+            .parseFromString(tx[2], "text/html")
+            .querySelectorAll("template")) {
+            const _html = template.innerHTML;
+            switch (template.getAttribute("name")) {
+              case "app":
+                T.WRAPPER = _html.replace(/{{cdn}}/gi, CDN);
+                break;
+              case "channel":
+                T.CHANNEL = _html;
+                break;
+              case "player":
+                T.PLAYER = _html;
+                break;
+              case "result-list":
+                T.RESULTS = _html;
+                break;
+              case "result-item":
+                T.RESULT = _html;
+                break;
+              case "start":
+                T.START = _html;
+                break;
+            }
+          }
 
           setupClient();
         })
@@ -166,7 +178,7 @@ const demo = () => {
 };
 
 window.onhashchange = () => {
-  const tr = `${HOST}/html`;
+  const tr = HOST;
   switch (location.hash) {
     case "#cookie-what?":
     case "#what?":
