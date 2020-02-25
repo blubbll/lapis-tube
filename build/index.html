@@ -121,6 +121,9 @@
     <!-- numerals -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
+    
+    <!--responsive fonts -->
+    <link rel="stylesheet" href="https://raw.githack.com/sboriskirov/fluiditype/master/fluidtype.css"/>
     <!-- nprogress -->
     <link
       rel="stylesheet"
@@ -150,7 +153,16 @@
     <link rel="stylesheet" href="{{local}}/bundle.css" />
 
     #ui-words
-    <style>body{background: black}</style>
+    <style>
+      :root {
+        --color-accent-main: #1b294b;
+      }
+      html,
+      body {
+        background: black;
+        background: var(--color-accent-main);
+      }
+    </style>
   </head>
 
   <body>

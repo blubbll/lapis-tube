@@ -3,6 +3,7 @@ const $$ = document.querySelectorAll.bind(document);
 
 const { AbortController, NProgress, LOADED } = window;
 let {
+  applyWords,
   addView,
   abortFetches,
   CDN,
@@ -18,6 +19,26 @@ let {
   setActiveView
 } = window;
 
+//gtranslate-hack
+applyWords = htmlString => {
+  const words = new DOMParser()
+    .parseFromString(htmlString, "text/html")
+    .querySelector("ui-words");
+  const UI = (window.UI = {});
+  //loop over categories
+  for (const _cat of words.querySelectorAll("cat")) {
+    const cat = _cat.getAttribute("name");
+    //loop over keys in category
+    for (const _key of _cat.querySelectorAll("key")) {
+      const key = _key.getAttribute("name");
+      const val = _cat.querySelector(`key[name=${key}]`).innerText;
+      //put values into json
+      !UI[cat] && [(UI[cat] = {})], (UI[cat][key] = val);
+    }
+  }
+};
+
+//add HTML to view system
 addView = HTML =>
   $("views") && $("views").insertAdjacentHTML("beforeend", HTML);
 
@@ -29,6 +50,7 @@ setActiveView = id => {
       : [(view.style.display = "")];
 };
 
+//detect ie & edge (ded browsers)
 const detectIEEdge = () => {
   const ua = window.navigator.userAgent;
 

@@ -7,6 +7,7 @@ console.log("%c Welcome to lapisTube 🙃", "background: blue;");
 
 //
 const {
+  applyWords,
   addView,
   autocomplete,
   alert,
@@ -99,6 +100,7 @@ API = `//${location.hostname}/api`;
 
       Promise.all(
         [
+          tr + "/ui-words.html",
           tr + "/app.html",
           API + "/geoip",
           tr + "/start.html",
@@ -110,16 +112,17 @@ API = `//${location.hostname}/api`;
         ].map(url => fetch(url).then(resp => resp.text()))
       )
         .then(tx => {
-          T.WRAPPER = tx[0].replace(/{{cdn}}/gi, CDN);
-          (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+          applyWords(tx[0])
+          T.WRAPPER = tx[1].replace(/{{cdn}}/gi, CDN);
+          (GEO = JSON.parse(tx[2])), (REGION = GEO.country_code.toLowerCase());
           console.debug(`Your Geo Information by Maxmind: `, GEO);
           console.debug(`Your browser language: `, getL());
-          T.START = tx[2];
-          T.CHANNEL = tx[3];
-          T.PLAYER = tx[4];
-          T.PLAYER_INSIDE = tx[5];
-          T.RESULT = tx[6];
-          T.RESULTS = tx[7];
+          T.START = tx[3];
+          T.CHANNEL = tx[4];
+          T.PLAYER = tx[5];
+          T.PLAYER_INSIDE = tx[6];
+          T.RESULT = tx[7];
+          T.RESULTS = tx[8];
 
           setupClient();
         })

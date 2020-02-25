@@ -79,12 +79,34 @@ getProxy();
 {
   //BUILD
   if (process.env.PROJECT_NAME) {
+    //dist-folder (output)
     const dist = "/!dist";
+    //create folders if not existing
     !fs.existsSync(`${__dirname}/${dist}`) &&
       fs.mkdirSync(`${__dirname}/${dist}`);
     !fs.existsSync(`${__dirname}/${dist}/html`) &&
       fs.mkdirSync(`${__dirname}/${dist}/html`);
+    {
+      //ui-words
+      const json = JSON.parse(
+        fs.readFileSync(`${__dirname}/build/ui-words.json`, "utf8")
+      ).ui;
+      let html = `<ui-words>`;
+      for (const group in json) {
+        html += `<cat name="${group}">`;
+        for (const key in json[group]) {
+          html += `<key name="${key}">`;
+          const val = json[group][key];
+          html += `${val}</key>`;
+        }
+        html += `</cat>`;
+      }
+      html += `</ui-words>`;
+      console.log(html);
+      fs.writeFileSync(`${__dirname}/${dist}/html/ui-words.html`, html, "utf8");
+    }
 
+    
     const atto = "/*!💜I love you monad.*/";
     const transpile = (file, direct) => {
       const result = es6tr.run({ filename: file });
@@ -130,11 +152,6 @@ getProxy();
               //size indicators
               /{{indicators}}/gi,
               fs.readFileSync(`${__dirname}/build/components/indicators.html`)
-            )
-            .replace(
-              //ui titles for js
-              /#ui-words/gi,
-              fs.readFileSync(`${__dirname}/build/components/ui-words.html`)
             )
             .replace(
               //loading animation instructions
@@ -424,5 +441,3 @@ setTimeout(() => {
   });
   process.exit();
 }, 1000 * 60 * 60 * restartHours); //restart every 6 hours
-
-
