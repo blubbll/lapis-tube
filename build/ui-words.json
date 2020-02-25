@@ -2,7 +2,9 @@
   "ui": {
     "labels": {
       "loading": "Loading...",
-      "buffering": "Buffering..."
+      "buffering": "Buffering...",
+      "region": "Region",
+      "language": "Language"
     },
     "warnings": {
       "muted": "The Video is muted. Click here to unmute.",

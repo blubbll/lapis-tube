@@ -299,7 +299,7 @@ getL = () => {
     "zu"
   ];
 
-  return gt_languages.includes(L) ? L.toLowerCase() : "uk";
+  return gt_languages.includes(L) ? L.toLowerCase() : "";
 };
 
 const fetchControllers = [];

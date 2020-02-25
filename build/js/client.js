@@ -27,6 +27,7 @@ const {
   setActiveView,
   setupSearch,
   T,
+  UI,
   waitForElement
 } = window;
 let { app_start, API, GEO, HOST, REGION, lscache } = window;
@@ -238,14 +239,15 @@ const setupClient = () => {
   initBg();
 
   waitForElement("views").then(element => {
+    const _L = getL() || "en";
     //SETUP MOMENTJS LANGUAGE
-    moment.locale(getL());
+    moment.locale(_L);
 
     //SETUP SEARCH
     setupSearch();
 
     //sync browser-language
-    $("#yt-lang").innerText = getL();
+    $("#yt-lang").innerText = _L;
     //sync region (language background clip)
 
     document.documentElement.style.setProperty(
@@ -256,8 +258,11 @@ const setupClient = () => {
     for (const img of $$("#dynamic-logo .alpha-target")) {
       img.src = `https://raw.githubusercontent.com/legacy-icons/famfamfam-flags/master/dist/png/${GEO.country_code.toLowerCase()}.png`;
     }
-    $("#dynamic-logo").setAttribute("title", `Region: ${GEO.country}`);
-    $("#yt-lang").setAttribute("title", `App language: ${getL()}`);
+    $("#dynamic-logo").setAttribute(
+      "title",
+      `${UI.labels.region}: ${GEO.country}`
+    );
+    $("#yt-lang").setAttribute("title", `App ${UI.labels.language}: ${_L}`);
 
     //show ui
     done();
