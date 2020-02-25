@@ -77,6 +77,7 @@ const detectIEEdge = () => {
   return false;
 };
 
+//not working with corbs
 getBase64Image = img => {
   var canvas = document.createElement("canvas");
   canvas.width = img.width;
@@ -136,14 +137,6 @@ getSize = () => {
       return indicator.classList[0].split("-")[1].replace("flex", "xs");
     }
   }
-};
-
-loadImage = url => {
-  return new Promise(r => {
-    let i = new Image();
-    i.onload = () => r(i);
-    i.src = url;
-  });
 };
 
 CDN = $("base").href;

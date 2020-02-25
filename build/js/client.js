@@ -43,7 +43,7 @@ let { app_start, API, GEO, HOST, REGION, lscache } = window;
         `${location.protocol}//${location.hostname
           .split(".")
           .splice(1)
-          .join(".")}`
+          .join(".")}` + `${getL() ? "?hl=" + getL() : ""}`
       )
     ];
 
