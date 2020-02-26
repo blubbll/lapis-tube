@@ -113,24 +113,17 @@
       document.title = UI.labels.loading;
       $("#player .card-title").innerText = UI.labels.loading;
 
+      //use result img for preloading img
+      const IMG_LOADER = $("poster>img");
+      let IMG_BLEND = $("poster>canvas");
       {
-        //use result img for preloading img
-        const IMG_LOADER = $("poster>img");
-        let IMG_BLEND = $("poster>canvas");
-
         const poster = IMG_LOADER.src;
 
         if ($("#results")) {
-          //const dynposter = $("#results").getAttribute("last-poster");
-
           if (!IMG_BLEND) {
             IMG_LOADER.insertAdjacentHTML("afterend", `<canvas/>`);
             IMG_BLEND = $("poster>canvas");
           }
-
-          //fit blend loader's sizes
-          IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-          IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
 
           var ctx = IMG_BLEND.getContext("2d");
           var img = $(`#results card[video-id=${id}] img`);
@@ -148,6 +141,10 @@
         }
       }
 
+      //fit blend loader's sizes
+      IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+      IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
+
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
         .then(raw => {
@@ -159,10 +156,10 @@
             error = true;
             document.title(UI.title.problem);
             //make loader red
-            $("poster>img").style.filter = "hue-rotate(130deg)";
+            IMG_LOADER.style.filter = "hue-rotate(130deg)";
             $("#player .card-title").innerText = UI.labels.tryagain;
           } else {
-            $("poster>img").style.filter = "";
+            IMG_LOADER.style.filter = "";
           }
           //repeat when instance is blocked
           vid.error && [(error = true), Player.play(id)];
@@ -174,6 +171,10 @@
           $(
             "#player .card-title"
           ).innerText = `${TITLE} (${UI.labels.buffering})`;
+
+          //fit blend loader's sizes
+          IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+          IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
 
           const STREAM = {
             LOW: vid.formatStreams[0],
@@ -371,6 +372,19 @@
                     get: () => {
                       AUDIO._pause();
                       return VIDEO._pause;
+                    }
+                  });
+
+                  //MIRROR currentTime vid>audio (set by afterglow)
+                  VIDEO._currentTime  = VIDEO.currentTime;
+                  Object.defineProperty(VIDEO, "currentTime", {
+                    set: val => {
+                      VIDEO._currentTime  = val;
+                      //!
+                      AUDIO.currentTime  = val;
+                    },
+                    get: () => {
+                      return VIDEO._currentTime ;
                     }
                   });
                 }
