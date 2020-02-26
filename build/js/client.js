@@ -3,7 +3,7 @@ const $$ = document.querySelectorAll.bind(document);
 
 //RESET
 location.hash = "";
-console.log("%c Welcome to lapisTube 🙃", "background: blue;");
+console.log("%c Welcome to lapisTube 🙃", "background: blue;color: white;");
 
 //
 const {
@@ -43,7 +43,7 @@ let { app_start, API, GEO, HOST, REGION, lscache } = window;
         `${location.protocol}//${location.hostname
           .split(".")
           .splice(1)
-          .join(".")}` + `${getL() ? "?hl=" + getL() : ""}`
+          .join(".")}` + `${location.hostname.split(".")[0] ? "?hl=" + location.hostname.split(".")[0] : ""}`
       )
     ];
 

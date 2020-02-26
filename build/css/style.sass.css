@@ -269,7 +269,7 @@ content {
 
 #filters {
   z-index: 1;
-    width: 103%!important;
+  place-self: flex-end;
   #filters-inner {
     border-color: rgba(255, 255, 255, 0.1) !important;
     color: white;

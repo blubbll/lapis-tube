@@ -23,6 +23,7 @@
     afterglow,
     Browser,
     Fullscreen,
+    setActiveView,
     waitForElement
   } = window;
 
@@ -46,11 +47,16 @@
     },
     close: () => {
       abortFetches();
-      $("audio") && [($("audio").src = "")];
-      $("#player").style.setProperty("display", "none", "important");
-      $("video") && [($("video").src = "")];
-      $("#filters").style.setProperty("display", "");
-      $("#results").style.setProperty("display", "");
+      //reset to results view if searched
+      if ($("#results")) {
+        document.title = `${UI.titles.results} "${$("#results").getAttribute(
+          "q"
+        )}"`;
+        setActiveView("results");
+      }
+      //remove sources
+      $("audio") && [($("audio").src = "")],
+        $("video") && [($("video").src = "")];
     },
     openFromResult: that => {
       $("views").classList.add("wait");
@@ -96,6 +102,7 @@
       }
 
       //fake title
+      document.title = UI.labels.loading;
       $("#player .card-title").innerText = UI.labels.loading;
 
       fetch(`${HOST}/api/${REGION}/video/${id}`)
@@ -104,6 +111,10 @@
           let vid = JSON.parse(raw);
           let HTML = "";
 
+        
+          if(vid.error){
+            document.title(UI.title.problem);
+          }
           //repeat when instance is blocked
           vid.error && Player.play(id);
 
@@ -258,7 +269,7 @@
                 VIDEO = $("video");
 
                 {
-                  //MIRROR VOLUME
+                  //MIRROR VOLUME vid>audio (set by afterglow)
                   Object.defineProperty(VIDEO, "volume", {
                     set: val => {
                       VIDEO._volume = val;
@@ -270,7 +281,7 @@
                     }
                   });
 
-                  //MIRROR MUTED
+                  //MIRROR MUTED vid>audio (set by afterglow)
                   Object.defineProperty(VIDEO, "muted", {
                     set: val => {
                       VIDEO._muted = val;
@@ -282,7 +293,7 @@
                     }
                   });
 
-                  //SYNC PLAY
+                  //SYNC PLAY vid>audio (set by afterglow)
                   VIDEO._play = VIDEO.play;
                   Object.defineProperty(VIDEO, "play", {
                     get: () => {
@@ -315,11 +326,19 @@
                       return VIDEO._play;
                     }
                   });
-                  //SYNC PAUSE
+                  //SYNC PAUSE audio>vid (set by others)
+                  AUDIO._pause = AUDIO.pause;
+                  Object.defineProperty(AUDIO, "pause", {
+                    get: () => {
+                      VIDEO._pause();
+                      return AUDIO._pause;
+                    }
+                  });
+                  //SYNC PAUSE vid>audio (set by afterglow)
                   VIDEO._pause = VIDEO.pause;
                   Object.defineProperty(VIDEO, "pause", {
                     get: () => {
-                      AUDIO.pause();
+                      AUDIO._pause();
                       return VIDEO._pause;
                     }
                   });
@@ -347,8 +366,6 @@
 
                     //normal title
                     $("#player .card-title").innerText = TITLE;
-
-                    console.log(TITLE);
 
                     //fancy title
                     $(".afterglow__controls").insertAdjacentHTML(
@@ -442,6 +459,9 @@
                     });
                   }
                 });
+              } else {
+                //desktop
+                document.title = `${UI.titles.playing} "${TITLE}"`;
               }
 
               //IOS

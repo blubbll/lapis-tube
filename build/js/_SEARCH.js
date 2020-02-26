@@ -19,6 +19,7 @@ const {
   numeral,
   setActiveView,
   T,
+  UI,
   waitForElement
 } = window;
 
@@ -30,10 +31,15 @@ setupSearch = () => {
   //do actual search
   SEARCH = str => {
     !$("#results") && addView(T.RESULTS);
-    
-    setActiveView("results")
+
+    setActiveView("results");
 
     let results = $("#results");
+
+    //store querystring for later
+    results.setAttribute("q", str);
+
+    document.title = `${UI.titles.results} "${results.getAttribute("q")}"`;
 
     if (results && results.getAttribute("search-active") === "true") return;
 
@@ -105,9 +111,6 @@ setupSearch = () => {
           SEARCH(that.getAttribute("q"));
         }
       });
-
-    //store querystring for re-querying more data when scrolling
-    results.setAttribute("q", str);
 
     fetch(`${HOST}/api/${REGION}/search/${str}/${page}`)
       .then(res => res.text())

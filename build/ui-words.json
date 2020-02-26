@@ -6,6 +6,13 @@
       "region": "Region",
       "language": "Language"
     },
+    "titles":{
+      "results": "Search results for",
+      "videos": "Videos",
+      "playing": "playing",
+      "trending": "Trending right now",
+      "problem": "Houston, we have a problem..."
+    },
     "warnings": {
       "muted": "The Video is muted. Click here to unmute.",
       "nosource": "No playable source found :("
