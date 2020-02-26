@@ -256,8 +256,11 @@ content {
   width: inherit;
   height: inherit;
 }
-#start-inner {
+views {
+  filter: none;
+  transition: filter 1s ease-out;
   &.wait {
+    filter: blur(3rem);
     cursor: wait;
     pointer-events: none;
   }
@@ -268,7 +271,7 @@ content {
 }
 
 #filters {
-  z-index: 1;
+  z-index: 2;
   place-self: flex-end;
   #filters-inner {
     border-color: rgba(255, 255, 255, 0.1) !important;
@@ -457,8 +460,9 @@ lapis-player {
       height: 100%;
       width: inherit;
       object-fit: cover;
-      transform: translateY(-100%);
+      position: absolute;
       mix-blend-mode: hard-light;
+      transform: scale(1.01);
     }
   }
 

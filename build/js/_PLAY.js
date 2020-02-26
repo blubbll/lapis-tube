@@ -38,21 +38,20 @@
     open: () => {
       if (!$("#player")) {
         addView(T.PLAYER);
-      } else {
-        $("#player").style.setProperty("display", "block");
       }
+      setActiveView("player");
       $("views").classList.remove("wait");
-      $("#filters").style.setProperty("display", "none", "important");
-      $("#results").style.setProperty("display", "none", "important");
     },
     close: () => {
       abortFetches();
       //reset to results view if searched
       if ($("#results")) {
+        $("views").classList.add("wait");
         document.title = `${UI.titles.results} "${$("#results").getAttribute(
           "q"
         )}"`;
         setActiveView("results");
+        setTimeout(() => $("views").classList.remove("wait"), 399);
       }
       //remove sources
       $("audio") && [($("audio").src = "")],
@@ -110,13 +109,21 @@
         .then(raw => {
           let vid = JSON.parse(raw);
           let HTML = "";
+          let error = false;
 
-        
-          if(vid.error){
+          if (raw.includes("unavailable")) {
+            error = true;
             document.title(UI.title.problem);
+            //make loader red
+            $("poster>img.poster-loader").style.filter = "hue-rotate(130deg)";
+            $("#player .card-title").innerText = UI.labels.tryagain;
+          } else {
+            $("poster>img.poster-loader").style.filter = "";
           }
           //repeat when instance is blocked
-          vid.error && Player.play(id);
+          vid.error && [(error = true), Player.play(id)];
+
+          if (error) return;
 
           let TITLE = vid.title;
 
@@ -138,8 +145,10 @@
                 `<img class="poster-blend" src="${dynposter}"/>`
               );
               IMG_BLEND = $("poster>img.poster-blend");
-              //fit blend's left offset
+              //fit blend loader's sizes
               IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+              IMG_BLEND.style.width = `${IMG_LOADER.clientWidth}px`;
+              IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
             } else {
               IMG_BLEND.setAttribute("src", dynposter);
             }

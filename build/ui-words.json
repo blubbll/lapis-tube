@@ -4,7 +4,8 @@
       "loading": "Loading...",
       "buffering": "Buffering...",
       "region": "Region",
-      "language": "Language"
+      "language": "Language",
+      "tryagain": "There was an error. Please try again."
     },
     "titles":{
       "results": "Search results for",
