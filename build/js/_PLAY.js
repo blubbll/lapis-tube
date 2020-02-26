@@ -44,14 +44,23 @@
     },
     close: () => {
       abortFetches();
+      $("#player-inner").setAttribute("closing", "");
       //reset to results view if searched
       if ($("#results")) {
         $("views").classList.add("wait");
+
         document.title = `${UI.titles.results} "${$("#results").getAttribute(
           "q"
         )}"`;
-        setActiveView("results");
-        setTimeout(() => $("views").classList.remove("wait"), 399);
+
+        setTimeout(
+          () => [
+            $("#player-inner").removeAttribute("closing"),
+            setActiveView("results")
+          ],
+          399
+        );
+        setTimeout(() => $("views").classList.remove("wait"), 249);
       }
       //remove sources
       $("audio") && [($("audio").src = "")],
@@ -64,8 +73,6 @@
 
       //mark the clicked card as growing
       that.classList.add("growing");
-
-      $("#results").setAttribute("last-poster", $(".growing img").currentSrc);
 
       setTimeout(() => {
         Player.play(that.getAttribute("video-id"));
@@ -80,29 +87,66 @@
       let VIDEO = $("video");
       const AUDIO = $("audio");
 
-      $("lapis-player>poster").style.width = `${
-        $("lapis-player").clientWidth
-      }px`;
-
       //reset
       {
-        const IMG_BLEND = $("poster>img.poster-blend");
+        const IMG_BLEND = $("poster>canvas");
         $("lapis-player>poster").style.display = "block";
         //remove warning
         $("lapis-warning") && $("lapis-warning").remove();
         IMG_BLEND && //clear blendpic
-          IMG_BLEND.setAttribute(
-            "src",
-            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="
+          IMG_BLEND.getContext("2d").clearRect(
+            0,
+            0,
+            IMG_BLEND.width,
+            IMG_BLEND.height
           );
         $(".afterglow__video") && [
           ($(".afterglow__video").style.display = "none")
         ];
       }
 
+      $("lapis-player>poster").style.width = `${
+        $("lapis-player").clientWidth
+      }px`;
+
       //fake title
       document.title = UI.labels.loading;
       $("#player .card-title").innerText = UI.labels.loading;
+
+      {
+        //use result img for preloading img
+        const IMG_LOADER = $("poster>img");
+        let IMG_BLEND = $("poster>canvas");
+
+        const poster = IMG_LOADER.src;
+
+        if ($("#results")) {
+          //const dynposter = $("#results").getAttribute("last-poster");
+
+          if (!IMG_BLEND) {
+            IMG_LOADER.insertAdjacentHTML("afterend", `<canvas/>`);
+            IMG_BLEND = $("poster>canvas");
+          }
+
+          //fit blend loader's sizes
+          IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+          IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
+
+          var ctx = IMG_BLEND.getContext("2d");
+          var img = $(`#results card[video-id=${id}] img`);
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            img.width,
+            img.height, // source rectangle
+            0,
+            0,
+            IMG_BLEND.width,
+            IMG_BLEND.height
+          );
+        }
+      }
 
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
@@ -115,10 +159,10 @@
             error = true;
             document.title(UI.title.problem);
             //make loader red
-            $("poster>img.poster-loader").style.filter = "hue-rotate(130deg)";
+            $("poster>img").style.filter = "hue-rotate(130deg)";
             $("#player .card-title").innerText = UI.labels.tryagain;
           } else {
-            $("poster>img.poster-loader").style.filter = "";
+            $("poster>img").style.filter = "";
           }
           //repeat when instance is blocked
           vid.error && [(error = true), Player.play(id)];
@@ -130,35 +174,6 @@
           $(
             "#player .card-title"
           ).innerText = `${TITLE} (${UI.labels.buffering})`;
-
-          const IMG_LOADER = $("poster>img.poster-loader");
-          let IMG_BLEND = $("poster>img.poster-blend");
-
-          const poster = IMG_LOADER.src;
-
-          if ($("#results")) {
-            const dynposter = $("#results").getAttribute("last-poster");
-
-            if (!IMG_BLEND) {
-              IMG_LOADER.insertAdjacentHTML(
-                "afterend",
-                `<img class="poster-blend" src="${dynposter}"/>`
-              );
-              IMG_BLEND = $("poster>img.poster-blend");
-              //fit blend loader's sizes
-              IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-              IMG_BLEND.style.width = `${IMG_LOADER.clientWidth}px`;
-              IMG_BLEND.style.height = `${IMG_LOADER.clientHeight}px`;
-            } else {
-              IMG_BLEND.setAttribute("src", dynposter);
-            }
-          } else {
-            IMG_LOADER.setAttribute(
-              "srcset",
-              createThumbs(vid.videoThumbnails)
-            );
-            lazyload(IMG_BLEND);
-          }
 
           const STREAM = {
             LOW: vid.formatStreams[0],
@@ -222,6 +237,7 @@
               }
             }
           }
+
           //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = () => {
             if (STREAM.VIDEOS.length === 0) {
@@ -271,9 +287,15 @@
 
             if (Browser.isFirefox || Browser.isChrome) {
               if (afterglow.controller.players.length === 0) {
+                /*IMG_LOADER.setAttribute(
+              "srcset",
+              createThumbs(vid.videoThumbnails)
+            );
+            lazyload(IMG_BLEND);*/
+
                 $(
                   "video"
-                ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
+                ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="loading.gif"></video>`;
 
                 VIDEO = $("video");
 

@@ -184,7 +184,7 @@ window.onhashchange = () => {
     case "#cookie-what?":
     case "#what?":
       {
-        fetch(tr + "/what.html")
+        fetch(tr + "/cookie-what.html")
           .then(res => res.text())
           .then(html => {
             $("[pop]").outerHTML = html;

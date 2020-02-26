@@ -122,7 +122,8 @@ body {
       filter: brightness(1.5) contrast(3);
     }
     > .alpha-target {
-      transition: opacity 499ms ease;
+      transition: opacity 199ms linear;
+      will-change: opacity;
       opacity: 1;
       width: $width;
       height: $height;
@@ -213,7 +214,8 @@ body {
 /**************************/
 #left {
   z-index: 3;
-  transition: left ease-out 299ms;
+  transition: left linear 299ms;
+  will-change: left;
   &[expanded="false"] {
     left: -100%;
   }
@@ -258,9 +260,10 @@ content {
 }
 views {
   filter: none;
-  transition: filter 1s ease-out;
+  transition: filter 299ms linear;
+  will-change: filter;
   &.wait {
-    filter: blur(3rem);
+    filter: blur(5px);
     cursor: wait;
     pointer-events: none;
   }
@@ -270,15 +273,26 @@ views {
   position: fixed;
 }
 
-#filters {
-  z-index: 2;
-  place-self: flex-end;
-  #filters-inner {
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    color: white;
+#player {
+  #player-inner {
+    transform: scale(1);
+    transition: transform 299ms linear;
+    will-change: transform;
+    &[closing] {
+      transform: scale(0.5);
+    }
   }
 }
+
 #results {
+  #filters {
+    z-index: 2;
+    place-self: flex-end;
+    #filters-inner {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: white;
+    }
+  }
   background: rgba(0, 0, 0, 0.3);
   $flex: 1 0 0;
   -webkit-flex: $flex;
@@ -291,21 +305,15 @@ views {
   /*fake-grow before popping into player*/
   &.grow {
     overflow: hidden;
+    .card {
+      transition: transform 299ms linear;
+      will-change: transform;
+    }
     .card.growing {
+      pointer-events: none;
+      transform: scale(5);
       z-index: 1;
       overflow: visible !important;
-      img {
-        filter: blur(
-          0.25rem
-        ) !important; /*override default filter (grayscale) */
-        z-index: 1;
-        transform: scale(15);
-        position: fixed;
-        align-self: center;
-        margin: 50% auto;
-        left: 25vw;
-        top: 0;
-      }
     }
   }
 
@@ -320,7 +328,6 @@ views {
       overflow: hidden;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 0.3rem;
-      transition: transform 10ms ease-out;
       figure {
         margin-bottom: 0;
         figcaption {
@@ -366,7 +373,6 @@ views {
           }
         }
         img {
-          transition: transform 299ms ease-out; /* growing-animation */
           height: 18vh;
           filter: grayscale(0.6);
           object-fit: cover;
@@ -451,13 +457,14 @@ lapis-player {
 
   poster {
     width: inherit;
+    height: 50vh;
     overflow: hidden;
-    img.poster-loader {
+    img {
+      height: inherit;
       width: inherit;
     }
-    img.poster-blend {
-      filter: blur(5px);
-      height: 100%;
+    canvas {
+      height: inherit;
       width: inherit;
       object-fit: cover;
       position: absolute;

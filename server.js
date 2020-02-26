@@ -125,6 +125,7 @@ getProxy();
       } else console.warn(`Error at transpiling of file ${file}:`, result);
     };
 
+    
     //HTML
     let building = false;
     const COMPILE_HTML = () => {
@@ -133,14 +134,14 @@ getProxy();
       const htmls = [
         `${__dirname}/build/index.html`,
         `${__dirname}/build/cookie.html`,
+        `${__dirname}/build/cookie-what.html`,
         `${__dirname}/build/outdated-browser.html`,
         `${__dirname}/build/html/app.html`,
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/player.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
-        `${__dirname}/build/html/start.html`,
-        `${__dirname}/build/html/what.html`
+        `${__dirname}/build/html/start.html`
       ];
       const templateFile = `${__dirname}/${dist}/html/templates.html`;
       fs.writeFileSync(templateFile, "<templates>"); //clear bundlefile
