@@ -2,8 +2,13 @@
   id="player"
   class="col-12 d-flex justify-content-around align-items-center px-0 px-sm-2"
 >
-  <div id="player-inner" class="d-flex flex-column w-100 align-items-center">
-    <div class="mb-1 col-12 col-sm-11 col-lg-10 col-xl-8 px-0">
+  <div
+    id="player-inner"
+    class="d-flex flex-column h-100 w-100 align-items-center"
+  >
+    <div
+      class="h-100 w-100 d-flex flex-grow-1 flex-column mb-1 col-12 col-sm-11 col-lg-10 col-xl-8 px-0"
+    >
       <div class="card">
         <div
           class="card-header py-2 px-3 ml-auto w-100 d-flex align-items-center"
@@ -26,21 +31,26 @@
           </lapis-player>
         </div>
         <div class="card-footer">
-          <div class="d-flex flex-row">
-            <a
-              data-authorid="{{authorid}}"
-              class="card-text text-secondary mb-0 notranslate small"
-            >
-              <i class="fas fa-user"></i>&thinsp;{{author}}
-            </a>
-            <p class="ml-auto card-text text-secondary mb-0 notranslate small">
-              <i class="fas fa-eye"></i>&thinsp;{{views}}
-            </p>
+          <div class="flex-column" id="player-info">
+            <div class="d-flex flex-row">
+              <a
+                data-authorid="{{authorid}}"
+                class="card-text text-secondary mb-0 notranslate small"
+              >
+                <i class="fas fa-user"></i>&thinsp;{{author}}
+              </a>
+              <p
+                class="ml-auto card-text text-secondary mb-0 notranslate small"
+              >
+                <i class="fas fa-eye"></i>&thinsp;{{views}}
+              </p>
+            </div>
+            <div class="flex-row">
+              <p id="player-desc" class="card-text text-dark">
+                {{desc}}
+              </p>
+            </div>
           </div>
-
-          <p class="card-text text-dark">
-            {{desc}}
-          </p>
         </div>
       </div>
     </div>

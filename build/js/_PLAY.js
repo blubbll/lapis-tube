@@ -24,7 +24,8 @@
     Browser,
     Fullscreen,
     setActiveView,
-    waitForElement
+    waitForElement,
+    numeral
   } = window;
 
   const $ = document.querySelector.bind(document);
@@ -145,10 +146,18 @@
       IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
       IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
 
+      //set info bg to loading
+      $("#player-info").setAttribute("loading", "");
+
+      //create dynamic template if not existing of player footer
+      !T.PLAYER_FOOTER && [(T.PLAYER_FOOTER = $("#player-info").innerHTML)];
+      $("#player-info").innerHTML = UI.labels.loading;
+
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
         .then(raw => {
-          let vid = JSON.parse(raw);
+          const vid = JSON.parse(raw);
+
           let HTML = "";
           let error = false;
 
@@ -166,7 +175,7 @@
 
           if (error) return;
 
-          let TITLE = vid.title;
+          const TITLE = vid.title;
 
           $(
             "#player .card-title"
@@ -210,7 +219,7 @@
                     }
                     clearInterval(checkInterval);
                     audio = void 0;
-                    canPlay() && applyStreams();
+                    canPlay() && applyStreams(vid);
                   }
                 }, 999);
               }
@@ -232,7 +241,7 @@
 
                     clearInterval(checkInterval);
                     video = void 0;
-                    canPlay() && applyStreams();
+                    canPlay() && applyStreams(vid);
                   }
                 }, 999);
               }
@@ -240,7 +249,7 @@
           }
 
           //process streams and apply them (async, to be done after verifying streams locally)
-          const applyStreams = () => {
+          const applyStreams = vid => {
             if (STREAM.VIDEOS.length === 0) {
               //$("#player .card-body").innerHTML = UI.warnings.nosource;
               ($(".afterglow__video") || $("lapis-player")).insertAdjacentHTML(
@@ -375,18 +384,45 @@
                     }
                   });
 
-                  //MIRROR currentTime vid>audio (set by afterglow)
-                  VIDEO._currentTime  = VIDEO.currentTime;
-                  Object.defineProperty(VIDEO, "currentTime", {
-                    set: val => {
-                      VIDEO._currentTime  = val;
-                      //!
-                      AUDIO.currentTime  = val;
-                    },
-                    get: () => {
-                      return VIDEO._currentTime ;
-                    }
-                  });
+                  //MIRROR/keep in sync currentTime vid<>audio (set by afterglow)
+                  AUDIO.addEventListener("timeupdate", e => {
+                    VIDEO.playing &&
+                      AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
+                        (VIDEO.currentTime = AUDIO.currentTime) &&
+                          console.debug(
+                            "Updated VIDEO TIME TO",
+                            VIDEO.currentTime
+                          )
+                      ];
+                  }),
+                    VIDEO.addEventListener("timeupdate", e => {
+                      AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
+                        (AUDIO.currentTime = VIDEO.currentTime) &&
+                          console.debug(
+                            "Updated AUDIO TIME TO",
+                            AUDIO.currentTime
+                          )
+                      ];
+                    });
+                }
+
+                {
+                  // FILL PLAYER FOOTER CONTENT
+                  $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
+                    //FILL DESCRIPTION
+                    "{{desc}}",
+                    vid.description
+                  )
+                    //FILL AUTHOR
+                    .replace("{{author}}", vid.author)
+                    //FILL AUTHOR id
+                    .replace("{{authorid}}", vid.authorId)
+                    //FILL VIEWS (formatted)
+                    .replace(
+                      "{{views}}",
+                      numeral(vid.viewCount || 0).format(`0.a`)
+                    );
+                  $("#player-info").removeAttribute("loading");
                 }
 
                 VIDEO.addEventListener(
@@ -411,6 +447,8 @@
 
                     //normal title
                     $("#player .card-title").innerText = TITLE;
+
+                    //console.log(TITLE, vid)
 
                     //fancy title
                     $(".afterglow__controls").insertAdjacentHTML(
@@ -438,12 +476,6 @@
                   },
                   false
                 );
-                //keep video time in sync with audio
-                setInterval(() => {
-                  AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
-                    (VIDEO.currentTime = AUDIO.currentTime)
-                  ];
-                }, 2999);
               }
 
               //SET MEDIA & init afterglow
@@ -451,6 +483,20 @@
               VIDEO.src = STREAM.CURRENT.VIDEO.url;
 
               afterglow.initVideoElements();
+
+              new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                  if (mutation.type == "attributes" && mutation.attributeName !== "class") {
+                    const target = mutation.target;
+                    const newH = $("#player .card").clientWidth -$("#player .card-header").clientWidth - target.clientHeight;
+                    $("#player-desc") && [$("#player-desc").style.height = `${newH}px`];
+                    console.log(newH)
+                  }
+                });
+              }).observe($("#mep_0"), {
+                attributes: true,
+                characterDataOldValue: true // pass old data to callback
+              });
 
               //load vid
               VIDEO.load();

@@ -10,8 +10,18 @@ param {
   padding-left: 5px;
 }
 
-#content {
+/* inherit height (make main height fit to content inside) */
+main {
   height: inherit;
+}
+
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
 }
 
 body {
@@ -268,19 +278,41 @@ views {
     pointer-events: none;
   }
 }
+/* canvas for bg */
 #canvas {
   z-index: 0;
   position: fixed;
 }
 
+[loading] {
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: darkgray;
+  background: linear-gradient(to right, #eeeeee 10%, #dddddd 18%, #eeeeee 33%);
+  background-size: 800px 104px;
+  height: 100px;
+  position: relative;
+}
+
 #player {
   #player-inner {
+    max-height: 80vh;
     transform: scale(1);
     transition: transform 299ms linear;
     will-change: transform;
     &[closing] {
-      transform: scale(0.5);
+      transform: scale(0.8);
     }
+  }
+  .card{
+    height: inherit;
+  }
+  #player-desc {
+    height: 15vh;
+    overflow-y: scroll;
   }
 }
 
@@ -311,7 +343,7 @@ views {
     }
     .card.growing {
       pointer-events: none;
-      transform: scale(5);
+      transform: scale(1.1);
       z-index: 1;
       overflow: visible !important;
     }
@@ -423,20 +455,22 @@ views {
       }
     }
   }
+}
 
-  &::-webkit-scrollbar {
+* {
+  ::-webkit-scrollbar {
     width: 16px;
     height: 16px;
   }
 
-  &::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background: #E0E0E0;
   }
 
-  &::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background: #9E9E9E;
   }
-  &::-webkit-scrollbar-thumb:hover {
+  ::-webkit-scrollbar-thumb:hover {
     background: #BDBDBD;
   }
 }
