@@ -8,6 +8,7 @@
     createThumbs,
     CDN,
     debounce,
+    clickSound,
     done,
     fetch,
     getL,
@@ -80,6 +81,9 @@
 
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
+
+        clickSound();
+        navigator.vibrate(100);
       }, 499);
     },
     play: id => {
@@ -146,12 +150,14 @@
       IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
       IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
 
-      //set info bg to loading
-      $("#player-info").setAttribute("loading", "");
-
       //create dynamic template if not existing of player footer
       !T.PLAYER_FOOTER && [(T.PLAYER_FOOTER = $("#player-info").innerHTML)];
-      $("#player-info").innerHTML = UI.labels.loading;
+
+      //set info bg to loading
+      $("#player .card").setAttribute("loading", "");
+      
+      //clear footer content
+       $("#player #player-info").innerHTML = "";
 
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
@@ -179,7 +185,7 @@
 
           $(
             "#player .card-title"
-          ).innerText = `${TITLE} (${UI.labels.buffering})`;
+          ).innerText = `${TITLE} (${UI.labels.preparing})`;
 
           //fit blend loader's sizes
           IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
@@ -386,7 +392,7 @@
 
                   //MIRROR/keep in sync currentTime vid<>audio (set by afterglow)
                   AUDIO.addEventListener("timeupdate", e => {
-                    VIDEO.playing &&
+                   
                       AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
                         (VIDEO.currentTime = AUDIO.currentTime) &&
                           console.debug(
@@ -396,7 +402,7 @@
                       ];
                   }),
                     VIDEO.addEventListener("timeupdate", e => {
-                      AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
+                      VIDEO.currentTime / AUDIO.currentTime > 1.1 && [
                         (AUDIO.currentTime = VIDEO.currentTime) &&
                           console.debug(
                             "Updated AUDIO TIME TO",
@@ -422,7 +428,7 @@
                       "{{views}}",
                       numeral(vid.viewCount || 0).format(`0.a`)
                     );
-                  $("#player-info").removeAttribute("loading");
+                  $("#player .card").removeAttribute("loading");
                 }
 
                 VIDEO.addEventListener(
@@ -486,11 +492,19 @@
 
               new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
-                  if (mutation.type == "attributes" && mutation.attributeName !== "class") {
+                  if (
+                    mutation.type == "attributes" &&
+                    mutation.attributeName !== "class"
+                  ) {
                     const target = mutation.target;
-                    const newH = $("#player .card").clientWidth -$("#player .card-header").clientWidth - target.clientHeight;
-                    $("#player-desc") && [$("#player-desc").style.height = `${newH}px`];
-                    console.log(newH)
+                    const newH = $("#player .card").clientHeight - //card itself
+                    $("#player .card-header").clientHeight - //card title
+                    $("#player .card-body").clientHeight - //player
+                    $("#player #player-quickinfo").clientHeight - //quickinfo
+                      $("#player #player-desc") && [
+                      //set
+                      ($("#player #player-desc").style.height = `${newH}px`)
+                    ];
                   }
                 });
               }).observe($("#mep_0"), {

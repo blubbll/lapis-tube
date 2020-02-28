@@ -2,7 +2,7 @@
   "ui": {
     "labels": {
       "loading": "Loading...",
-      "buffering": "Buffering...",
+      "preparing": "Preparing sources...",
       "region": "Region",
       "language": "Language",
       "tryagain": "There was an error. Please try again."

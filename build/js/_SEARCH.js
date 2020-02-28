@@ -221,7 +221,7 @@ setupSearch = () => {
     });
   }
 
-  //set Input on mobile to fullwidth
+  //set Input on mobile focus to fullwidth
   {
     $("#search-input").addEventListener("focus", () => {
       if (getSize() === "xs") {

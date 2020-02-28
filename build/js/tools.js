@@ -3,6 +3,7 @@ const $$ = document.querySelectorAll.bind(document);
 
 const { AbortController, NProgress, LOADED } = window;
 let {
+  clickSound,
   applyWords,
   addView,
   abortFetches,
@@ -19,6 +20,14 @@ let {
   setActiveView
 } = window;
 
+{
+  const audio = new Audio(
+    "https://lapistube.b-cdn.net/176727_3249786-lq.mp3"
+  );
+  clickSound = () => {
+    audio.play();
+  };
+}
 //gtranslate-hack
 applyWords = htmlString => {
   const words = new DOMParser()
