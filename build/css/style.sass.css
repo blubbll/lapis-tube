@@ -299,7 +299,7 @@ views {
 
 #player {
   #player-inner {
-    max-height: 85vh;
+    max-height: 86vh;
     transform: scale(1);
     transition: transform 299ms linear;
     will-change: transform;

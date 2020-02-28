@@ -155,9 +155,9 @@
 
       //set info bg to loading
       $("#player .card").setAttribute("loading", "");
-      
+
       //clear footer content
-       $("#player #player-info").innerHTML = "";
+      $("#player #player-info").innerHTML = "";
 
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
@@ -392,14 +392,13 @@
 
                   //MIRROR/keep in sync currentTime vid<>audio (set by afterglow)
                   AUDIO.addEventListener("timeupdate", e => {
-                   
-                      AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
-                        (VIDEO.currentTime = AUDIO.currentTime) &&
-                          console.debug(
-                            "Updated VIDEO TIME TO",
-                            VIDEO.currentTime
-                          )
-                      ];
+                    AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
+                      (VIDEO.currentTime = AUDIO.currentTime) &&
+                        console.debug(
+                          "Updated VIDEO TIME TO",
+                          VIDEO.currentTime
+                        )
+                    ];
                   }),
                     VIDEO.addEventListener("timeupdate", e => {
                       VIDEO.currentTime / AUDIO.currentTime > 1.1 && [
@@ -497,11 +496,13 @@
                     mutation.attributeName !== "class"
                   ) {
                     const target = mutation.target;
-                    const newH = $("#player .card").clientHeight - //card itself
-                    $("#player .card-header").clientHeight - //card title
-                    $("#player .card-body").clientHeight - //player
-                    $("#player #player-quickinfo").clientHeight - //quickinfo
-                      $("#player #player-desc") && [
+                    const newH =
+                      $("#player .card").clientHeight - //card itself
+                      $("#player .card-header").clientHeight - //card title
+                      $("#player .card-body").clientHeight - //player
+                      ($("#player .card-footer").clientHeight -
+                        $("#player #player-desc").clientHeight); // not quickinfo/desc itself
+                    $("#player #player-desc") && [
                       //set
                       ($("#player #player-desc").style.height = `${newH}px`)
                     ];
