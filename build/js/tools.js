@@ -432,7 +432,7 @@ HTMLElement.prototype.removeListeners = () => {
   //mobile Chrome
   that.isMobileChrome =
     !!window.chrome &&
-    navigator.userAgent.includes("Mobi") &&
+    navigator.userAgent.includes("Chrome") &&
     typeof window.orientation !== "undefined";
 
   // Edge (based on chromium) detection

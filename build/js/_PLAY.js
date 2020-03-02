@@ -301,7 +301,7 @@
                 break;
             }
 
-            if (Browser.isFirefox || Browser.isChrome) {
+            if (Browser.isFirefox || Browser.isMobileChrome || Browser.isChrome) {
               if (afterglow.controller.players.length === 0) {
                 /*IMG_LOADER.setAttribute(
               "srcset",
