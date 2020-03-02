@@ -581,11 +581,13 @@
                   if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
                     AUDIO.pause();
 
+                  //TODO
                   //re-fix player (re-add controls)
-                  !document.fullscreen &&
+                  document.fullscreen && [VIDEO.controls = false];
+                  /*!document.fullscreen &&
                     $(".afterglow__video").classList.add(
                       "afterglow__container"
-                    );
+                    );*/
                 };
 
                 //sync video war playNpause with audio
@@ -608,9 +610,10 @@
                     Fullscreen.exit();
                   } else {
                     setTimeout(() => {
-                      $(".afterglow__video").classList.remove(
+                      /*$(".afterglow__video").classList.remove(
                         "afterglow__container"
-                      );
+                      );*/
+                      VIDEO.controls = true;
                       Fullscreen.enter($("video"));
                     });
                   }
