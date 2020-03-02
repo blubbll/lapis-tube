@@ -163,6 +163,9 @@
         .then(res => res.text())
         .then(raw => {
           const vid = JSON.parse(raw);
+        
+          //work-around :/
+          window.__video = vid;
 
           let HTML = "";
           let error = false;
@@ -417,7 +420,9 @@
                     });
                 }
 
+              
                 VIDEO.onloadedmetadata = e => {
+                  vid = window.__video;
                   const that = e.target;
 
                   console.debug("video metadata loaded");
@@ -471,7 +476,7 @@
                     $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
                       //FILL DESCRIPTION
                       "{{desc}}",
-                      vid.description
+                      vid.description || "😶"
                     )
                       //FILL AUTHOR
                       .replace("{{author}}", vid.author)
