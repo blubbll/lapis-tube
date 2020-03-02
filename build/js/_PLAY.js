@@ -163,7 +163,7 @@
         .then(res => res.text())
         .then(raw => {
           const vid = JSON.parse(raw);
-        
+
           //work-around :/
           window.__video = vid;
 
@@ -259,7 +259,6 @@
 
           //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = vid => {
-
             if (STREAM.VIDEOS.length === 0) {
               //$("#player .card-body").innerHTML = UI.warnings.nosource;
               ($(".afterglow__video") || $("lapis-player")).insertAdjacentHTML(
@@ -419,7 +418,6 @@
                     });
                 }
 
-              
                 VIDEO.onloadedmetadata = e => {
                   vid = window.__video;
                   const that = e.target;
@@ -453,20 +451,6 @@
                     );
                   }
 
-                  //customize afterglow's html
-                  waitForElement(".afterglow__controls").then(el => [
-                    //fancy control area
-                    el.insertAdjacentHTML(
-                      "beforeend",
-                      `<div class="afterglow__control-bar"></div>`
-                    ),
-                    //fancy title in fullscreen
-                    el.insertAdjacentHTML(
-                      "afterbegin",
-                      `<div class="afterglow__title-bar">${TITLE}</div>`
-                    )
-                  ]);
-
                   //fancy title
                   $(".afterglow__controls");
 
@@ -486,14 +470,17 @@
                         "{{views}}",
                         numeral(vid.viewCount || 0).format(`0.a`)
                       );
-                    
+
                     //fix links in description
-                    for(const link of $$("#player-info a")){
-                      if(link.href.split("/")[3] && link.href.split("/")[3].startsWith("redirect?")){
-                        link.href = link.innerText
+                    for (const link of $$("#player-info a")) {
+                      if (
+                        link.href.split("/")[3] &&
+                        link.href.split("/")[3].startsWith("redirect?")
+                      ) {
+                        link.href = link.innerText;
                       }
                     }
-                    
+
                     $("#player .card").removeAttribute("loading");
                   }
 
@@ -527,6 +514,20 @@
                   setTimeout(fitRatio, 0);
                   window.addEventListener("resize", fitRatio);
                 };
+
+                //customize afterglow's html
+                waitForElement(".afterglow__top-control-bar").then(el => [
+                  //fancy control area
+                  $(".afterglow__controls").insertAdjacentHTML(
+                    "beforeend",
+                    `<div class="afterglow__control-bar"></div>`
+                  ),
+                  //fancy title in fullscreen
+                  $(".afterglow__controls").insertAdjacentHTML(
+                    "afterbegin",
+                    `<div class="afterglow__title-bar"></div>`
+                  )
+                ]);
 
                 //fit card body to vid-player dimensions inside player card
                 waitForElement("#mep_0").then(el =>
@@ -618,11 +619,13 @@
                 //desktop
                 document.title = `${UI.titles.playing} "${TITLE}"`;
 
-                //normal title
-                $("#player .card-title").innerText = TITLE;
-
                 //console.log(TITLE, vid)
               }
+
+              //normal title
+              waitForElement("#player .afterglow__title-bar").then(el => el.innerText = TITLE);
+              //normal title
+              $("#player .card-title").innerText = TITLE;
 
               //IOS
             } /* if (
