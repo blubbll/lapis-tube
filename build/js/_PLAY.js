@@ -259,7 +259,6 @@
 
           //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = vid => {
-            console.log("APPLY");
 
             if (STREAM.VIDEOS.length === 0) {
               //$("#player .card-body").innerHTML = UI.warnings.nosource;
@@ -487,6 +486,14 @@
                         "{{views}}",
                         numeral(vid.viewCount || 0).format(`0.a`)
                       );
+                    
+                    //fix links in description
+                    for(const link of $$("#player-info a")){
+                      if(link.href.split("/")[3] && link.href.split("/")[3].startsWith("redirect?")){
+                        link.href = link.innerText
+                      }
+                    }
+                    
                     $("#player .card").removeAttribute("loading");
                   }
 
