@@ -36,16 +36,17 @@ setupSearch = () => {
 
     let results = $("#results");
 
-    //store querystring for later
-    results.setAttribute("q", str);
-
-    document.title = `${UI.titles.results} "${results.getAttribute("q")}"`;
+    //update page title
+    document.title = `${UI.titles.results} "${str}"`;
 
     if (results && results.getAttribute("search-active") === "true") return;
 
     let page = results ? +results.getAttribute("page") : 0;
 
+    $("views").classList.add("wait");
+
     //no search, no paging
+
     if (page === 0) {
       //construct result base
 
@@ -62,8 +63,17 @@ setupSearch = () => {
       } else {
         results.setAttribute("state", "search-new");
         page = 1;
+        //scroll to top (prevents loading of new pages)
+        $("#results").scrollTop = 0
+        //clear search results
+        $("#results-inner").innerHTML = "";
       }
     }
+    
+    setTimeout(()=>$("views").classList.remove("wait"), 749);
+
+    //store querystring for later
+    results.setAttribute("q", str);
 
     //search active
     results.setAttribute("search-active", true);

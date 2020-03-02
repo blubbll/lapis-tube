@@ -473,6 +473,7 @@ views {
 
   ::-webkit-scrollbar-thumb {
     background: #9E9E9E;
+    height: 5vh;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #BDBDBD;
