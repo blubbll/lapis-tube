@@ -476,7 +476,7 @@
                     $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
                       //FILL DESCRIPTION
                       "{{desc}}",
-                      vid.description || "😶"
+                      vid.descriptionHtml || "😶"
                     )
                       //FILL AUTHOR
                       .replace("{{author}}", vid.author)
