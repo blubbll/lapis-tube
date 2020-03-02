@@ -82,7 +82,7 @@
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
 
-        navigator.vibrate(50);
+        setTimeout(() => navigator.vibrate(50), 99);
         clickSound();
       }, 499);
     },
@@ -256,6 +256,8 @@
 
           //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = vid => {
+            console.log("APPLY");
+
             if (STREAM.VIDEOS.length === 0) {
               //$("#player .card-body").innerHTML = UI.warnings.nosource;
               ($(".afterglow__video") || $("lapis-player")).insertAdjacentHTML(
@@ -301,7 +303,11 @@
                 break;
             }
 
-            if (Browser.isFirefox || Browser.isMobileChrome || Browser.isChrome) {
+            if (
+              Browser.isFirefox ||
+              Browser.isMobileChrome ||
+              Browser.isChrome
+            ) {
               if (afterglow.controller.players.length === 0) {
                 /*IMG_LOADER.setAttribute(
               "srcset",
@@ -411,102 +417,130 @@
                     });
                 }
 
-                {
-                  // FILL PLAYER FOOTER CONTENT
-                  $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
-                    //FILL DESCRIPTION
-                    "{{desc}}",
-                    vid.description
-                  )
-                    //FILL AUTHOR
-                    .replace("{{author}}", vid.author)
-                    //FILL AUTHOR id
-                    .replace("{{authorid}}", vid.authorId)
-                    //FILL VIEWS (formatted)
-                    .replace(
-                      "{{views}}",
-                      numeral(vid.viewCount || 0).format(`0.a`)
-                    );
-                  $("#player .card").removeAttribute("loading");
-                }
+                VIDEO.onloadedmetadata = e => {
+                  const that = e.target;
 
-                VIDEO.addEventListener(
-                  "loadedmetadata",
-                  e => {
-                    const that = e.target;
+                  console.debug("video metadata loaded");
 
-                    console.debug("video metadata loaded");
+                  $("lapis-player>poster").style.display = "none";
 
-                    $("lapis-player>poster").style.display = "none";
+                  //reset enforced player heigth
+                  $("lapis-player").style.height = "auto";
 
-                    //reset enforced player heigth
-                    $("lapis-player").style.height = "auto";
+                  //replace afterglow labels with translated labels
+                  {
+                    //mute btn
+                    waitForElement(
+                      ".afterglow__volume-button.afterglow__mute > button"
+                    ).then(el => el.setAttribute("title", UI.player.mute));
 
-                    //replace afterglow labels with translated labels
-                    {
-                      //mute btn
-                      $(
-                        ".afterglow__volume-button.afterglow__mute > button"
-                      ) && $(
-                        ".afterglow__volume-button.afterglow__mute > button"
-                      ).setAttribute("title", UI.player.mute);
-                      //play btn and...
-                      $(".afterglow__play>button").setAttribute(
-                        "title",
-                        UI.player.play
-                      ),
-                        //...pause btn
-                        $(".afterglow__pause>button") &&
-                          $(".afterglow__pause>button").setAttribute(
-                            "title",
-                            UI.player.pause
-                          );
-                      //fullscreen btn
-                      $(".afterglow__fullscreen-toggle").setAttribute(
-                        "title",
-                        UI.player.fullscreen
+                    //play btn and...
+                    waitForElement(".afterglow__play>button").then(el =>
+                      el.setAttribute("title", UI.player.play)
+                    ),
+                      //...pause btn
+                      waitForElement(".afterglow__pause>button").then(el =>
+                        el.setAttribute("title", UI.player.pause)
                       );
-                    }
 
-                    //show video pane
-                    $(".afterglow__video").style.display = "flex";
-
-                    try {
-                      VIDEO.play();
-                    } catch (e) {
-                      console.warn(e);
-                    }
-
-                    //normal title
-                    $("#player .card-title").innerText = TITLE;
-
-                    //console.log(TITLE, vid)
-
-                    //fancy title
-                    $(".afterglow__controls").insertAdjacentHTML(
-                      "afterbegin",
-                      `<div class="afterglow__title-bar">${TITLE}</div>`
+                    //fullscreen btn
+                    waitForElement(".afterglow__fullscreen-toggle").then(el =>
+                      el.setAttribute("title", UI.player.fullscreen)
                     );
+                  }
 
+                  //customize afterglow's html
+                  waitForElement(".afterglow__controls").then(el => [
                     //fancy control area
-                    $(".afterglow__controls").insertAdjacentHTML(
+                    el.insertAdjacentHTML(
                       "beforeend",
                       `<div class="afterglow__control-bar"></div>`
-                    );
+                    ),
+                    //fancy title in fullscreen
+                    el.insertAdjacentHTML(
+                      "afterbegin",
+                      `<div class="afterglow__title-bar">${TITLE}</div>`
+                    )
+                  ]);
 
-                    const fitRatio = () => {
-                      const ratio =
-                        $("lapis-player").getAttribute("ratio") ||
-                        that.videoHeight / that.videoWidth;
-                      $("lapis-player").setAttribute("ratio", ratio);
-                      $(".afterglow__video").style.height = `${$(
-                        ".afterglow__video"
-                      ).clientWidth * ratio}px`;
-                    };
-                    setTimeout(fitRatio, 0);
-                    window.addEventListener("resize", fitRatio);
-                  },
-                  false
+                  //fancy title
+                  $(".afterglow__controls");
+
+                  {
+                    // FILL PLAYER FOOTER CONTENT
+                    $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
+                      //FILL DESCRIPTION
+                      "{{desc}}",
+                      vid.description
+                    )
+                      //FILL AUTHOR
+                      .replace("{{author}}", vid.author)
+                      //FILL AUTHOR id
+                      .replace("{{authorid}}", vid.authorId)
+                      //FILL VIEWS (formatted)
+                      .replace(
+                        "{{views}}",
+                        numeral(vid.viewCount || 0).format(`0.a`)
+                      );
+                    $("#player .card").removeAttribute("loading");
+                  }
+
+                  //show video pane
+                  $(".afterglow__video").style.display = "flex";
+
+                  try {
+                    VIDEO.play();
+                  } catch (e) {
+                    console.warn(e);
+                  }
+
+                  //show video pane
+                  $(".afterglow__video").style.display = "flex";
+
+                  try {
+                    VIDEO.play();
+                  } catch (e) {
+                    console.warn(e);
+                  }
+
+                  const fitRatio = () => {
+                    const ratio =
+                      $("lapis-player").getAttribute("ratio") ||
+                      that.videoHeight / that.videoWidth;
+                    $("lapis-player").setAttribute("ratio", ratio);
+                    $(".afterglow__video").style.height = `${$(
+                      ".afterglow__video"
+                    ).clientWidth * ratio}px`;
+                  };
+                  setTimeout(fitRatio, 0);
+                  window.addEventListener("resize", fitRatio);
+                };
+
+                //fit card body to vid-player dimensions inside player card
+                waitForElement("#mep_0").then(el =>
+                  new MutationObserver(mutations => {
+                    mutations.forEach(mutation => {
+                      if (
+                        mutation.type == "attributes" &&
+                        mutation.attributeName !== "class"
+                      ) {
+                        const target = mutation.target;
+                        if ($("#player #player-desc")) {
+                          const newH =
+                            $("#player .card").clientHeight - //card itself
+                            $("#player .card-header").clientHeight - //card title
+                            $("#player .card-body").clientHeight - //player
+                            ($("#player .card-footer").clientHeight -
+                              $("#player #player-desc").clientHeight); // not quickinfo/desc itself
+                          //set
+                          $("#player #player-desc").style.height = `${newH}px`;
+                        }
+                      }
+                    });
+                  }).observe(el, {
+                    attributes: true,
+                    characterDataOldValue: true // pass old data to callback
+                  })
                 );
               }
 
@@ -515,30 +549,6 @@
               VIDEO.src = STREAM.CURRENT.VIDEO.url;
 
               afterglow.initVideoElements();
-
-              new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                  if (
-                    mutation.type == "attributes" &&
-                    mutation.attributeName !== "class"
-                  ) {
-                    const target = mutation.target;
-                    const newH =
-                      $("#player .card").clientHeight - //card itself
-                      $("#player .card-header").clientHeight - //card title
-                      $("#player .card-body").clientHeight - //player
-                      ($("#player .card-footer").clientHeight -
-                        $("#player #player-desc").clientHeight); // not quickinfo/desc itself
-                    $("#player #player-desc") && [
-                      //set
-                      ($("#player #player-desc").style.height = `${newH}px`)
-                    ];
-                  }
-                });
-              }).observe($("#mep_0"), {
-                attributes: true,
-                characterDataOldValue: true // pass old data to callback
-              });
 
               //load vid
               VIDEO.load();
@@ -578,7 +588,7 @@
                 //ADD NEW EVENT
                 $(
                   ".afterglow__button.afterglow__fullscreen-toggle"
-                ).addEventListener("click", e => {
+                ).onclick = e => {
                   const that = e.target;
 
                   if (document.fullscreen) {
@@ -591,10 +601,15 @@
                       Fullscreen.enter($("video"));
                     });
                   }
-                });
+                };
               } else {
                 //desktop
                 document.title = `${UI.titles.playing} "${TITLE}"`;
+
+                //normal title
+                $("#player .card-title").innerText = TITLE;
+
+                //console.log(TITLE, vid)
               }
 
               //IOS
