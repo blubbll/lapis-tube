@@ -82,8 +82,8 @@
         $("#results").classList.remove("grow");
         that.classList.remove("growing");
 
+        navigator.vibrate(50);
         clickSound();
-        navigator.vibrate(100);
       }, 499);
     },
     play: id => {
@@ -442,7 +442,34 @@
                     //reset enforced player heigth
                     $("lapis-player").style.height = "auto";
 
-                    $(".afterglow__video").style.display = "block";
+                    //replace afterglow labels with translated labels
+                    {
+                      //mute btn
+                      $(
+                        ".afterglow__volume-button.afterglow__mute > button"
+                      ) && $(
+                        ".afterglow__volume-button.afterglow__mute > button"
+                      ).setAttribute("title", UI.player.mute);
+                      //play btn and...
+                      $(".afterglow__play>button").setAttribute(
+                        "title",
+                        UI.player.play
+                      ),
+                        //...pause btn
+                        $(".afterglow__pause>button") &&
+                          $(".afterglow__pause>button").setAttribute(
+                            "title",
+                            UI.player.pause
+                          );
+                      //fullscreen btn
+                      $(".afterglow__fullscreen-toggle").setAttribute(
+                        "title",
+                        UI.player.fullscreen
+                      );
+                    }
+
+                    //show video pane
+                    $(".afterglow__video").style.display = "flex";
 
                     try {
                       VIDEO.play();

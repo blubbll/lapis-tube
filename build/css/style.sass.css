@@ -473,7 +473,7 @@ views {
 
   ::-webkit-scrollbar-thumb {
     background: #9E9E9E;
-    height: 5vh;
+    height: 5vh !important;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #BDBDBD;
@@ -599,17 +599,19 @@ lapis-player {
     top: 0;
   }
   /* custom fullscreen toggle */
-  .afterglow__top-control-bar a {
-  }
-
   .afterglow__top-control-bar {
-    padding: 0.35rem 0.5rem;
-    border-radius: 3rem;
     backdrop-filter: blur(2rem);
-    &:hover {
-      background: rgba(255, 255, 0, 0.45);
-    }
+
     > a {
+      height: 2vmax;
+      background-size: inherit;
+
+      width: 2vmax;
+      &:hover {
+        height: 4vmax;
+        width: 4vmax;
+        filter: brightness(50%) sepia(100) saturate(5) hue-rotate(18deg);
+      }
       margin-left: 0;
     }
   }

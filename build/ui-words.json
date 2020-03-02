@@ -7,6 +7,12 @@
       "language": "Language",
       "tryagain": "There was an error. Please try again."
     },
+    "player":{
+      "mute": "mute",
+      "play": "play",
+      "pause": "pause",
+      "fullscreen": "toggle fullscreen"
+    },
     "titles":{
       "results": "Search results for",
       "videos": "Videos",
