@@ -20,15 +20,37 @@ let {
   setActiveView
 } = window;
 
+//custom UI counds
 {
-  const audio = new Audio(
-    "https://lapistube.b-cdn.net/176727_3249786-lq.mp3"
-  );
+  const audio = new Audio("https://lapistube.b-cdn.net/176727_3249786-lq.mp3");
   clickSound = () => {
     audio.play();
   };
 }
-//gtranslate-hack
+
+//get page params
+{
+  $.params = {};
+  window.onpopstate = () => {
+    //fix title ¯\_(ツ)_/¯
+    {
+      const t = $("title").innerText;
+      (document.title = ""), (document.title = t);
+    }
+    var match,
+      pl = /\+/g, // Regex for replacing addition symbol with a space
+      search = /([^&=]+)=?([^&]*)/g,
+      decode = s => {
+        return decodeURIComponent(s.replace(pl, " "));
+      },
+      query = window.location.search.substring(1);
+    while ((match = search.exec(query)))
+      $.params[decode(match[1])] = decode(match[2]);
+  };
+  window.onpopstate();
+}
+
+//gtranslate-hack (from html to json)
 applyWords = htmlString => {
   const words = new DOMParser()
     .parseFromString(htmlString, "text/html")

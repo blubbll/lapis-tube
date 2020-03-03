@@ -42,10 +42,13 @@
         addView(T.PLAYER);
       }
       setActiveView("player");
+
       $("views").classList.remove("wait");
     },
     close: () => {
+      history.back();
       abortFetches();
+
       $("#player-inner").setAttribute("closing", "");
       //reset to results view if searched
       if ($("#results")) {
@@ -163,6 +166,8 @@
         .then(res => res.text())
         .then(raw => {
           const vid = JSON.parse(raw);
+
+          history.pushState(null, null, `${HOST}/v/${id}`);
 
           //work-around :/
           window.__video = vid;
@@ -581,7 +586,6 @@
 
                 //sync audio pause on android video pause
                 VIDEO.onfullscreenchange = () => {
-                  
                   VIDEO.paused && !AUDIO.paused && AUDIO.pause();
 
                   //re-fix player (re-add controls)
@@ -621,7 +625,7 @@
                 //desktop
                 document.title = `${UI.titles.playing} "${TITLE}"`;
 
-                //console.log(TITLE, vid)
+                //console.debug(TITLE, vid)
               }
 
               //normal title

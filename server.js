@@ -1,4 +1,3 @@
-
 //© 2019-20 by blubbll
 ("use strict");
 ///////////////////////////////////////////////////////////////////////////
@@ -126,7 +125,6 @@ getProxy();
       } else console.warn(`Error at transpiling of file ${file}:`, result);
     };
 
-    
     //HTML
     let building = false;
     const COMPILE_HTML = () => {
@@ -138,6 +136,7 @@ getProxy();
         `${__dirname}/build/cookie-what.html`,
         `${__dirname}/build/outdated-browser.html`,
         `${__dirname}/build/html/app.html`,
+        `${__dirname}/build/html/404.html`,
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/player.html`,
         `${__dirname}/build/html/result-list.html`,
@@ -305,34 +304,6 @@ app.get("/", (req, res) => {
 // static
 app.use(express.static(`${__dirname}/!dist`));
 
-//check format urls
-/*app.get(`${API}/check/:formaturl`, (req, res) => {
-  request(decodeURIComponent(req.params.formaturl)).on("response", _res => {
-    res.json(_res.statusCode);
-  });
-});*/
-/*app.post(`${API}/getformats`, (req, res) => {
-  let OUTPUT = {
-    AUDIOS: [],
-    VIDEOS: []
-  };
-  let i = 0;
-  for (const format of req.body) {
-    fetch(format.url)
-      .then(_res => {
-        i++;
-        if (_res.status === 200) {
-          if (format.type.startsWith("video")) OUTPUT.VIDEOS.push(format);
-          if (format.type.startsWith("audio")) OUTPUT.AUDIOS.push(format);
-        }
-        if (i === req.body.length) {
-          res.json(OUTPUT);
-        }
-      })
-      .catch(e => console.warn(e));
-  }
-});*/
-
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
   /*fetch(`http://api.petabyet.com/geoip/${req.ip}`).then(_res => {
@@ -381,6 +352,27 @@ app.get(`${API}/:region/video/:vid`, (req, res) => {
     request({
       uri: encodeURI(
         `https://${process.env.IV_HOST}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
+      ),
+      method: "GET",
+      timeout: 3000,
+      followRedirect: true,
+      maxRedirects: 10
+    })
+      .on("response", _res => {
+        if (res.statusCode === 200) {
+          _res.pipe(res);
+        } else setTimeout(get, 999);
+      })
+      .on("error", () => setTimeout(get, 999));
+  get();
+});
+
+//VIDEO
+app.get(`${API}/:region/videoDEMO/:vid`, (req, res) => {
+  const get = () =>
+    request({
+      uri: encodeURI(
+        `https://${process.env.IV_HOST_DEMO}/api/v1/videos/${req.params.vid}?region=${req.params.region}`
       ),
       method: "GET",
       timeout: 3000,
@@ -446,6 +438,13 @@ app.get(`${API}/:region/complete/:q`, (req, res) => {
       }
     }
   );
+});
+
+//forwarding if not defined
+app.get("*", (req, res, next) => {
+  !req.originalUrl.includes("/?from=")
+    ? res.redirect(`${req.protocol}://${req.hostname}/?from=${req.url}`)
+    : next();
 });
 
 // listen for requests :)

@@ -93,12 +93,12 @@ setupSearch = () => {
         break;
       case "search-new":
         {
-          console.log(`Loading results for new query:`, { q: str, "": "..." });
+          console.debug(`Loading results for new query:`, { q: str, "": "..." });
         }
         break;
       case "search-continue":
         {
-          console.log(`Loading continued results for query:`, {
+          console.debug(`Loading continued results for query:`, {
             q: str,
             page: page,
             "": "..."
