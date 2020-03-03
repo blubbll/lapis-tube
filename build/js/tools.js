@@ -76,6 +76,8 @@ addView = HTML =>
 
 /* hide views but (id) */
 setActiveView = id => {
+  //set active view (for async callbacks)
+  $("views").setAttribute("active", id);
   for (const view of $$("views>view"))
     view.id !== id //hide all views but (id)
       ? [view.style.setProperty("display", "none", "important")]

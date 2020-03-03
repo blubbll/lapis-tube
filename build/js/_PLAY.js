@@ -56,7 +56,7 @@
       //show app home
       else {
         history.pushState(null, null, HOST);
-        setActiveView("start")
+        setActiveView("start");
       }
 
       $("#player-inner").setAttribute("closing", "");
@@ -175,6 +175,9 @@
       fetch(`${HOST}/api/${REGION}/video/${id}`)
         .then(res => res.text())
         .then(raw => {
+          //abort, abort!
+          if (!$("views[active=player]")) return false;
+
           const vid = JSON.parse(raw);
 
           history.pushState(null, null, `${HOST}/v/${id}`);
@@ -235,6 +238,11 @@
                 audio.src = format.url;
 
                 const checkInterval = setInterval(() => {
+                  //abort, abort!
+                  if (!$("views[active=player]")) {
+                    clearInterval(checkInterval);
+                    return false;
+                  }
                   if (audio.error || !isNaN(audio.duration)) {
                     i++;
                     if (audio.duration) {

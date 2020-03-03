@@ -10,7 +10,7 @@ location.hash = "";
       "--color-accent-main"
     ),
     args = [
-      `\n %c %c %c➤ %cLapisTube %c  %c  ${location.href} %c  %c ♥ %c  \n\n`,
+      `\n  %c %c %c➤ %cLapisTube %c %c  ${location.href} %c  %c ♥ %c  \n`,
       `background: ${acc}; padding:5px 0;`,
       `background: black; padding:5px 0;`,
       `color: blue; background: black; padding:5px 0;`,
