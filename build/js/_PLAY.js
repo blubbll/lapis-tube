@@ -51,8 +51,7 @@
       //came from results
       if ($("#results"))
         //lead back if location was pushed
-        location.href.split("/").length===5 &&
-          history.back();
+        location.href.split("/").length === 5 && history.back();
       //show app home
       else {
         history.pushState(null, null, HOST);
@@ -180,7 +179,7 @@
 
           const vid = JSON.parse(raw);
 
-          history.pushState(null, null, `${HOST}/v/${id}`);
+          history.pushState(null, null, `${location.origin}/v/${id}`);
 
           //work-around :/
           window.__video = vid;
@@ -424,23 +423,23 @@
 
                   //MIRROR/keep in sync currentTime vid<>audio (set by afterglow)
                   AUDIO.addEventListener("timeupdate", e => {
-                    AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
-                      (VIDEO.currentTime = AUDIO.currentTime) &&
-                        console.debug(
-                          "Updated VIDEO TIME TO",
-                          VIDEO.currentTime
-                        )
-                    ];
+                    VIDEO.paused &&
+                      AUDIO.currentTime - VIDEO.currentTime > 1.1 && [
+                        (VIDEO.currentTime = AUDIO.currentTime) &&
+                          console.debug(
+                            "Updated VIDEO TIME TO",
+                            VIDEO.currentTime
+                          )
+                      ];
                   }),
                     VIDEO.addEventListener("timeupdate", e => {
-                      !AUDIO.muted &&
-                        VIDEO.currentTime / AUDIO.currentTime > 1.1 && [
-                          (AUDIO.currentTime = VIDEO.currentTime) &&
-                            console.debug(
-                              "Updated AUDIO TIME TO",
-                              AUDIO.currentTime
-                            )
-                        ];
+                      (VIDEO.currentTime - AUDIO.currentTime > 1.1 ||
+                        VIDEO.currentTime - AUDIO.currentTime < - 1.1) &&
+                        (AUDIO.currentTime = VIDEO.currentTime) &&
+                        console.debug(
+                          "Updated AUDIO TIME TO",
+                          AUDIO.currentTime
+                        );
                     });
                 }
 
