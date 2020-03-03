@@ -1,7 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { Player, waitForElement } = window;
+const { HOST, Player, waitForElement, setActiveView } = window;
 let { route } = window;
 
 route = to => {
@@ -23,12 +23,15 @@ route = to => {
         default: {
           if (to.startsWith("/watch?v=")) {
             const id = to.split("/watch?v=")[1];
-
+        
             //from yt vid
             console.debug(
               "attempting to play requested video (direct call from yt)",
               id
             );
+             setActiveView("start")
+            history.pushState(null, null, HOST);
+           
             Player.play(id);
           }
         }
