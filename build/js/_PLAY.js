@@ -46,10 +46,18 @@
       $("views") && $("views").classList.remove("wait");
     },
     close: () => {
-      //lead back if location wasnt pushed
-      location.href.split("//")[1].split("/")[1] !== location.hostname &&
-        history.back();
       abortFetches();
+
+      //came from results
+      if ($("#results"))
+        //lead back if location was pushed
+        location.href.split("//")[1].split("/")[1] !== location.hostname &&
+          history.back();
+      //show app home
+      else {
+        history.pushState(null, null, HOST);
+        setActiveView("start")
+      }
 
       $("#player-inner").setAttribute("closing", "");
       //reset to results view if searched

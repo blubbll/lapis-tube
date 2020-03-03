@@ -19,6 +19,14 @@ route = to => {
             waitForElement("views").then(Player.play(id));
           }
           break;
+      
+      default:{
+        if(to.startsWith("/watch?v=")){ //from yt vid
+          console.debug("attempting to play requested video (direct call from yt)", id);
+          const id = to.split("/watch?v=")[1];
+          Player.play(id);
+        }
+      }
       }
     });
   }
