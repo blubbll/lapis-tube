@@ -131,7 +131,7 @@
           }
 
           var ctx = IMG_BLEND.getContext("2d");
-          var img = $(`#results card[video-id=${id}] img`);
+          var img = $(`#results card[video-id="${id}"] img`);
           ctx.drawImage(
             img,
             0,
@@ -574,20 +574,23 @@
 
               //MOBILE DEVICE
               if (Browser.isMobileChrome) {
+                //reset psedo-fullscreen
+                VIDEO.FULLSCREEN = false;
+
                 document.title = TITLE;
 
                 //sync audio pause on android video pause
-                document.onfullscreenchange = () => {
-                  if (!document.fullscreen && VIDEO.paused && !AUDIO.paused)
-                    AUDIO.pause();
+                VIDEO.onfullscreenchange = () => {
+                  
+                  VIDEO.paused && !AUDIO.paused && AUDIO.pause();
 
-                  //TODO
                   //re-fix player (re-add controls)
-                  document.fullscreen && [VIDEO.controls = false];
-                  /*!document.fullscreen &&
+                  if (VIDEO.FULLSCREEN) {
                     $(".afterglow__video").classList.add(
                       "afterglow__container"
-                    );*/
+                    );
+                    VIDEO.FULLSCREEN = false;
+                  }
                 };
 
                 //sync video war playNpause with audio
@@ -606,16 +609,12 @@
                 ).onclick = e => {
                   const that = e.target;
 
-                  if (document.fullscreen) {
-                    Fullscreen.exit();
-                  } else {
-                    setTimeout(() => {
-                      /*$(".afterglow__video").classList.remove(
-                        "afterglow__container"
-                      );*/
-                      VIDEO.controls = true;
-                      Fullscreen.enter($("video"));
-                    });
+                  if (!VIDEO.FULLSCREEN) {
+                    $(".afterglow__video").classList.remove(
+                      "afterglow__container"
+                    );
+                    Fullscreen.enter($("video"));
+                    VIDEO.FULLSCREEN = true;
                   }
                 };
               } else {
@@ -626,7 +625,9 @@
               }
 
               //normal title
-              waitForElement("#player .afterglow__title-bar").then(el => el.innerText = TITLE);
+              waitForElement("#player .afterglow__title-bar").then(
+                el => (el.innerText = TITLE)
+              );
               //normal title
               $("#player .card-title").innerText = TITLE;
 

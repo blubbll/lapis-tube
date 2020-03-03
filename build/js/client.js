@@ -3,7 +3,27 @@ const $$ = document.querySelectorAll.bind(document);
 
 //RESET
 location.hash = "";
-console.log("%c Welcome to lapisTube 🙃", "background: blue;color: white;");
+//console.log("%c Welcome to lapisTube 🙃", "background: blue;color: white;");
+//welcome to the console
+{
+  const acc = getComputedStyle(document.documentElement).getPropertyValue(
+      "--color-accent-main"
+    ),
+    args = [
+      `\n %c %c %c➤ %cLapisTube %c  %c  ${location.href} %c  %c ♥ %c  \n\n`,
+      `background: ${acc}; padding:5px 0;`,
+      `background: black; padding:5px 0;`,
+      `color: blue; background: black; padding:5px 0;`,
+      `color: white; background: black; padding:5px 0;`,
+      `background: ${acc}; padding:5px 0;`,
+      `background: black; padding:5px 0;`,
+      `background: ${acc}; padding:5px 0;`,
+      "color: purple; background: #fff; padding:5px 0;",
+      `background: ${acc}; padding:5px 0;`
+    ];
+
+  window.console.log(...args);
+}
 
 //
 const {
@@ -43,7 +63,12 @@ let { app_start, API, GEO, HOST, REGION, lscache } = window;
         `${location.protocol}//${location.hostname
           .split(".")
           .splice(1)
-          .join(".")}` + `${location.hostname.split(".")[0] ? "?hl=" + location.hostname.split(".")[0] : ""}`
+          .join(".")}` +
+          `${
+            location.hostname.split(".")[0]
+              ? "?hl=" + location.hostname.split(".")[0]
+              : ""
+          }`
       )
     ];
 
@@ -60,7 +85,7 @@ HOST = `${location.protocol}//${
     location.hostname === "gtranslate.io"
     ? location.href.split("/edit/")[1]
     : //TRANSLATED
-      `${getL()}.${location.hostname}`
+      `${getL()!=="en"?getL()+".":""}${location.hostname}`
 }`;
 //api
 API = `//${location.hostname}/api`;
@@ -89,7 +114,7 @@ API = `//${location.hostname}/api`;
 }
 
 {
-  console.log("Client starting up");
+  console.debug("Client starting up");
   //LOAD TEMPLATES
   {
     //template remote path
@@ -270,6 +295,6 @@ const setupClient = () => {
     //small search demo
     demo();
 
-    console.log("Client done");
+    console.debug("Client done");
   });
 };

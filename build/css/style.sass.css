@@ -10,6 +10,11 @@ param {
   padding-left: 5px;
 }
 
+/* no long-click to dl on images */
+img {
+    pointer-events: none;
+}
+
 /* inherit height (make main height fit to content inside) */
 main {
   height: inherit;
@@ -276,6 +281,7 @@ views {
     filter: blur(5px);
     cursor: wait;
     pointer-events: none;
+    touch-action: none;
   }
 }
 /* canvas for bg */
@@ -294,14 +300,12 @@ views {
   background: linear-gradient(to right, #eeeeee 10%, #dddddd 18%, #eeeeee 33%);
   background-size: 800px 104px;
   height: 100px;
-  touch-action: none;
-  pointer-events: none;
   position: relative;
 }
 
 #player {
   #player-inner {
-    max-height: 86vh;
+    max-height: 82vh;
     transform: scale(1);
     transition: transform 299ms linear;
     will-change: transform;
@@ -317,7 +321,13 @@ views {
     height: inherit;
     #player-desc {
       height: inherit;
-      overflow-y: scroll;
+      width: inherit;
+      overflow-y: auto;
+    }
+    /* yt/invidious html desciption fixes */
+    #eow-description{
+      overflow-y: auto;
+      margin-bottom: 0;
     }
   }
 }

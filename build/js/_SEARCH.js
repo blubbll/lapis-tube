@@ -85,7 +85,7 @@ setupSearch = () => {
     switch (results.getAttribute("state")) {
       case "search-fresh":
         {
-          console.log(`Loading fresh results for query:`, {
+          console.debug(`Loading fresh results for query:`, {
             q: str,
             "": "..."
           });
