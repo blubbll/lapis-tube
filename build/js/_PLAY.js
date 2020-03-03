@@ -51,7 +51,7 @@
       //came from results
       if ($("#results"))
         //lead back if location was pushed
-        location.href.split("//")[1].split("/")[1] !== location.hostname &&
+        location.href.split("/").length===5 &&
           history.back();
       //show app home
       else {
