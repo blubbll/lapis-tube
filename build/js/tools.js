@@ -17,7 +17,8 @@ let {
   getL,
   getSize,
   loadImage,
-  setActiveView
+  setActiveView,
+  route
 } = window;
 
 //custom UI counds
@@ -28,10 +29,10 @@ let {
   };
 }
 
-//get page params
+//get page querystring
 {
-  $.params = {};
   window.onpopstate = () => {
+    !$.query && [($.query = {})];
     //fix title ¯\_(ツ)_/¯
     {
       const t = $("title").innerText;
@@ -45,9 +46,9 @@ let {
       },
       query = window.location.search.substring(1);
     while ((match = search.exec(query)))
-      $.params[decode(match[1])] = decode(match[2]);
+      $.query[decode(match[1])] = decode(match[2]);
+    route($.query.from);
   };
-  window.onpopstate();
 }
 
 //gtranslate-hack (from html to json)

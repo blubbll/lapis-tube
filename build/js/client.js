@@ -37,6 +37,7 @@ const {
   fetch,
   getL,
   getSize,
+  route,
   initBg,
   load,
   LOCAL,
@@ -85,7 +86,7 @@ HOST = `${location.protocol}//${
     location.hostname === "gtranslate.io"
     ? location.href.split("/edit/")[1]
     : //TRANSLATED
-      `${getL()!=="en"?getL()+".":""}${location.hostname}`
+      `${getL() !== "en" ? getL() + "." : ""}${location.hostname}`
 }`;
 //api
 API = `//${location.hostname}/api`;
@@ -143,6 +144,9 @@ API = `//${location.hostname}/api`;
             switch (template.getAttribute("name")) {
               case "app":
                 T.WRAPPER = _html.replace(/{{cdn}}/gi, CDN);
+                break;
+              case "404":
+                T[404] = _html;
                 break;
               case "channel":
                 T.CHANNEL = _html;
@@ -296,5 +300,7 @@ const setupClient = () => {
     demo();
 
     console.debug("Client done");
+
+     setTimeout(window.onpopstate);
   });
 };

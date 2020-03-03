@@ -12,7 +12,7 @@ param {
 
 /* no long-click to dl on images */
 img {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 /* inherit height (make main height fit to content inside) */
@@ -67,6 +67,52 @@ body {
     background-color: rgba(255, 255, 255, 0.5);
     -webkit-backdrop-filter: blur(0.75rem);
     backdrop-filter: blur(0.75rem);
+  }
+}
+
+/**************************/
+//404///////////////////////
+/**************************/
+.bsod {
+  $light-grey: #e0e2f4;
+  $grey: #aaaaaa;
+  $blue: #0414a7;
+  width: 90%;
+  padding: 25%;
+  align-self: center;
+  background: $blue;
+  p {
+    color: $light-grey;
+  }
+  .neg {
+    text-align: center;
+    color: $blue;
+
+    .bg {
+      background: $grey;
+      padding: 0 15px 2px 13px;
+    }
+  }
+  .title {
+    margin-bottom: 50px;
+  }
+  .nav {
+    margin-top: 35px;
+    text-align: center;
+
+    .link {
+      color: $light-grey;
+      text-decoration: none;
+      border-style: double;
+
+      padding: 0 9px 2px 8px;
+
+      &:hover,
+      &:focus {
+        background: $grey;
+        color: $blue;
+      }
+    }
   }
 }
 
@@ -325,7 +371,7 @@ views {
       overflow-y: auto;
     }
     /* yt/invidious html desciption fixes */
-    #eow-description{
+    #eow-description {
       overflow-y: auto;
       margin-bottom: 0;
     }

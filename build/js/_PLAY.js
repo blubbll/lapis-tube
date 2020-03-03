@@ -43,10 +43,12 @@
       }
       setActiveView("player");
 
-      $("views").classList.remove("wait");
+      $("views") && $("views").classList.remove("wait");
     },
     close: () => {
-      history.back();
+      //lead back if location wasnt pushed
+      location.href.split("//")[1].split("/")[1] !== location.hostname &&
+        history.back();
       abortFetches();
 
       $("#player-inner").setAttribute("closing", "");
@@ -127,7 +129,8 @@
       {
         const poster = IMG_LOADER.src;
 
-        if ($("#results")) {
+        //apply carbon copy of preview img to loading-poster (only when exists in results)
+        if ($("#results") && $(`#results card[video-id="${id}"]`)) {
           if (!IMG_BLEND) {
             IMG_LOADER.insertAdjacentHTML("afterend", `<canvas/>`);
             IMG_BLEND = $("poster>canvas");
@@ -146,12 +149,11 @@
             IMG_BLEND.width,
             IMG_BLEND.height
           );
+          //fit blend loader's sizes
+          IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+          IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
         }
       }
-
-      //fit blend loader's sizes
-      IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-      IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
 
       //create dynamic template if not existing of player footer
       !T.PLAYER_FOOTER && [(T.PLAYER_FOOTER = $("#player-info").innerHTML)];
@@ -196,8 +198,10 @@
           ).innerText = `${TITLE} (${UI.labels.preparing})`;
 
           //fit blend loader's sizes
-          IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
-          IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
+          if (IMG_BLEND) {
+            IMG_BLEND.style.left = `${IMG_LOADER.offsetLeft}px`;
+            IMG_BLEND.style.top = `${IMG_LOADER.offsetTop}px`;
+          }
 
           const STREAM = {
             LOW: vid.formatStreams[0],
@@ -413,13 +417,14 @@
                     ];
                   }),
                     VIDEO.addEventListener("timeupdate", e => {
-                      VIDEO.currentTime / AUDIO.currentTime > 1.1 && [
-                        (AUDIO.currentTime = VIDEO.currentTime) &&
-                          console.debug(
-                            "Updated AUDIO TIME TO",
-                            AUDIO.currentTime
-                          )
-                      ];
+                      !AUDIO.muted &&
+                        VIDEO.currentTime / AUDIO.currentTime > 1.1 && [
+                          (AUDIO.currentTime = VIDEO.currentTime) &&
+                            console.debug(
+                              "Updated AUDIO TIME TO",
+                              AUDIO.currentTime
+                            )
+                        ];
                     });
                 }
 

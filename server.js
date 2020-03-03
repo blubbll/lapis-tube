@@ -206,6 +206,7 @@ getProxy();
       let bundle = "";
 
       const scripts = [
+        `${__dirname}/build/js/routing.js`,
         `${__dirname}/build/js/tools.js`,
         `${__dirname}/build/js/_PLAY.js`,
         `${__dirname}/build/js/_SEARCH.js`,
