@@ -105,7 +105,7 @@ getProxy();
       fs.writeFileSync(`${__dirname}/${dist}/html/ui-words.html`, html, "utf8");
     }
 
-    const atto = "/*!💜I love you monad.*/";
+    const atto = "/*!💜I love you, Monad.*/";
     const transpile = (file, direct) => {
       const result = es6tr.run({ filename: file });
       const outFile = `${file.replace("/build", dist)}`;

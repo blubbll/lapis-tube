@@ -541,7 +541,7 @@
                   }
 
                    try {
-                    VIDEO._play();
+                    VIDEO.play();
                   } catch (e) {
                     console.warn(e);
                   }
