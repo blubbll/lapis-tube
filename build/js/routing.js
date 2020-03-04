@@ -1,8 +1,29 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { HOST, Player, waitForElement, setActiveView } = window;
+const { addView, T, HOST, Player, waitForElement, setActiveView } = window;
 let { route } = window;
+
+//get page querystring
+{
+  window.onpopstate = () => {
+    !$.query && [($.query = {})];
+    //fix title ¯\_(ツ)_/¯
+    {
+      const t = $("title").innerText;
+      (document.title = ""), (document.title = t);
+    }
+    var match,
+      pl = /\+/g, // Regex for replacing addition symbol with a space
+      search = /([^&=]+)=?([^&]*)/g,
+      decode = s => {
+        return decodeURIComponent(s.replace(pl, " "));
+      },
+      query = window.location.search.substring(1);
+    while ((match = search.exec(query)))
+      $.query[decode(match[1])] = decode(match[2]);
+  };
+}
 
 route = to => {
   if (to) {
@@ -21,18 +42,26 @@ route = to => {
           break;
 
         default: {
-          if (to.startsWith("/watch?v=")) {
-            const id = to.split("/watch?v=")[1];
-        
-            //from yt vid
-            console.debug(
-              "attempting to play requested video (direct call from yt)",
-              id
-            );
-             setActiveView("start")
-            history.pushState(null, null, HOST);
-           
-            Player.play(id);
+          //atomar routing based on array
+          if (
+            ["/watch"].some((val, i, arr) => val === to || val.startsWith(to))
+          ) {
+            if (to.startsWith("/watch?v=")) {
+              const id = to.split("/watch?v=")[1];
+
+              //from yt vid
+              console.debug(
+                "attempting to play requested video (direct call from yt)",
+                id
+              );
+              setActiveView("start");
+              history.pushState(null, null, HOST);
+
+              Player.play(id);
+            }
+          } else {
+            !$($('view[id="404"]')) && addView(T[404]);
+            setActiveView("404");
           }
         }
       }

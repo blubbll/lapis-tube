@@ -15,6 +15,7 @@
     },
     "titles":{
       "results": "Search results for",
+      "moreresults": "More search results for",
       "videos": "Videos",
       "playing": "playing",
       "trending": "Trending right now",

@@ -36,9 +36,6 @@ setupSearch = () => {
 
     let results = $("#results");
 
-    //update page title
-    document.title = `${UI.titles.results} "${str}"`;
-
     if (results && results.getAttribute("search-active") === "true") return;
 
     let page = results ? +results.getAttribute("page") : 0;
@@ -56,21 +53,31 @@ setupSearch = () => {
       //we're on page 1
       page = 1;
     } else {
-      //same page, new querystring
+      //same querystring, new page
       if (results.getAttribute("q") === str) {
         results.setAttribute("state", "search-continue");
         page = page + 1;
+
+        //update page title
+        document.title = `${UI.titles.moreresults} "${str}"`;
       } else {
+        //new search
         results.setAttribute("state", "search-new");
         page = 1;
+
+        history.pushState(null, null, `${HOST}/search/${str}`);
+
+        //update page title
+        document.title = `${UI.titles.results} "${str}"`;
+
         //scroll to top (prevents loading of new pages)
-        $("#results").scrollTop = 0
+        $("#results").scrollTop = 0;
         //clear search results
         $("#results-inner").innerHTML = "";
       }
     }
-    
-    setTimeout(()=>$("views").classList.remove("wait"), 749);
+
+    setTimeout(() => $("views").classList.remove("wait"), 749);
 
     //store querystring for later
     results.setAttribute("q", str);
@@ -93,7 +100,10 @@ setupSearch = () => {
         break;
       case "search-new":
         {
-          console.debug(`Loading results for new query:`, { q: str, "": "..." });
+          console.debug(`Loading results for new query:`, {
+            q: str,
+            "": "..."
+          });
         }
         break;
       case "search-continue":

@@ -3,15 +3,34 @@
   <p>An error has occured, to continue:</p>
   <p>
     * Return to the start.<br />
+    * Go back<br />
     * Open an issue about this error and try later.
   </p>
-  <nav class="nav">
-    <a href="#" onclick="location.assign(HOST)" class="link">Start</a
-    >&nbsp;|&nbsp;<a
+  <nav class="nav flex-column">
+    <a
+      type="button"
+      onclick="location.assign(HOST)"
+      class="link"
+      title="go to the start page"
+      >Start</a
+    >
+    &nbsp;|&nbsp;
+    <a
+      type="button"
+      onclick="history.back()"
+      class="link"
+      title="go a page back"
+    >
+      go back</a
+    >
+    &nbsp;|&nbsp;
+    <a
       href="https://github.com/blubbll/lapis-tube/issues"
       class="link"
       target="_blank"
-      ><span class="notranslate">GitHub</span> Issue Tracker</a
+      title="open an issue"
+    >
+      <span class="notranslate">GitHub</span> Issue Tracker</a
     >
   </nav>
 </error>

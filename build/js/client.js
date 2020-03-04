@@ -73,6 +73,7 @@ let { app_start, API, GEO, HOST, REGION, lscache } = window;
       )
     ];
 
+//update size attribute
 window.onresize = debounce(() => {
   $("body").setAttribute("size", getSize());
 }, 999);
@@ -111,6 +112,18 @@ API = `//${location.hostname}/api`;
         ? el.classList.add("d-none")
         : el.classList.remove("d-none");
     }, 199);
+  });
+}
+
+//go to home
+{
+  document.addEventListener("click", e => {
+    const that = $("#dynamic-logo");
+    //////////////////////////////////////////////////////////////
+    if (!that || (that && !that.contains(e.target))) return false;
+    //////////////////////////////////////////////////////////////
+
+    setActiveView("start");
   });
 }
 
