@@ -1,6 +1,19 @@
-<view id="history" class="d-flex align-items-center w-100 flex-column">
+<view id="results" class="d-flex align-items-center w-100 flex-column">
   <div
-    id="history-inner"
+    id="filters"
+    class="w-100 d-flex justify-content-center backdrop-blur border-bottom position-absolute"
+  >
+    <div
+      id="filters-inner"
+      class="col-12 col-sm-10 col-md-9 col-lg-7 col-xl-6 d-flex justify-content-end px-2"
+    >
+      <button type="button" class="btn btn-sm">
+        Filter<i class="fas fa-filter"></i>
+      </button>
+    </div>
+  </div>
+  <div
+    id="results-inner"
     class="d-flex align-items-center mt-5 d-flex row col-12 col-md-10 col-lg-10 col-xl-9 align-items-center"
   ></div>
 </view>

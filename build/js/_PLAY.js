@@ -545,7 +545,7 @@
                   $(".afterglow__video").style.display = "flex";
 
                   try {
-                    VIDEO.play();
+                    VIDEO._play();
                   } catch (e) {
                     console.warn(e);
                   }
@@ -554,7 +554,7 @@
                   $(".afterglow__video").style.display = "flex";
 
                   try {
-                    VIDEO.play();
+                    VIDEO._play();
                   } catch (e) {
                     console.warn(e);
                   }
