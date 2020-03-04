@@ -410,28 +410,30 @@
                       if (AUDIO.paused) {
                         console.debug("muted");
 
-                        $(".afterglow__video").insertAdjacentHTML(
-                          "afterbegin",
-                          `<lapis-warning name="muted"></lapis-warning>`
-                        );
+                        if (!$("lapis-warning[name=muted]")) {
+                          $(".afterglow__video").insertAdjacentHTML(
+                            "afterbegin",
+                            `<lapis-warning name="muted"></lapis-warning>`
+                          );
 
-                        const WARNING_MUTED = $("lapis-warning[name=muted]");
+                          const WARNING_MUTED = $("lapis-warning[name=muted]");
 
-                        WARNING_MUTED.innerHTML = UI.warnings.muted;
-                        WARNING_MUTED.style.display = "flex";
-                        WARNING_MUTED.addEventListener("click", () => {
-                          WARNING_MUTED.remove();
-                          AUDIO.muted = false;
-                          VIDEO.currentTime = 0;
-                          AUDIO.play();
-                          !AUDIO.muted &&
-                            !AUDIO.paused &&
-                            VIDEO.play() &&
-                            console.debug("unmuted.");
-                        });
+                          WARNING_MUTED.innerHTML = UI.warnings.muted;
+                          WARNING_MUTED.style.display = "flex";
+                          WARNING_MUTED.addEventListener("click", () => {
+                            WARNING_MUTED.remove();
+                            AUDIO.muted = false;
+                            VIDEO.currentTime = 0;
+                            AUDIO.play();
+                            !AUDIO.muted &&
+                              !AUDIO.paused &&
+                              VIDEO._play() &&
+                              console.debug("unmuted.");
+                          });
+                        }
+
+                        return VIDEO._play;
                       }
-
-                      return VIDEO._play;
                     }
                   });
                   //SYNC PAUSE audio>vid (set by others)
