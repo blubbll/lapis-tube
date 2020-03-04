@@ -205,11 +205,13 @@ getProxy();
       const bundleFile = `${__dirname}/${dist}/bundle.js`;
       let bundle = "";
 
+      //maybe glob would be better in the future
       const scripts = [
         `${__dirname}/build/js/tools.js`,
         `${__dirname}/build/js/routing.js`,
         `${__dirname}/build/js/_PLAY.js`,
         `${__dirname}/build/js/_SEARCH.js`,
+        `${__dirname}/build/js/_HISTORY.js`,
         `${__dirname}/build/js/bg.js`,
         `${__dirname}/build/js/client.js`
       ];

@@ -431,9 +431,8 @@
                               console.debug("unmuted.");
                           });
                         }
-
-                        return VIDEO._play;
                       }
+                      return VIDEO._play;
                     }
                   });
                   //SYNC PAUSE audio>vid (set by others)
@@ -541,23 +540,17 @@
                     $("#player .card").removeAttribute("loading");
                   }
 
-                  //show video pane
-                  $(".afterglow__video").style.display = "flex";
-
-                  try {
+                   try {
                     VIDEO._play();
                   } catch (e) {
                     console.warn(e);
                   }
-
+                  
                   //show video pane
                   $(".afterglow__video").style.display = "flex";
 
-                  try {
-                    VIDEO._play();
-                  } catch (e) {
-                    console.warn(e);
-                  }
+                  //show video pane
+                  $(".afterglow__video").style.display = "flex";
 
                   const fitRatio = () => {
                     const ratio =

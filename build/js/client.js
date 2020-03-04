@@ -180,6 +180,9 @@
                 case "player":
                   T.PLAYER = _html;
                   break;
+                case "history":
+                  T.HISTORY = _html;
+                  break;
                 case "result-list":
                   T.RESULTS = _html;
                   break;
