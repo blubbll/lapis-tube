@@ -47,7 +47,6 @@ let {
       query = window.location.search.substring(1);
     while ((match = search.exec(query)))
       $.query[decode(match[1])] = decode(match[2]);
-    route($.query.from);
   };
 }
 

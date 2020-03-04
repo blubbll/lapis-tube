@@ -294,16 +294,13 @@ app.use("*", (req, res, next) => {
 });
 
 //index
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
   res.send(
     fs
       .readFileSync(`${__dirname}/!dist/index.html`, "utf8")
       .replace(/{{local}}/gi, `${req.protocol}://${req.hostname}/`)
   );
-});
-
-// static
-app.use(express.static(`${__dirname}/!dist`));
+});*/
 
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
@@ -443,10 +440,20 @@ app.get(`${API}/:region/complete/:q`, (req, res) => {
 
 //forwarding if not defined
 app.get("*", (req, res, next) => {
-  !req.originalUrl.includes("/?from=")
-    ? res.redirect(`${req.protocol}://${req.hostname}/?from=${req.url}`)
-    : next();
+  if (req.url === "/" || !fs.existsSync(`${__dirname}/!dist${req.url}`))
+    //index
+    res.send(
+      fs
+        .readFileSync(`${__dirname}/!dist/index.html`, "utf8")
+        .replace(/{{local}}/gi, `${req.protocol}://${req.hostname}/`)
+        .replace(/{{from}}/gi, `${req.url}`)
+    );
+  //resource
+  else next();
 });
+
+// static
+app.use(express.static(`${__dirname}/!dist`));
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {

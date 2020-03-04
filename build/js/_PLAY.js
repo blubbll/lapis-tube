@@ -421,7 +421,7 @@
                     }
                   });
 
-                  //MIRROR/keep in sync currentTime vid<>audio (set by afterglow)
+                  //update vid progress in bg play
                   AUDIO.addEventListener("timeupdate", e => {
                     VIDEO.paused &&
                       AUDIO.currentTime - VIDEO.currentTime > 1.1 && [
@@ -431,10 +431,10 @@
                             VIDEO.currentTime
                           )
                       ];
-                  }),
+                  }), //MIRROR/keep in sync currentTime vid>audio (set by afterglow)
                     VIDEO.addEventListener("timeupdate", e => {
                       (VIDEO.currentTime - AUDIO.currentTime > 1.1 ||
-                        VIDEO.currentTime - AUDIO.currentTime < - 1.1) &&
+                        VIDEO.currentTime - AUDIO.currentTime < -1.1) &&
                         (AUDIO.currentTime = VIDEO.currentTime) &&
                         console.debug(
                           "Updated AUDIO TIME TO",

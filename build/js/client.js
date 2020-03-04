@@ -301,6 +301,7 @@ const setupClient = () => {
 
     console.debug("Client done");
 
-     setTimeout(window.onpopstate);
+    //routing
+    setTimeout(route($("meta[name=from]").getAttribute("value")));
   });
 };
