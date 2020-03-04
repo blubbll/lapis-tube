@@ -1,5 +1,5 @@
 {
-  const {
+  /*const {
     addView,
     API,
     abortFetches,
@@ -27,14 +27,46 @@
     setActiveView,
     waitForElement,
     numeral
+  } = window;*/
+
+  //get generic
+  const {
+    lscache,
+    Browser,
+    afterglow,
+    waitForElement,
+    getSize,
+    getL,
+    fetch,
+    debounce,
+    alert,
+    done,
+    initBg,
+    createThumbs,
+    Fullscreen,
+    clickSound,
+    autocomplete,
+    applyWords,
+    moment,
+    numeral,
+    load,
+    lazyload,
+    speed,
+    abortFetches
   } = window;
+  //set generic
+  let { app_start, route } = window;
+  //-//
+  const L = window;
+  //get Elements of L
+  const { GEO, URL, REGION, addView, setActiveView, T, UI } = L;
+  //set Elements of L
+  let { Player } = L;
 
   const $ = document.querySelector.bind(document);
   const $$ = document.querySelectorAll.bind(document);
 
   //afterglow player
-
-  let { Player } = window;
 
   Player = {
     open: () => {
@@ -54,7 +86,7 @@
         location.href.split("/").length === 5 && history.back();
       //show app home
       else {
-        history.pushState(null, null, HOST);
+        history.pushState(null, null, URL.HOST);
         setActiveView("start");
       }
 
@@ -171,7 +203,7 @@
       //clear footer content
       $("#player #player-info").innerHTML = "";
 
-      fetch(`${HOST}/api/${REGION}/video/${id}`)
+      fetch(`${URL.API}/${REGION}/video/${id}`)
         .then(res => res.text())
         .then(raw => {
           //abort, abort!

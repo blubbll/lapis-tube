@@ -1,25 +1,41 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { AbortController, NProgress, LOADED } = window;
+//get generic
+const {
+  NProgress,
+  app_start,
+  lscache,
+  alert,
+  done,
+  initBg,
+  autocomplete,
+  moment,
+  numeral,
+  load,
+  lazyload,
+  setupSearch
+} = window;
+//set generic
 let {
-  clickSound,
-  applyWords,
-  addView,
-  abortFetches,
-  CDN,
-  createThumbs,
-  debounce,
-  LOCAL,
   fetch,
+  applyWords,
+  createThumbs,
   Fullscreen,
+  clickSound,
+  waitForElement,
+  abortFetches,
+  debounce,
   getBase64Image,
   getL,
-  getSize,
-  loadImage,
-  setActiveView,
-  route
+  getSize
 } = window;
+//-//
+const L = window;
+//get Elements of L
+const { GEO, LOADED, Player, SEARCH, route, T } = L;
+//set Elements of L
+let { setActiveView, addView, URL, UI } = L;
 
 //custom UI counds
 {
@@ -29,14 +45,13 @@ let {
   };
 }
 
-
-
 //gtranslate-hack (from html to json)
 applyWords = htmlString => {
   const words = new DOMParser()
     .parseFromString(htmlString, "text/html")
     .querySelector("ui-words");
-  const UI = (window.UI = {});
+  //recreate var if broken / non-existant
+  !UI && [(UI = {})];
   //loop over categories
   for (const _cat of words.querySelectorAll("cat")) {
     const cat = _cat.getAttribute("name");
@@ -48,6 +63,24 @@ applyWords = htmlString => {
       !UI[cat] && [(UI[cat] = {})], (UI[cat][key] = val);
     }
   }
+};
+
+URL = {
+  HOST: `${location.protocol}//${
+    location.host.endsWith("glitch.me")
+      ? //DEV ENV in ORIGINAL
+        location.hostname
+      : //GT EDITOR
+      location.hostname === "gtranslate.io"
+      ? location.href.split("/edit/")[1]
+      : //TRANSLATED
+        `${
+          getL() !== "en" ? getL() + "." + location.hostname : location.origin
+        }`
+  }`,
+  CDN: $("base").href,
+  LOCAL: location.origin,
+  API: `${location.origin}/api`
 };
 
 //add HTML to view system
@@ -115,7 +148,7 @@ createThumbs = thumbsData => {
 };
 
 //(promise) wait until element appears on dom
-const waitForElement = selector => {
+waitForElement = selector => {
   return new Promise((resolve, reject) => {
     var element = document.querySelector(selector);
 
@@ -152,9 +185,6 @@ getSize = () => {
     }
   }
 };
-
-CDN = $("base").href;
-LOCAL = location.origin;
 
 if (detectIEEdge()) {
   const LLegacy =

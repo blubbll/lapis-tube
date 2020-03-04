@@ -1,7 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const {
+/*const {
   addView,
   autocomplete,
   alert,
@@ -25,9 +25,42 @@ const {
 
 let { setupSearch, SEARCH } = window;
 
+*/
+
+//get generic
+const {
+  lscache,
+  waitForElement,
+  getSize,
+  getL,
+  fetch,
+  debounce,
+  alert,
+  done,
+  initBg,
+  createThumbs,
+  autocomplete,
+  applyWords,
+  moment,
+  numeral,
+  load,
+  lazyload
+} = window;
+//set generic
+let { app_start, route } = window;
+//-//
+const L = window;
+//get Elements of L
+const { GEO, URL, REGION, Player, addView, setActiveView, T, UI } = L;
+//set Elements of L
+let { SEARCH, setupSearch } = L;
+
 setupSearch = () => {
   //$("#view-inner").innerHTML = T.RESULTS;
-
+  if ($("#results")) {
+    console.error("search has been setup already!");
+    return false;
+  }
   //do actual search
   SEARCH = str => {
     !$("#results") && addView(T.RESULTS);
@@ -65,7 +98,7 @@ setupSearch = () => {
         results.setAttribute("state", "search-new");
         page = 1;
 
-        history.pushState(null, null, `${HOST}/search/${str}`);
+        history.pushState(null, null, `${URL.HOST}/search/${str}`);
 
         //update page title
         document.title = `${UI.titles.results} "${str}"`;
@@ -132,7 +165,7 @@ setupSearch = () => {
         }
       });
 
-    fetch(`${HOST}/api/${REGION}/search/${str}/${page}`)
+    fetch(`${URL.API}/${REGION}/search/${str}/${page}`)
       .then(res => res.text())
       .then(raw => {
         let _results = JSON.parse(raw);
@@ -205,7 +238,7 @@ setupSearch = () => {
         const text = input.toLowerCase();
 
         text &&
-          fetch(`${HOST}/api/${REGION}/complete/${text}`)
+          fetch(`${URL.API}/${REGION}/complete/${text}`)
             .then(res => res.text())
             .then(raw => {
               const result = JSON.parse(raw);

@@ -1,8 +1,16 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { addView, T, HOST, Player, waitForElement, setActiveView, SEARCH } = window;
-let { route } = window;
+//get generic
+const { addView, waitForElement } = window;
+//set generic
+let {} = window;
+//-//
+const L = window;
+//get Elements of L
+const { URL, Player, setActiveView, SEARCH, T } = L;
+//set Elements of L
+let { route } = L;
 
 //get page querystring
 {
@@ -40,20 +48,23 @@ route = to => {
             Player.play(id);
           }
           break;
-          
-        case "/search":{
-          const q = args;
+
+        case "/search":
+          {
+            const q = args;
             console.debug("attempting to search", q);
             //waitForElement("views").then(Player.play(id));
-           SEARCH(q);
-        } break;
+            SEARCH(q);
+          }
+          break;
 
         default: {
           //atomar routing based on array
           if (
-            ["/search", "/watch"].some((val, i, arr) => val === to || val.startsWith(to))
+            ["/search", "/watch"].some(
+              (val, i, arr) => val === to || val.startsWith(to)
+            )
           ) {
-           
             if (to.startsWith("/watch?v=")) {
               const id = to.split("/watch?v=")[1];
 
@@ -63,7 +74,7 @@ route = to => {
                 id
               );
               setActiveView("start");
-              history.pushState(null, null, HOST);
+              history.pushState(null, null, URL.HOST);
 
               Player.play(id);
             }

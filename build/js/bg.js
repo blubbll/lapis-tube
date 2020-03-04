@@ -1,5 +1,6 @@
 const { debounce } = window;
-let { initBg, LOADED } = window;
+let { initBg } = window;
+let { LOADED } = window.L;
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 /*const { Trianglify, debounce, fetch } = window;
@@ -804,5 +805,5 @@ window.done = () =>
     $("aside[name=loader]").style.display = "none";
     //remove blur class
     $("content").classList.remove("loading");
-    LOADED=true;
+    LOADED = true;
   }, 999);

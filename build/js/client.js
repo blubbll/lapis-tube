@@ -3,7 +3,6 @@ const $$ = document.querySelectorAll.bind(document);
 
 //RESET
 location.hash = "";
-//console.log("%c Welcome to lapisTube 🙃", "background: blue;color: white;");
 //welcome to the console
 {
   const acc = getComputedStyle(document.documentElement).getPropertyValue(
@@ -25,33 +24,33 @@ location.hash = "";
   window.console.log(...args);
 }
 
-//
+//get generic
 const {
-  applyWords,
-  addView,
-  autocomplete,
-  alert,
-  debounce,
-  CDN,
-  done,
-  fetch,
-  getL,
+  lscache,
+  waitForElement,
   getSize,
-  route,
+  getL,
+  fetch,
+  debounce,
+  alert,
+  done,
   initBg,
-  load,
-  LOCAL,
-  lazyload,
+  autocomplete,
+  applyWords,
   moment,
   numeral,
-  SEARCH,
-  setActiveView,
-  setupSearch,
-  T,
-  UI,
-  waitForElement
+  load,
+  lazyload,
+  setupSearch
 } = window;
-let { app_start, API, GEO, HOST, REGION, lscache } = window;
+//set generic
+let { app_start, route } = window;
+//-//
+const L = window;
+//get Elements of L
+const { URL, Player, addView, setActiveView, SEARCH, T, UI } = L;
+//set Elements of L
+let { GEO, REGION } = L;
 
 //anti-hostname (allow inplace editing though)
 !location.host !== "gtranslate.io" &&
@@ -77,20 +76,6 @@ let { app_start, API, GEO, HOST, REGION, lscache } = window;
 window.onresize = debounce(() => {
   $("body").setAttribute("size", getSize());
 }, 999);
-
-//host
-HOST = `${location.protocol}//${
-  location.host.endsWith("glitch.me")
-    ? //DEV ENV in ORIGINAL
-      location.hostname
-    : //GT EDITOR
-    location.hostname === "gtranslate.io"
-    ? location.href.split("/edit/")[1]
-    : //TRANSLATED
-      `${getL() !== "en" ? getL() + "." : ""}${location.hostname}`
-}`;
-//api
-API = `//${location.hostname}/api`;
 
 //navi switch
 {
@@ -132,21 +117,22 @@ API = `//${location.hostname}/api`;
   //LOAD TEMPLATES
   {
     //template remote path
-    const tr = `${HOST}/html`;
+    const tr = `${URL.HOST}/html`;
 
     app_start = () => {
       //template var inmemory
       const T = (window.T = {});
 
       Promise.all(
-        [tr + "/ui-words.html", API + "/geoip", tr + "/templates.html"].map(
+        [tr + "/ui-words.html", URL.API + "/geoip", tr + "/templates.html"].map(
           url => fetch(url).then(resp => resp.text())
         )
       )
         .then(tx => {
           applyWords(tx[0]);
 
-          (GEO = JSON.parse(tx[1])), (REGION = GEO.country_code.toLowerCase());
+          GEO = JSON.parse(tx[1]);
+          REGION = GEO.country_code.toLowerCase();
           console.debug(`Your Geo Information by Maxmind: `, GEO);
           console.debug(`Your browser language: `, getL());
 
@@ -156,7 +142,7 @@ API = `//${location.hostname}/api`;
             const _html = template.innerHTML;
             switch (template.getAttribute("name")) {
               case "app":
-                T.WRAPPER = _html.replace(/{{cdn}}/gi, CDN);
+                T.WRAPPER = _html.replace(/{{cdn}}/gi, URL.CDN);
                 break;
               case "404":
                 T[404] = _html;
@@ -185,7 +171,7 @@ API = `//${location.hostname}/api`;
           console.warn(e);
           alert("WEBSITE FAILED LOADING. PRESS OK TO TRY AGAIN!");
           setTimeout(() => {
-            location.reload(true), 4999;
+            //location.reload(true), 4999;
           });
         });
     };
@@ -196,7 +182,7 @@ API = `//${location.hostname}/api`;
       fetch(tr + "/cookie.html")
         .then(res => res.text())
         .then(html => {
-          $("content").innerHTML = html.replace(/{{local}}/gi, LOCAL);
+          $("content").innerHTML = html.replace(/{{local}}/gi, URL.LOCAL);
           done();
         });
     }
@@ -221,7 +207,7 @@ const demo = () => {
 };
 
 window.onhashchange = () => {
-  const tr = HOST;
+  const tr = URL.HOST;
   switch (location.hash) {
     case "#cookie-what?":
     case "#what?":
@@ -243,7 +229,7 @@ window.onhashchange = () => {
         fetch(tr + "/cookie.html")
           .then(res => res.text())
           .then(html => {
-            $("[pop]").outerHTML = html.replace(/{{local}}/gi, LOCAL);
+            $("[pop]").outerHTML = html.replace(/{{local}}/gi, URL.LOCAL);
             done();
           });
       }
@@ -294,7 +280,7 @@ const setupClient = () => {
 
     document.documentElement.style.setProperty(
       "--alpha-logo",
-      `url(${CDN}/logo.png)`
+      `url(${URL.CDN}/logo.png)`
     );
 
     for (const img of $$("#dynamic-logo .alpha-target")) {
