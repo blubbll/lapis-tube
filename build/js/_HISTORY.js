@@ -55,12 +55,11 @@
   let { setupHistory, showHistory } = _L;
 
   showHistory = page => {
-    
-          if (!$("#history")) {
-        addView(T.HISTORY);
-      }
-      setActiveView("player");
-    
+    if (!$("#history")) {
+      addView(T.HISTORY);
+    }
+    setActiveView("history");
+
     var indexDB = new PouchDB("history");
 
     indexDB.allDocs().then(all => {

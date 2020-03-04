@@ -843,7 +843,7 @@ window.onresize = debounce(initBg, 999);
       $("content").classList.remove("loading");
       LOADED = true;
 
-      //magic
+      //Control.
       for (const key of Object.keys(window.L)) {
         window.L[key] = window[key];
       }
