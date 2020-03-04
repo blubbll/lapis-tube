@@ -284,18 +284,21 @@
           //process streams and apply them (async, to be done after verifying streams locally)
           const applyStreams = vid => {
             if (STREAM.VIDEOS.length === 0) {
-              //$("#player .card-body").innerHTML = UI.warnings.nosource;
-              ($(".afterglow__video") || $("lapis-player")).insertAdjacentHTML(
-                "afterbegin",
-                `<lapis-warning name="nosource"></lapis-warning>`
-              );
-              $(".afterglow__video") && [
-                ($(".afterglow__video").style.display = "")
-              ];
-              const WARNING_NOSOURCE = $("lapis-warning");
-              WARNING_NOSOURCE.innerHTML = UI.warnings.nosource;
-              WARNING_NOSOURCE.style.display = "flex";
-              //$("poster").style.display = "none";
+              if (!$("lapis-warning[name=nosource]")) {
+                (
+                  $(".afterglow__video") || $("lapis-player")
+                ).insertAdjacentHTML(
+                  "afterbegin",
+                  `<lapis-warning name="nosource"></lapis-warning>`
+                );
+
+                $(".afterglow__video") && [
+                  ($(".afterglow__video").style.display = "")
+                ];
+                const WARNING_NOSOURCE = $("lapis-warning");
+                WARNING_NOSOURCE.innerHTML = UI.warnings.nosource;
+                WARNING_NOSOURCE.style.display = "flex";
+              }
               return false;
             }
 
