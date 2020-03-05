@@ -233,6 +233,11 @@
 
   /* hide views but (id) */
   setActiveView = id => {
+    //add view if not existing yet
+    if (!$(`view[id="${id}"]`)) {
+      addView(T[id.toUpperCase()]);
+    }
+
     //set active view (for async callbacks)
     $("views").setAttribute("active", id);
     for (const view of $$("views>view"))

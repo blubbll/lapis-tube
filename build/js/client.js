@@ -73,7 +73,7 @@
     }
   );
   //get Elements of L
-  const { URL, Player, addView, setActiveView, SEARCH, T, UI } = _L;
+  const { URL, Player, setActiveView, SEARCH, T, UI } = _L;
   //set Elements of L
   let { GEO, REGION } = _L;
 
@@ -206,6 +206,7 @@
           });
       };
 
+      lscache.setBucket("tracking");
       if (lscache.get("cookie-accepted")) {
         app_start();
       } else {
@@ -276,7 +277,9 @@
     if (!that || (that && !that.contains(e.target))) return false;
     //////////////////////////////////////////////////////////////
 
+    lscache.setBucket("tracking");
     lscache.set("cookie-accepted", true, 60 * 24 * 31); //expires in 1 month
+    history.pushState(null, null, URL.LOCAL);
     app_start();
     //location.reload(true);
   });
@@ -285,8 +288,6 @@
   const setupClient = () => {
     //fill content (first step in app setup)
     $("content").innerHTML = T.WRAPPER;
-
-    addView(T.START);
 
     setActiveView("start");
 

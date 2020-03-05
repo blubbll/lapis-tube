@@ -4,7 +4,7 @@
   const $$ = document.querySelectorAll.bind(document);
 
   //get generic
-  const { addView, waitForElement } = window;
+  const { waitForElement } = window;
   //set generic
   let {} = window;
   //-//
@@ -106,7 +106,6 @@
             } else {
               console.error("Page not found");
               setTimeout(() => {
-                !$('view[id="404"]') && addView(T[404]);
                 setActiveView("404");
               });
             }

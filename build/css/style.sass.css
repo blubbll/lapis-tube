@@ -379,10 +379,10 @@ views {
 }
 
 #results {
-  #filters {
+  #results-filters {
     z-index: 2;
     place-self: flex-end;
-    #filters-inner {
+    #results-filters-inner {
       border-color: rgba(255, 255, 255, 0.1) !important;
       color: white;
     }
@@ -467,7 +467,10 @@ views {
           }
         }
         img {
-          height: 18vh;
+          height: 17vh;
+          border: 0.1rem solid rgba(255, 255, 255, 0.8);
+          border-right: none;
+          border-left: none;
           filter: grayscale(0.6);
           object-fit: cover;
         }

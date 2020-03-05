@@ -50,7 +50,7 @@
     }
   );
   //get Elements of L
-  const { GEO, URL, REGION, Player, addView, setActiveView, T, UI } = _L;
+  const { GEO, URL, REGION, Player, setActiveView, T, UI } = _L;
   //set Elements of L
   let { SEARCH, setupSearch } = _L;
 
@@ -62,8 +62,6 @@
     }
     //do actual search
     SEARCH = str => {
-      !$("#results") && addView(T.RESULTS);
-
       setActiveView("results");
 
       let results = $("#results");

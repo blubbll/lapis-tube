@@ -50,14 +50,11 @@
     }
   );
   //get Elements of L
-  const { GEO, URL, REGION, Player, addView, setActiveView, T, UI } = _L;
+  const { GEO, URL, REGION, Player, setActiveView, T, UI } = _L;
   //set Elements of L
   let { setupHistory, showHistory } = _L;
 
   showHistory = page => {
-    if (!$("#history")) {
-      addView(T.HISTORY);
-    }
     setActiveView("history");
 
     var indexDB = new PouchDB("history");

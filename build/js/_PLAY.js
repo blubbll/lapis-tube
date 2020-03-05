@@ -54,7 +54,7 @@
     }
   );
   //get Elements of L
-  const { GEO, URL, REGION, addView, setActiveView, T, UI } = _L;
+  const { GEO, URL, REGION, setActiveView, T, UI } = _L;
   //set Elements of L
   let { Player } = _L;
 
@@ -65,9 +65,6 @@
 
   Player = {
     open: () => {
-      if (!$("#player")) {
-        addView(T.PLAYER);
-      }
       setActiveView("player");
 
       $("views") && $("views").classList.remove("wait");
@@ -205,6 +202,17 @@
 
           history.pushState(null, null, `${location.origin}/v/${id}`);
 
+          //SAVE VID TO HISTORY
+          {
+            lscache.setBucket("history");
+            //did we store it yet?...
+            if (!lscache.get(vid.videoId)) {
+              //..no? ...store it!
+              console.debug(`${vid.videoId} was saved to history`);
+              lscache.set(vid.videoId, vid, Infinity);
+            }
+          }
+
           //work-around :/
           window.__video = vid;
 
@@ -274,6 +282,7 @@
                     } else {
                       console.warn("AUDIO NOT OK", format.url);
                     }
+
                     clearInterval(checkInterval);
                     audio = void 0;
                     canPlay() && applyStreams(vid);
