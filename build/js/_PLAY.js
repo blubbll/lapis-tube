@@ -24,7 +24,8 @@
     load,
     lazyload,
     speed,
-    abortFetches
+    abortFetches,
+    showError
   } = window;
   //set generic
   let { app_start, route } = window;
@@ -206,6 +207,7 @@
           {
             lscache.setBucket("history");
             //did we store it yet?...
+
             if (!lscache.get(vid.videoId)) {
               //..no? ...store it!
               console.debug(`${vid.videoId} was saved to history`);
@@ -723,6 +725,7 @@
           };
         })
         .catch(e => {
+          showError();
           console.warn(e);
         });
     }

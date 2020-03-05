@@ -106,8 +106,12 @@
   {
     document.addEventListener("click", e => {
       const that = $("#toggle-left");
-      //////////////////////////////////////////////////////////////
-      if (!that || (that && !that.contains(e.target))) return false;
+
+      //click anywhere to close
+      if (!$("#left[expanded=true]"))
+        if (!that || (that && !that.contains(e.target)))
+          //////////////////////////////////////////////////////////////
+          return false;
       //////////////////////////////////////////////////////////////
 
       const el = $("#left");

@@ -146,12 +146,18 @@ app.use(cors(), [bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
               fs.readFileSync(`${__dirname}/build/components/indicators.html`)
             )
             .replace(
+              //some sgv filters
+              /{{filters}}/gi,
+              fs.readFileSync(`${__dirname}/build/components/filters.html`)
+            )
+            .replace(
               //loading animation instructions
               /{{loader}}/gi,
               fs.readFileSync(`${__dirname}/build/components/loader.html`)
             );
         }
 
+        
         if (
           html
             .split("/build/")
@@ -208,6 +214,7 @@ app.use(cors(), [bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
       for (const script of scripts) {
         bundle += transpile(script, true);
       }
+
       //write bundle
       const minified = Terser.minify(bundle);
       minified.error

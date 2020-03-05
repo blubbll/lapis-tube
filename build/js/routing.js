@@ -60,7 +60,7 @@
 
   showError = info => {
     setActiveView("error");
-    $("#error-custom").innerHTML = info ? `- ${info}` : "";
+    info && [($("#error-custom").innerHTML = `- ${info}`)];
   };
 
   route = to => {

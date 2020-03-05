@@ -54,11 +54,76 @@
   //set Elements of L
   let { setupHistory, showHistory } = _L;
 
-  showHistory = page => {
+  showHistory = () => {
     setActiveView("history");
 
     document.title = UI.titles.history;
 
     history.pushState(null, null, `${URL.LOCAL}/history`);
+
+    //clear old results
+    $("#history-inner").innerHTML = "";
+    
+    let page = $("#history-inner").getAttribute("page") || 0;
+
+    //get total history
+    const keys = Object.keys(localStorage).filter(
+      key =>
+        key.startsWith("lscache-history") && !key.endsWith("-cacheexpiration")
+    );
+
+    if (keys.length) {
+      for (const key of keys.reverse()) {
+        const vid = JSON.parse(localStorage.getItem(key));
+
+        //build results
+        let srcSet = createThumbs(vid.videoThumbnails);
+
+        const getDurationDetailed = () => {
+          let detailed = moment
+            .utc(moment.duration(vid.lengthSeconds, "seconds").asMilliseconds())
+            .format("HH:mm:ss");
+          //slice empty hours
+          detailed.startsWith("00:") && [(detailed = detailed.slice(3))];
+          //slice empty minutes
+          detailed.startsWith("0") && [(detailed = detailed.slice(1))];
+
+          return detailed;
+        };
+        //CONSTRUCT HTML
+        let HTML = T.RESULT
+          //FILL title
+          .replace("{{title}}", vid.title)
+          //fill previewset placeholder
+          .replace("{{preview-set}}", srcSet.slice(0, -1))
+          //FILL DESCRIPTION
+          .replace("{{preview-desc}}", vid.description)
+          //FILL DURATION
+          .replace(
+            "{{duration}}",
+            moment.duration(vid.lengthSeconds * 1000).humanize()
+          ) //DURATION DETAILED
+          .replace("{{duration-detailed}}", getDurationDetailed())
+          //FILL video id
+          .replace("{{video}}", vid.videoId)
+          //FILL AUTHOR
+          .replace("{{author}}", vid.author)
+          //FILL AUTHOR id
+          .replace("{{authorid}}", vid.authorId)
+          //FILL VIEWS (formatted)
+          .replace("{{views}}", numeral(vid.viewCount || 0).format(`0.a`));
+
+        //render result
+        $("#history-inner").insertAdjacentHTML("beforeend", HTML);
+
+        //setup lazyloading
+        lazyload($$("figure>img"));
+      }
+    } else {
+      console.debug("Nothing found :(");
+      $(
+        "#history-inner"
+      ).innerHTML = `<span class="alert-warning border p-5">${UI.warnings.nothings}</span>`;
+    }
   };
 }

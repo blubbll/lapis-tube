@@ -74,6 +74,7 @@ body {
 //404///////////////////////
 /**************************/
 .bsod {
+  max-height: 80vh;
   $light-grey: #e0e2f4;
   $grey: #aaaaaa;
   $blue: #0414a7;
@@ -372,6 +373,11 @@ views {
   }
 }
 
+#results-inner.scrolling {
+  -webkit-filter: url(#scrollblur);
+  filter: url(#scrollblur);
+}
+
 [role="listpage"] {
   background: rgba(0, 0, 0, 0.3);
   $flex: 1 0 0;
@@ -401,10 +407,11 @@ views {
     z-index: 2;
     place-self: flex-end;
     align-items: center;
-    [role="listpage/filters/info"] {
-      white-space: nowrap;
-    }
     [role="listpage/filters/inner"] {
+      [role="listpage/filters/info"] {
+        white-space: nowrap;
+        margin: 0 2rem;
+      }
       border-color: rgba(255, 255, 255, 0.1) !important;
       color: white;
     }

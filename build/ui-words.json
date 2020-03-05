@@ -6,6 +6,7 @@
       "region": "Region",
       "language": "Language",
       "tryagain": "There was an error. Please try again."
+      
     },
     "player": {
       "mute": "mute",
@@ -24,7 +25,8 @@
     },
     "warnings": {
       "muted": "The Video is muted. Click here to unmute.",
-      "nosource": "No playable source found :("
+      "nosource": "No playable source found :(",
+      "nothings": "No items could be found."
     }
   }
 }

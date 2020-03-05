@@ -58,6 +58,7 @@
     //$("#view-inner").innerHTML = T.RESULTS;
     if ($("#results")) {
       console.error("search has been setup already!");
+
       return false;
     }
     //do actual search
@@ -73,10 +74,8 @@
       $("views").classList.add("wait");
 
       //no search, no paging
-
       if (page === 0) {
         //construct result base
-
         setActiveView("results");
         results = $("#results");
         results.setAttribute("state", "search-fresh");
@@ -146,7 +145,7 @@
       }
 
       //Load more results (prevent rebind on infiniscroll)
-      if (results.getAttribute("state") !== "search-continue")
+      if (!results.scrollSetupDone) {
         results.addEventListener("scroll", e => {
           const that = results;
 
@@ -158,7 +157,17 @@
             //search more
             SEARCH(that.getAttribute("q"));
           }
+
+          {
+            clearTimeout(results.scrollTimer);
+            $("#results-inner").classList.add("scrolling");
+            results.scrollTimer = setTimeout(() => {
+              $("#results-inner").classList.remove("scrolling");
+            }, 50);
+          }
         });
+        results.scrollSetupDone = true;
+      }
 
       fetch(`${URL.API}/${REGION}/search/${str}/${page}`)
         .then(res => res.text())
@@ -222,9 +231,10 @@
             .setAttribute("search-active", false);
 
           setTimeout(() => $("views").classList.remove("wait"), 749);
-        }).catch((err)=>{
-        showError();
-      })
+        })
+        .catch(err => {
+          showError();
+        });
     };
 
     //LIVESEARCH
@@ -269,6 +279,9 @@
                 } else if (result.code === 404) {
                   update([{ label: input, value: input.toLowerCase() }]);
                 }
+              })
+              .catch(e => {
+                showError();
               });
         },
         onSelect: item => {
