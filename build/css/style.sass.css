@@ -132,12 +132,6 @@ body {
 /**************************/
 //NAVBAR TOP////////////////
 /**************************/
-.burger-flag {
-  margin-bottom: 4px;
-  width: 13.13px;
-  height: 14px !important;
-  opacity: 0.5;
-}
 #top,
 #left {
   z-index: 3;
@@ -378,15 +372,7 @@ views {
   }
 }
 
-#results {
-  #results-filters {
-    z-index: 2;
-    place-self: flex-end;
-    #results-filters-inner {
-      border-color: rgba(255, 255, 255, 0.1) !important;
-      color: white;
-    }
-  }
+[role="listpage"] {
   background: rgba(0, 0, 0, 0.3);
   $flex: 1 0 0;
   -webkit-flex: $flex;
@@ -411,7 +397,20 @@ views {
     }
   }
 
-  #results-inner {
+  [role="listpage/filters"] {
+    z-index: 2;
+    place-self: flex-end;
+    align-items: center;
+    [role="listpage/filters/info"] {
+      white-space: nowrap;
+    }
+    [role="listpage/filters/inner"] {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: white;
+    }
+  }
+
+  [role="listpage/inner"] {
     height: -moz-available;
     height: -webkit-fill-available;
     height: fill-available;

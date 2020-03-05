@@ -1,0 +1,38 @@
+<view id="error" class="d-flex flex-column">
+  <error class="d-flex flex-column justify-content-center bsod">
+    <h1 class="neg title"><span class="bg">Error - <p id="error-custom"></p></span></h1>
+    <p>An error has occured, to continue:</p>
+    <p>
+      * Return to the start.<br />
+      * Reload the current page<br />
+      * Open an issue about this error and try later.
+    </p>
+    <nav class="nav flex-column">
+      <a
+        type="button"
+        onclick="location.assign(L.URL.LOCAL)"
+        class="link"
+        title="go to the start page"
+        >Start</a
+      >
+      &nbsp;|&nbsp;
+      <a
+        type="button"
+        onclick="location.reload(true)"
+        class="link"
+        title="reload page"
+      >
+        reload page</a
+      >
+      &nbsp;|&nbsp;
+      <a
+        href="https://github.com/blubbll/lapis-tube/issues"
+        class="link"
+        target="_blank"
+        title="open an issue"
+      >
+        <span class="notranslate">GitHub</span> Issue Tracker</a
+      >
+    </nav>
+  </error>
+</view>

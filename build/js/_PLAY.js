@@ -78,7 +78,7 @@
         location.href.split("/").length === 5 && history.back();
       //show app home
       else {
-        history.pushState(null, null, URL.HOST);
+        history.pushState(null, null, URL.LOCAL);
         setActiveView("start");
       }
 
@@ -200,7 +200,7 @@
 
           const vid = JSON.parse(raw);
 
-          history.pushState(null, null, `${location.origin}/v/${id}`);
+          history.pushState(null, null, `${URL.LOCAL}/v/${id}`);
 
           //SAVE VID TO HISTORY
           {
@@ -521,7 +521,9 @@
                     $("#player-info").innerHTML = T.PLAYER_FOOTER.replace(
                       //FILL DESCRIPTION
                       "{{desc}}",
-                      vid.descriptionHtml || "😶"
+                      vid.descriptionHtml.length >= 38 //(37 is the length of an empty htmldesc here)
+                        ? vid.descriptionHtml
+                        : "😶"
                     )
                       //FILL AUTHOR
                       .replace("{{author}}", vid.author)

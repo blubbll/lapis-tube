@@ -33,9 +33,9 @@
     }
   );
   //get Elements of L
-  const { URL, Player, setActiveView, SEARCH, T } = _L;
+  const { URL, Player, setActiveView, SEARCH, T, showHistory } = _L;
   //set Elements of L
-  let { route } = _L;
+  let { route, showError } = _L;
 
   //get page querystring
   {
@@ -58,12 +58,18 @@
     };
   }
 
+  showError = info => {
+    setActiveView("error");
+    $("#error-custom").innerHTML = info ? `- ${info}` : "";
+  };
+
   route = to => {
     if (to) {
       console.debug(`Processing route ${to}...`);
       const args = to.split("/")[2];
       //process route when app's ready
       waitForElement("views").then(() => {
+        $("views").classList.remove("wait");
         switch (`/${to.split("/")[1]}`) {
           case "/v":
             {
@@ -74,6 +80,11 @@
             }
             break;
 
+          case "/history":
+            {
+              showHistory();
+            }
+            break;
           case "/search":
             {
               const q = args;
@@ -86,9 +97,7 @@
           default: {
             //atomar routing based on array
             if (
-              ["/search", "/watch"].some(
-                (val, i, arr) => val === to || val.startsWith(to)
-              )
+              ["/watch"].some((val, i, arr) => val === to || val.startsWith(to))
             ) {
               if (to.startsWith("/watch?v=")) {
                 const id = to.split("/watch?v=")[1];

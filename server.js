@@ -125,8 +125,10 @@ app.use(cors(), [bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
         `${__dirname}/build/outdated-browser.html`,
         `${__dirname}/build/html/app.html`,
         `${__dirname}/build/html/404.html`,
+        `${__dirname}/build/html/error.html`,
         `${__dirname}/build/html/channel.html`,
         `${__dirname}/build/html/player.html`,
+        `${__dirname}/build/html/history-list.html`,
         `${__dirname}/build/html/result-list.html`,
         `${__dirname}/build/html/result-item.html`,
         `${__dirname}/build/html/start.html`

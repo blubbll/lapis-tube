@@ -23,7 +23,7 @@
     lazyload
   } = window;
   //set generic
-  let { app_start, route } = window;
+  let { app_start, route, showError } = window;
   //-//
   const _L = new Proxy(
     {},
@@ -106,8 +106,6 @@
           $("#results-inner").innerHTML = "";
         }
       }
-
-      setTimeout(() => $("views").classList.remove("wait"), 749);
 
       //store querystring for later
       results.setAttribute("q", str);
@@ -222,7 +220,11 @@
           document
             .getElementById("results")
             .setAttribute("search-active", false);
-        });
+
+          setTimeout(() => $("views").classList.remove("wait"), 749);
+        }).catch((err)=>{
+        showError();
+      })
     };
 
     //LIVESEARCH

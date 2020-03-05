@@ -148,6 +148,7 @@
         //template var inmemory
         const T = (window.T = {});
 
+        //received files by "tr" are translated!
         Promise.all(
           [
             tr + "/ui-words.html",
@@ -163,6 +164,7 @@
             console.debug(`Your Geo Information by Maxmind: `, GEO);
             console.debug(`Your browser language: `, getL());
 
+            //loop received html and fill template vars
             for (const template of new DOMParser()
               .parseFromString(tx[2], "text/html")
               .querySelectorAll("template")) {
@@ -174,13 +176,16 @@
                 case "404":
                   T[404] = _html;
                   break;
+                case "error":
+                  T.ERROR = _html;
+                  break;
                 case "channel":
                   T.CHANNEL = _html;
                   break;
                 case "player":
                   T.PLAYER = _html;
                   break;
-                case "history":
+                case "history-list":
                   T.HISTORY = _html;
                   break;
                 case "result-list":

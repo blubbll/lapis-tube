@@ -57,13 +57,8 @@
   showHistory = page => {
     setActiveView("history");
 
-    var indexDB = new PouchDB("history");
+    document.title = UI.titles.history;
 
-    indexDB.allDocs().then(all => {
-      for (const item of all.rows) {
-        const vid = indexDB.get(item.id);
-        console.log(vid);
-      }
-    });
+    history.pushState(null, null, `${URL.LOCAL}/history`);
   };
 }

@@ -7,19 +7,20 @@
       "language": "Language",
       "tryagain": "There was an error. Please try again."
     },
-    "player":{
+    "player": {
       "mute": "mute",
       "play": "play",
       "pause": "pause",
       "fullscreen": "toggle fullscreen"
     },
-    "titles":{
+    "titles": {
       "results": "Search results for",
       "moreresults": "More search results for",
       "videos": "Videos",
       "playing": "playing",
       "trending": "Trending right now",
-      "problem": "Houston, we have a problem..."
+      "problem": "Houston, we have a problem...",
+      "history": "Previously watched videos"
     },
     "warnings": {
       "muted": "The Video is muted. Click here to unmute.",
