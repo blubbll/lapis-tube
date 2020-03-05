@@ -64,18 +64,6 @@ const express = require("express"),
 //configure bodyparser
 app.use(cors(), [bodyParser.urlencoded({ extended: true }), bodyParser.json()]);
 
-/*let PROXY;
-const getProxy = () => {
-  fetch(process.env.REMOTE_INSTANCES)
-    .then(res => res.json())
-    .then(json => {
-      console.log(json);
-      //for(const prx of json)
-    });
-};
-
-getProxy();
-*/
 {
   //BUILD
   if (process.env.PROJECT_NAME) {
@@ -295,25 +283,8 @@ app.use("*", (req, res, next) => {
   next();
 });
 
-//index
-/*app.get("/", (req, res) => {
-  res.send(
-    fs
-      .readFileSync(`${__dirname}/!dist/index.html`, "utf8")
-      .replace(/{{local}}/gi, `${req.protocol}://${req.hostname}/`)
-  );
-});*/
-
 //simple geo ip
 app.get(`${API}/geoip`, (req, res) => {
-  /*fetch(`http://api.petabyet.com/geoip/${req.ip}`).then(_res => {
-    if(_res.status){
-      _res=>_res.json.then(() =>{
-        _res.pipe
-      })
-    }
-    console.log(res.status)
-  })*/
   const get = () =>
     request(`http://api.petabyet.com/geoip/${req.ip}`)
       .on("response", _res => {

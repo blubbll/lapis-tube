@@ -210,18 +210,18 @@
   };
 
   URL = {
-    HOST: `${location.protocol}//${
-      location.host.endsWith("glitch.me")
-        ? //DEV ENV in ORIGINAL
-          location.hostname
-        : //GT EDITOR
-        location.hostname === "gtranslate.io"
-        ? location.href.split("/edit/")[1]
-        : //TRANSLATED
-          `${
-            getL() !== "en" ? getL() + "." + location.hostname : location.origin
-          }`
-    }`,
+    HOST: location.host.endsWith("glitch.me")
+      ? //DEV ENV in ORIGINAL
+        location.origin
+      : //GT EDITOR
+      location.hostname === "gtranslate.io"
+      ? location.href.split("/edit/")[1]
+      : //TRANSLATED
+        `${
+          getL() === "en" //don't do .en-subdomain
+            ? location.origin
+            : "//" + getL() + "." + location.hostname
+        }`,
     CDN: $("base").href,
     LOCAL: location.origin,
     API: `${location.origin}/api`

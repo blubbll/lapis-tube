@@ -97,7 +97,7 @@
           results.setAttribute("state", "search-new");
           page = 1;
 
-          history.pushState(null, null, `${URL.HOST}/search/${str}`);
+          history.pushState(null, null, `${URL.LOCAL}/search/${str}`);
 
           //update page title
           document.title = `${UI.titles.results} "${str}"`;

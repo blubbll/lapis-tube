@@ -11,7 +11,7 @@
         "--color-accent-main"
       ),
       args = [
-        `\n  %c %c %c➤ %cLapisTube %c %c  ${location.href} %c  %c ♥ %c  \n`,
+        `\n%c  %c %c➤ %c𝑙𝑎𝑝𝑖𝑠Tube  %c %c  ${location.href}  %c  %c ♥ %c  \n`,
         `background: ${acc}; padding:5px 0;`,
         `background: black; padding:5px 0;`,
         `color: blue; background: black; padding:5px 0;`,

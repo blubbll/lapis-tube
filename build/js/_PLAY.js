@@ -94,18 +94,15 @@
           "q"
         )}"`;
 
-        setTimeout(
-          () => [
-            $("#player-inner").removeAttribute("closing"),
-            setActiveView("results")
-          ],
-          399
-        );
+        setTimeout(() => {
+          $("#player-inner").removeAttribute("closing");
+          setActiveView("results");
+          //remove sources
+          $("audio") && [($("audio").src = "")],
+            $("video") && [($("video").src = "")];
+        }, 399);
         setTimeout(() => $("views").classList.remove("wait"), 249);
       }
-      //remove sources
-      $("audio") && [($("audio").src = "")],
-        $("video") && [($("video").src = "")];
     },
     openFromResult: that => {
       $("views").classList.add("wait");
@@ -540,12 +537,12 @@
                     $("#player .card").removeAttribute("loading");
                   }
 
-                   try {
+                  try {
                     VIDEO.play();
                   } catch (e) {
                     console.warn(e);
                   }
-                  
+
                   //show video pane
                   $(".afterglow__video").style.display = "flex";
 
