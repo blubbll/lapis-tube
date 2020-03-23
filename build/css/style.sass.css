@@ -10,6 +10,16 @@ param {
   padding-left: 5px;
 }
 
+/* smooth scroll */
+* {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}
+
 /* no long-click to dl on images */
 img {
   pointer-events: none;
@@ -88,6 +98,7 @@ body {
   .neg {
     text-align: center;
     color: $blue;
+    white-space: nowrap;
 
     .bg {
       background: $grey;
@@ -102,6 +113,8 @@ body {
     text-align: center;
 
     .link {
+      background: none!important;
+      border: unset; /* reset / override bs */
       color: $light-grey;
       text-decoration: none;
       border-style: double;
@@ -110,8 +123,8 @@ body {
 
       &:hover,
       &:focus {
-        background: $grey;
-        color: $blue;
+        background: $grey !important;
+        color: $blue !important;
       }
     }
   }
@@ -388,18 +401,28 @@ views {
   flex: $flex;
   overflow-y: auto;
 
+  .card {
+    will-change: opacity, transform;
+    transition: opacity 299ms linear;
+  }
   /*fake-grow before popping into player*/
   &.grow {
     overflow: hidden;
     .card {
       transition: transform 299ms linear;
-      will-change: transform;
     }
     .card.growing {
       pointer-events: none;
       transform: scale(1.1);
       z-index: 1;
       overflow: visible !important;
+    }
+  }
+
+  &.fading {
+    overflow: hidden;
+    .card {
+      opacity: 0;
     }
   }
 

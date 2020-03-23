@@ -52,7 +52,12 @@
   //get Elements of L
   const { GEO, URL, REGION, Player, setActiveView, T, UI } = _L;
   //set Elements of L
-  let { setupHistory, showHistory } = _L;
+  let { setupHistory, showHistory, clearHistory } = _L;
+
+  clearHistory = () => {
+    lscache.setBucket("history");
+    lscache.flush();
+  };
 
   showHistory = () => {
     setActiveView("history");
@@ -63,7 +68,7 @@
 
     //clear old results
     $("#history-inner").innerHTML = "";
-    
+
     let page = $("#history-inner").getAttribute("page") || 0;
 
     //get total history

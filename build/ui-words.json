@@ -26,7 +26,7 @@
     "warnings": {
       "muted": "The Video is muted. Click here to unmute.",
       "nosource": "No playable source found :(",
-      "nothings": "No items could be found."
+      "nothings": "No videos could be found."
     }
   }
 }

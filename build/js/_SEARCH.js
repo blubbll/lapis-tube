@@ -5,6 +5,7 @@
 
   //get generic
   const {
+    Browser,
     lscache,
     waitForElement,
     getSize,
@@ -157,15 +158,20 @@
             //search more
             SEARCH(that.getAttribute("q"));
           }
-
-          {
-            clearTimeout(results.scrollTimer);
-            $("#results-inner").classList.add("scrolling");
-            results.scrollTimer = setTimeout(() => {
-              $("#results-inner").classList.remove("scrolling");
-            }, 50);
-          }
         });
+        //fancy scrolling
+        Browser.isChrome &&
+          results.addEventListener("scroll", e => {
+            const that = results;
+
+            {
+              clearTimeout(results.scrollTimer);
+              $("#results-inner").classList.add("scrolling");
+              results.scrollTimer = setTimeout(() => {
+                $("#results-inner").classList.remove("scrolling");
+              }, 39);
+            }
+          });
         results.scrollSetupDone = true;
       }
 
@@ -232,7 +238,7 @@
 
           setTimeout(() => $("views").classList.remove("wait"), 749);
         })
-        .catch(err => {
+        .catch(e => {
           showError();
         });
     };

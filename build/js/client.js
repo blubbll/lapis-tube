@@ -219,7 +219,7 @@
       if (lscache.get("cookie-accepted")) {
         app_start();
       } else {
-        fetch(tr + "/cookie.html")
+        fetch(URL.HOST + "/cookie.html")
           .then(res => res.text())
           .then(html => {
             $("content").innerHTML = html.replace(/{{local}}/gi, URL.LOCAL);

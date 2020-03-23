@@ -207,11 +207,12 @@
           {
             lscache.setBucket("history");
             //did we store it yet?...
-
             if (!lscache.get(vid.videoId)) {
+              //cut description
+              vid.description = `${vid.description.substring(0, 122)}...`;
               //..no? ...store it!
-              console.debug(`${vid.videoId} was saved to history`);
               lscache.set(vid.videoId, vid, Infinity);
+              console.debug(`${vid.videoId} was saved to history`);
             }
           }
 
