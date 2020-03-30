@@ -1,7 +1,14 @@
 //©Blu2020
 {
   //get generic
-  const { debounce } = window;
+  const {
+    alert,
+    Browser,
+    debounce,
+    devicePixelRatio,
+    Event,
+    WebGL2RenderingContext
+  } = window;
   //set generic
   let { initBg } = window;
   //-//
@@ -32,810 +39,463 @@
   let { LOADED } = _L;
   const $ = document.querySelector.bind(document);
   const $$ = document.querySelectorAll.bind(document);
-  /*const { Trianglify, debounce, fetch } = window;
-
-window.load = () =>
-  setTimeout(() => {
-    document.querySelector("diamond").setAttribute("style", "");
-    document.querySelector("#wrap") &&
-      document.querySelector("#wrap").setAttribute("style", "display:none;");
-  }, 999);
-
-window.done = () =>
-  setTimeout(() => {
-    document.querySelector("diamond").setAttribute("style", "display:none;");
-    document.querySelector("#wrap") &&
-      document.querySelector("#wrap").setAttribute("style", "");
-  }, 999);
-
-//BG START
-const initBg = () => {
-  var rn = Math.floor(Math.random() * 150 + 60);
-  var rs = Math.floor(Math.random() * 11 + 4);
-  const prim = getComputedStyle(document.documentElement).getPropertyValue(
-    "--color-accent-main"
-  );
-
-  var t = new Trianglify({
-    x_gradient: [
-      "#173b5e",
-      "#3e87d0",
-      "#1c4873",
-      "#215487",
-      "#26619c",
-      "#2b6eb1",
-      "#307bc5"
-    ], //Trianglify.colorbrewer.Spectral[rs],
-    noiseIntensity: 0,
-    cellsize: rn
-  });
-  var pattern = t.generate(window.innerWidth, window.innerHeight);
-  document.body.setAttribute("style", `background-image: ${pattern.dataUrl}`);
-};
-window.onresize = debounce(initBg, 999);
-//BG END
-/*
-
-/*
-  Johan Karlsson, 2020
-  https://twitter.com/DonKarlssonSan
-  MIT License, see Details View
-*/
-
-  // https://github.com/jwagner/simplex-noise.js
-
-  /*
-   * A fast javascript implementation of simplex noise by Jonas Wagner
-   *
-   * Based on a speed-improved simplex noise algorithm for 2D, 3D and 4D in Java.
-   * Which is based on example code by Stefan Gustavson (stegu@itn.liu.se).
-   * With Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
-   * Better rank ordering method by Stefan Gustavson in 2012.
-   *
-   *
-   * Copyright (C) 2016 Jonas Wagner
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining
-   * a copy of this software and associated documentation files (the
-   * "Software"), to deal in the Software without restriction, including
-   * without limitation the rights to use, copy, modify, merge, publish,
-   * distribute, sublicense, and/or sell copies of the Software, and to
-   * permit persons to whom the Software is furnished to do so, subject to
-   * the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be
-   * included in all copies or substantial portions of the Software.
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-   * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-   * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-   * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-   *
-   */
-
-  const { define, SimplexNoise } = window;
-
-  (() => {
-    const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-    const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-    const F3 = 1.0 / 3.0;
-    const G3 = 1.0 / 6.0;
-    const F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
-    const G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
-
-    function SimplexNoise(random) {
-      if (!random) random = Math.random;
-      this.p = buildPermutationTable(random);
-      this.perm = new Uint8Array(512);
-      this.permMod12 = new Uint8Array(512);
-      for (let i = 0; i < 512; i++) {
-        this.perm[i] = this.p[i & 255];
-        this.permMod12[i] = this.perm[i] % 12;
-      }
-    }
-    SimplexNoise.prototype = {
-      grad3: new Float32Array([
-        1,
-        1,
-        0,
-        -1,
-        1,
-        0,
-        1,
-        -1,
-        0,
-
-        -1,
-        -1,
-        0,
-        1,
-        0,
-        1,
-        -1,
-        0,
-        1,
-
-        1,
-        0,
-        -1,
-        -1,
-        0,
-        -1,
-        0,
-        1,
-        1,
-
-        0,
-        -1,
-        1,
-        0,
-        1,
-        -1,
-        0,
-        -1,
-        -1
-      ]),
-      grad4: new Float32Array([
-        0,
-        1,
-        1,
-        1,
-        0,
-        1,
-        1,
-        -1,
-        0,
-        1,
-        -1,
-        1,
-        0,
-        1,
-        -1,
-        -1,
-        0,
-        -1,
-        1,
-        1,
-        0,
-        -1,
-        1,
-        -1,
-        0,
-        -1,
-        -1,
-        1,
-        0,
-        -1,
-        -1,
-        -1,
-        1,
-        0,
-        1,
-        1,
-        1,
-        0,
-        1,
-        -1,
-        1,
-        0,
-        -1,
-        1,
-        1,
-        0,
-        -1,
-        -1,
-        -1,
-        0,
-        1,
-        1,
-        -1,
-        0,
-        1,
-        -1,
-        -1,
-        0,
-        -1,
-        1,
-        -1,
-        0,
-        -1,
-        -1,
-        1,
-        1,
-        0,
-        1,
-        1,
-        1,
-        0,
-        -1,
-        1,
-        -1,
-        0,
-        1,
-        1,
-        -1,
-        0,
-        -1,
-        -1,
-        1,
-        0,
-        1,
-        -1,
-        1,
-        0,
-        -1,
-        -1,
-        -1,
-        0,
-        1,
-        -1,
-        -1,
-        0,
-        -1,
-        1,
-        1,
-        1,
-        0,
-        1,
-        1,
-        -1,
-        0,
-        1,
-        -1,
-        1,
-        0,
-        1,
-        -1,
-        -1,
-        0,
-        -1,
-        1,
-        1,
-        0,
-        -1,
-        1,
-        -1,
-        0,
-        -1,
-        -1,
-        1,
-        0,
-        -1,
-        -1,
-        -1,
-        0
-      ]),
-      noise2D(xin, yin) {
-        const permMod12 = this.permMod12;
-        const perm = this.perm;
-        const grad3 = this.grad3;
-        let n0 = 0; // Noise contributions from the three corners
-        let n1 = 0;
-        let n2 = 0;
-        // Skew the input space to determine which simplex cell we're in
-        const s = (xin + yin) * F2; // Hairy factor for 2D
-        const i = Math.floor(xin + s);
-        const j = Math.floor(yin + s);
-        const t = (i + j) * G2;
-        const X0 = i - t; // Unskew the cell origin back to (x,y) space
-        const Y0 = j - t;
-        const x0 = xin - X0; // The x,y distances from the cell origin
-        const y0 = yin - Y0;
-
-        // For the 2D case, the simplex shape is an equilateral triangle.
-        // Determine which simplex we are in.
-        let i1; // Offsets for second (middle) corner of simplex in (i,j) coords
-
-        let j1;
-        if (x0 > y0) {
-          i1 = 1;
-          j1 = 0;
-        } // lower triangle, XY order: (0,0)->(1,0)->(1,1)
-        else {
-          i1 = 0;
-          j1 = 1;
-        } // upper triangle, YX order: (0,0)->(0,1)->(1,1)
-        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
-        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
-        // c = (3-sqrt(3))/6
-        const x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
-        const y1 = y0 - j1 + G2;
-        const x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
-        const y2 = y0 - 1.0 + 2.0 * G2;
-        // Work out the hashed gradient indices of the three simplex corners
-        const ii = i & 255;
-        const jj = j & 255;
-        // Calculate the contribution from the three corners
-        let t0 = 0.5 - x0 * x0 - y0 * y0;
-        if (t0 >= 0) {
-          const gi0 = permMod12[ii + perm[jj]] * 3;
-          t0 *= t0;
-          n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0); // (x,y) of grad3 used for 2D gradient
-        }
-        let t1 = 0.5 - x1 * x1 - y1 * y1;
-        if (t1 >= 0) {
-          const gi1 = permMod12[ii + i1 + perm[jj + j1]] * 3;
-          t1 *= t1;
-          n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1);
-        }
-        let t2 = 0.5 - x2 * x2 - y2 * y2;
-        if (t2 >= 0) {
-          const gi2 = permMod12[ii + 1 + perm[jj + 1]] * 3;
-          t2 *= t2;
-          n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        return 70.0 * (n0 + n1 + n2);
-      },
-      // 3D simplex noise
-      noise3D(xin, yin, zin) {
-        const permMod12 = this.permMod12;
-        const perm = this.perm;
-        const grad3 = this.grad3;
-        let n0; // Noise contributions from the four corners
-        let n1;
-        let n2;
-        let n3;
-        // Skew the input space to determine which simplex cell we're in
-        const s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
-        const i = Math.floor(xin + s);
-        const j = Math.floor(yin + s);
-        const k = Math.floor(zin + s);
-        const t = (i + j + k) * G3;
-        const X0 = i - t; // Unskew the cell origin back to (x,y,z) space
-        const Y0 = j - t;
-        const Z0 = k - t;
-        const x0 = xin - X0; // The x,y,z distances from the cell origin
-        const y0 = yin - Y0;
-        const z0 = zin - Z0;
-
-        // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
-        // Determine which simplex we are in.
-        let i1; // Offsets for second corner of simplex in (i,j,k) coords
-
-        let j1;
-        let k1;
-        let i2; // Offsets for third corner of simplex in (i,j,k) coords
-        let j2;
-        let k2;
-        if (x0 >= y0) {
-          if (y0 >= z0) {
-            i1 = 1;
-            j1 = 0;
-            k1 = 0;
-            i2 = 1;
-            j2 = 1;
-            k2 = 0;
-          } // X Y Z order
-          else if (x0 >= z0) {
-            i1 = 1;
-            j1 = 0;
-            k1 = 0;
-            i2 = 1;
-            j2 = 0;
-            k2 = 1;
-          } // X Z Y order
-          else {
-            i1 = 0;
-            j1 = 0;
-            k1 = 1;
-            i2 = 1;
-            j2 = 0;
-            k2 = 1;
-          } // Z X Y order
-        } else {
-          // x0<y0
-          if (y0 < z0) {
-            i1 = 0;
-            j1 = 0;
-            k1 = 1;
-            i2 = 0;
-            j2 = 1;
-            k2 = 1;
-          } // Z Y X order
-          else if (x0 < z0) {
-            i1 = 0;
-            j1 = 1;
-            k1 = 0;
-            i2 = 0;
-            j2 = 1;
-            k2 = 1;
-          } // Y Z X order
-          else {
-            i1 = 0;
-            j1 = 1;
-            k1 = 0;
-            i2 = 1;
-            j2 = 1;
-            k2 = 0;
-          } // Y X Z order
-        }
-        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
-        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
-        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
-        // c = 1/6.
-        const x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
-        const y1 = y0 - j1 + G3;
-        const z1 = z0 - k1 + G3;
-        const x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x,y,z) coords
-        const y2 = y0 - j2 + 2.0 * G3;
-        const z2 = z0 - k2 + 2.0 * G3;
-        const x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x,y,z) coords
-        const y3 = y0 - 1.0 + 3.0 * G3;
-        const z3 = z0 - 1.0 + 3.0 * G3;
-        // Work out the hashed gradient indices of the four simplex corners
-        const ii = i & 255;
-        const jj = j & 255;
-        const kk = k & 255;
-        // Calculate the contribution from the four corners
-        let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0) n0 = 0.0;
-        else {
-          const gi0 = permMod12[ii + perm[jj + perm[kk]]] * 3;
-          t0 *= t0;
-          n0 =
-            t0 *
-            t0 *
-            (grad3[gi0] * x0 + grad3[gi0 + 1] * y0 + grad3[gi0 + 2] * z0);
-        }
-        let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0) n1 = 0.0;
-        else {
-          const gi1 = permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]] * 3;
-          t1 *= t1;
-          n1 =
-            t1 *
-            t1 *
-            (grad3[gi1] * x1 + grad3[gi1 + 1] * y1 + grad3[gi1 + 2] * z1);
-        }
-        let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0) n2 = 0.0;
-        else {
-          const gi2 = permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]] * 3;
-          t2 *= t2;
-          n2 =
-            t2 *
-            t2 *
-            (grad3[gi2] * x2 + grad3[gi2 + 1] * y2 + grad3[gi2 + 2] * z2);
-        }
-        let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0) n3 = 0.0;
-        else {
-          const gi3 = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]] * 3;
-          t3 *= t3;
-          n3 =
-            t3 *
-            t3 *
-            (grad3[gi3] * x3 + grad3[gi3 + 1] * y3 + grad3[gi3 + 2] * z3);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-        return 32.0 * (n0 + n1 + n2 + n3);
-      },
-      // 4D simplex noise, better simplex rank ordering method 2012-03-09
-      noise4D(x, y, z, w) {
-        const permMod12 = this.permMod12;
-        const perm = this.perm;
-        const grad4 = this.grad4;
-
-        let n0; // Noise contributions from the five corners
-        let n1;
-        let n2;
-        let n3;
-        let n4;
-        // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
-        const s = (x + y + z + w) * F4; // Factor for 4D skewing
-        const i = Math.floor(x + s);
-        const j = Math.floor(y + s);
-        const k = Math.floor(z + s);
-        const l = Math.floor(w + s);
-        const t = (i + j + k + l) * G4; // Factor for 4D unskewing
-        const X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
-        const Y0 = j - t;
-        const Z0 = k - t;
-        const W0 = l - t;
-        const x0 = x - X0; // The x,y,z,w distances from the cell origin
-        const y0 = y - Y0;
-        const z0 = z - Z0;
-        const w0 = w - W0;
-        // For the 4D case, the simplex is a 4D shape I won't even try to describe.
-        // To find out which of the 24 possible simplices we're in, we need to
-        // determine the magnitude ordering of x0, y0, z0 and w0.
-        // Six pair-wise comparisons are performed between each possible pair
-        // of the four coordinates, and the results are used to rank the numbers.
-        let rankx = 0;
-        let ranky = 0;
-        let rankz = 0;
-        let rankw = 0;
-        if (x0 > y0) rankx++;
-        else ranky++;
-        if (x0 > z0) rankx++;
-        else rankz++;
-        if (x0 > w0) rankx++;
-        else rankw++;
-        if (y0 > z0) ranky++;
-        else rankz++;
-        if (y0 > w0) ranky++;
-        else rankw++;
-        if (z0 > w0) rankz++;
-        else rankw++;
-        let i1; // The integer offsets for the second simplex corner
-        let j1;
-        let k1;
-        let l1;
-        let i2; // The integer offsets for the third simplex corner
-        let j2;
-        let k2;
-        let l2;
-        let i3; // The integer offsets for the fourth simplex corner
-        let j3;
-        let k3;
-        let l3;
-        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some order.
-        // Many values of c will never occur, since e.g. x>y>z>w makes x<z, y<w and x<w
-        // impossible. Only the 24 indices which have non-zero entries make any sense.
-        // We use a thresholding to set the coordinates in turn from the largest magnitude.
-        // Rank 3 denotes the largest coordinate.
-        i1 = rankx >= 3 ? 1 : 0;
-        j1 = ranky >= 3 ? 1 : 0;
-        k1 = rankz >= 3 ? 1 : 0;
-        l1 = rankw >= 3 ? 1 : 0;
-        // Rank 2 denotes the second largest coordinate.
-        i2 = rankx >= 2 ? 1 : 0;
-        j2 = ranky >= 2 ? 1 : 0;
-        k2 = rankz >= 2 ? 1 : 0;
-        l2 = rankw >= 2 ? 1 : 0;
-        // Rank 1 denotes the second smallest coordinate.
-        i3 = rankx >= 1 ? 1 : 0;
-        j3 = ranky >= 1 ? 1 : 0;
-        k3 = rankz >= 1 ? 1 : 0;
-        l3 = rankw >= 1 ? 1 : 0;
-        // The fifth corner has all coordinate offsets = 1, so no need to compute that.
-        const x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
-        const y1 = y0 - j1 + G4;
-        const z1 = z0 - k1 + G4;
-        const w1 = w0 - l1 + G4;
-        const x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
-        const y2 = y0 - j2 + 2.0 * G4;
-        const z2 = z0 - k2 + 2.0 * G4;
-        const w2 = w0 - l2 + 2.0 * G4;
-        const x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
-        const y3 = y0 - j3 + 3.0 * G4;
-        const z3 = z0 - k3 + 3.0 * G4;
-        const w3 = w0 - l3 + 3.0 * G4;
-        const x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
-        const y4 = y0 - 1.0 + 4.0 * G4;
-        const z4 = z0 - 1.0 + 4.0 * G4;
-        const w4 = w0 - 1.0 + 4.0 * G4;
-        // Work out the hashed gradient indices of the five simplex corners
-        const ii = i & 255;
-        const jj = j & 255;
-        const kk = k & 255;
-        const ll = l & 255;
-        // Calculate the contribution from the five corners
-        let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if (t0 < 0) n0 = 0.0;
-        else {
-          const gi0 = (perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32) * 4;
-          t0 *= t0;
-          n0 =
-            t0 *
-            t0 *
-            (grad4[gi0] * x0 +
-              grad4[gi0 + 1] * y0 +
-              grad4[gi0 + 2] * z0 +
-              grad4[gi0 + 3] * w0);
-        }
-        let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t1 < 0) n1 = 0.0;
-        else {
-          const gi1 =
-            (perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] %
-              32) *
-            4;
-          t1 *= t1;
-          n1 =
-            t1 *
-            t1 *
-            (grad4[gi1] * x1 +
-              grad4[gi1 + 1] * y1 +
-              grad4[gi1 + 2] * z1 +
-              grad4[gi1 + 3] * w1);
-        }
-        let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t2 < 0) n2 = 0.0;
-        else {
-          const gi2 =
-            (perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] %
-              32) *
-            4;
-          t2 *= t2;
-          n2 =
-            t2 *
-            t2 *
-            (grad4[gi2] * x2 +
-              grad4[gi2 + 1] * y2 +
-              grad4[gi2 + 2] * z2 +
-              grad4[gi2 + 3] * w2);
-        }
-        let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t3 < 0) n3 = 0.0;
-        else {
-          const gi3 =
-            (perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] %
-              32) *
-            4;
-          t3 *= t3;
-          n3 =
-            t3 *
-            t3 *
-            (grad4[gi3] * x3 +
-              grad4[gi3 + 1] * y3 +
-              grad4[gi3 + 2] * z3 +
-              grad4[gi3 + 3] * w3);
-        }
-        let t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t4 < 0) n4 = 0.0;
-        else {
-          const gi4 =
-            (perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32) *
-            4;
-          t4 *= t4;
-          n4 =
-            t4 *
-            t4 *
-            (grad4[gi4] * x4 +
-              grad4[gi4 + 1] * y4 +
-              grad4[gi4 + 2] * z4 +
-              grad4[gi4 + 3] * w4);
-        }
-        // Sum up and scale the result to cover the range [-1,1]
-        return 27.0 * (n0 + n1 + n2 + n3 + n4);
-      }
-    };
-
-    function buildPermutationTable(random) {
-      let i;
-      const p = new Uint8Array(256);
-      for (i = 0; i < 256; i++) {
-        p[i] = i;
-      }
-      for (i = 0; i < 255; i++) {
-        const r = i + ~~(random() * (256 - i));
-        const aux = p[i];
-        p[i] = p[r];
-        p[r] = aux;
-      }
-      return p;
-    }
-    SimplexNoise._buildPermutationTable = buildPermutationTable;
-
-    // amd
-    if (typeof define !== "undefined" && define.amd) define(() => SimplexNoise);
-    // common js
-    if (typeof exports !== "undefined") exports.SimplexNoise = SimplexNoise;
-    // browser
-    else if (typeof window !== "undefined") window.SimplexNoise = SimplexNoise;
-    // nodejs
-    if (typeof module !== "undefined") {
-      module.exports = SimplexNoise;
-    }
-  })();
-
-  ////////////////////////////////////////
-  ////////////////////////////////////////
-  ////////////////////////////////////////
-  ////////////////////////////////////////
-
   initBg = () => {
-    let config = {};
-    let canvas;
-    let ctx;
-    let w;
-    let h;
-    let hexagons;
-    let simplex;
-    let noiseZoom;
-
-    class Hexagon {
-      constructor(x, y, R) {
-        this.x = x;
-        this.y = y;
-        this.R = R;
+    "use strict";
+    const canvas = document.createElement("canvas");
+    canvas.id = "canvas";
+    document.body.append(canvas);
+    const gl = canvas.getContext("webgl2", { antialias: false });
+    ping(gl);
+    window.addEventListener("resize", () => fscn(gl));
+    // --- vshader, share among basic geoms
+    const vss = `#version 300 es
+in vec4 P;
+in lowp vec4 C;
+uniform mat4 M0;
+uniform mat4 M1;
+out lowp vec4 vC;
+void main() {
+    // trnp is used just becuz i hvn't made "matlib" in js....
+    gl_Position = transpose(M0) * transpose(M1) * P;
+    vC = C;
+}
+`;
+    const fss = `#version 300 es
+precision mediump float;
+out vec4 o;
+in lowp vec4 vC;
+void main() {
+  o = vC;
+}
+`;
+    let prg;
+    try {
+      prg = mkprg(gl, vss, fss);
+    } catch (e) {
+      alert("failed to mk prg, see console, bye");
+      throw e;
+    }
+    var Box;
+    (function(Box_1) {
+      // --- internal
+      const vrts = new Float32Array([
+        -0.5,
+        -0.5,
+        -0.5,
+        +0.5,
+        -0.5,
+        -0.5,
+        +0.5,
+        +0.5,
+        -0.5,
+        -0.5,
+        +0.5,
+        -0.5,
+        -0.5,
+        -0.5,
+        +0.5,
+        +0.5,
+        -0.5,
+        +0.5,
+        +0.5,
+        +0.5,
+        +0.5,
+        -0.5,
+        +0.5,
+        +0.5
+      ]);
+      const idxs = new Uint16Array([
+        1,
+        5,
+        6,
+        1,
+        6,
+        2,
+        4,
+        0,
+        3,
+        4,
+        3,
+        7,
+        3,
+        2,
+        6,
+        3,
+        6,
+        7,
+        4,
+        5,
+        1,
+        4,
+        1,
+        0,
+        5,
+        4,
+        7,
+        5,
+        7,
+        6,
+        0,
+        1,
+        2,
+        0,
+        2,
+        3
+      ]);
+      const shader = prg;
+      const info = qprg(shader);
+      // share among all boxes
+      let vrtsObj;
+      let idxsObj;
+      function mk(
+        gl,
+        color = [0, 0, 0, 0] // rgba in [0,255]
+      ) {
+        if (!vrtsObj) {
+          vrtsObj = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, vrtsObj);
+          gl.bufferData(gl.ARRAY_BUFFER, vrts, gl.STATIC_DRAW);
+          gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        }
+        if (!idxsObj) {
+          idxsObj = gl.createBuffer();
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxsObj);
+          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idxs, gl.STATIC_DRAW);
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+        }
+        // --- vao (each inst has own vao)
+        const vao = gl.createVertexArray();
+        gl.bindVertexArray(vao);
+        // --- "attrib vec4 P"
+        gl.bindBuffer(gl.ARRAY_BUFFER, vrtsObj);
+        gl.enableVertexAttribArray(info.a.P);
+        gl.vertexAttribPointer(info.a.P, 3, gl.FLOAT, false, 0, 0);
+        // --- draw order
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxsObj);
+        // --- "atttib lowp vec4 color"
+        const clrs = new Uint8Array([
+          ...color,
+          ...color,
+          ...color,
+          ...color,
+          0,
+          0,
+          0,
+          255,
+          0,
+          0,
+          0,
+          255,
+          0,
+          0,
+          0,
+          255,
+          0,
+          0,
+          0,
+          255
+        ]);
+        const clrsObj = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, clrsObj);
+        gl.bufferData(gl.ARRAY_BUFFER, clrs, gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(info.a.C);
+        gl.vertexAttribPointer(info.a.C, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+        // --- done (unbind vao)
+        gl.bindVertexArray(null);
+        return new Box(gl, vao);
       }
-
-      draw() {
-        ctx.save();
-        /*let n = Math.round(
-        (simplex.noise2D(this.x / config.noiseZoom, this.y / config.noiseZoom) +
-          1) *
-          100
-      );*/
-        //let color = `rgb(${n}, ${n}, ${n})`;
-
-        let n = Math.round(
-          (simplex.noise2D(
-            this.x / config.noiseZoom,
-            this.y / config.noiseZoom
-          ) +
-            1) *
-            75
+      Box_1.mk = mk;
+      // internal
+      class Box {
+        constructor(gl, vao) {
+          this.gl = gl;
+          this.vao = vao;
+          this.mat = identity4();
+          this.pos = new Float32Array([0, 0, 0]);
+          this.avel = new Float32Array([0, 0, 0]);
+        }
+        render(proj) {
+          this.gl.useProgram(shader);
+          this.gl.bindVertexArray(this.vao);
+          this.gl.uniformMatrix4fv(info.u.M0, false, proj);
+          this.gl.uniformMatrix4fv(info.u.M1, false, this.mat);
+          this.gl.drawElements(
+            this.gl.TRIANGLES,
+            36,
+            this.gl.UNSIGNED_SHORT,
+            0
+          );
+          this.gl.bindVertexArray(null);
+        }
+      }
+    })(Box || (Box = {}));
+    // ---- preload
+    // --- projector stub ---
+    const orthoProj = ortho();
+    let proj = clone4(orthoProj);
+    const fillContain = (r, proj) => {
+      r > 1
+        ? mul4(scale4(1 / r, 1, 1), orthoProj, proj)
+        : mul4(scale4(1, r, 1), orthoProj, proj);
+    };
+    const fillCover = (r, proj) => {
+      r > 1
+        ? mul4(scale4(1, r, 1), orthoProj, proj)
+        : mul4(scale4(1 / r, 1, 1), orthoProj, proj);
+    };
+    let frozen = false;
+    window.addEventListener("resize", () => {
+      frozen = false;
+      fillCover(canvas.width / canvas.height, proj);
+    });
+    // --- boxes
+    const boxes = [];
+    const W = 40,
+      H = 40,
+      D = 1;
+    const RANGE = [-1, 1];
+    const len = RANGE[1] - RANGE[0];
+    const sc = 0.1;
+    for (let k = 0; k < D; ++k) {
+      for (let j = 0; j < H; ++j) {
+        for (let i = 0; i < W; ++i) {
+          const color = [(i / W) * 256, (j / H) * 256, 255, 10];
+          const box = Box.mk(gl, color);
+          box.pos[0] = RANGE[0] + len * (i / (W - 1));
+          box.pos[1] = RANGE[0] + len * (j / (H - 1));
+          box.pos[2] = 0;
+          mul4c(
+            [
+              move4v(box.pos),
+              rx4(Math.PI / 6),
+              ry4(Math.PI * 2 * Math.random()),
+              rz4(Math.PI / 6 + Math.random() * Math.PI),
+              scale4(sc, sc, sc * 2)
+            ],
+            box.mat
+          );
+          box.avel[2] = 0.005 + Math.random() * 0.005;
+          boxes.push(box);
+        }
+      }
+    }
+    // ---- render
+    gl.clearColor(0, 0, 0, 1);
+    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.DST_ALPHA);
+    function render(gl, dt) {
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      for (const box of boxes) {
+        box.render(proj);
+        mul4c(
+          [
+            move4v(box.pos),
+            // rx4(0.01),
+            rz4(box.avel[2]),
+            move4(-box.pos[0], -box.pos[1], -box.pos[2]),
+            clone4(box.mat)
+          ],
+          box.mat
         );
-        let color = `rgb(10, 10, ${n})`;
-
-        ctx.fillStyle = color;
-        ctx.strokeStyle = color;
-        ctx.translate(this.x, this.y);
-        ctx.beginPath();
-        for (let i = 0; i < 6; i++) {
-          let angle = (Math.PI / 3) * i + Math.PI / 6;
-          let x = Math.cos(angle) * this.R;
-          let y = Math.sin(angle) * this.R;
-          ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.stroke();
-
-        ctx.fill();
-        ctx.restore();
       }
     }
-
-    function setup() {
-      canvas = document.querySelector("#canvas");
-      ctx = canvas.getContext("2d");
-      window.addEventListener("resize", debounce(resize, 999));
-      canvas.addEventListener("click", draw);
-      resize();
-    }
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      draw();
-    }
-
-    function setupHexagons() {
-      hexagons = [];
-      let r = config.size;
-      let R = r / Math.cos(Math.PI / 6);
-      let t = (r * 2) / Math.sqrt(3);
-      let rows = w / (r * 2) + 1;
-      let cols = h / R;
-      for (let x = 0; x < rows; x++) {
-        for (let y = 0; y < cols; y++) {
-          let xOffset = y % 2 === 0 ? r : 0;
-          let xPixel = r * x * 2 + xOffset;
-          let yPixel = (t / 2 + R) * y;
-          let hexagon = new Hexagon(xPixel, yPixel, R);
-          hexagons.push(hexagon);
+    // trigger once
+    window.dispatchEvent(new Event("resize"));
+    raf(render);
+    setTimeout(() => render, 999);
+    function raf(f) {
+      const sch =
+        "requestPostAnimationFrame" in window
+          ? window.requestPostAnimationFrame
+          : window.requestAnimationFrame;
+      let t0 = Date.now();
+      (function g() {
+        if (!frozen) {
+          sch(g);
+          let now = Date.now();
+          f(gl, (now - t0) / 1e3);
+          t0 = now;
+          if (Browser.isMobileChrome || Browser.isSafari) frozen = true;
         }
+      })();
+    }
+    // helper: make shader program
+    function mkprg(gl, vss, fss) {
+      const vs = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vs, vss);
+      gl.compileShader(vs);
+      const fs = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fs, fss);
+      gl.compileShader(fs);
+      const prg = gl.createProgram();
+      gl.attachShader(prg, vs);
+      gl.attachShader(prg, fs);
+      gl.linkProgram(prg);
+      let ok = false;
+      if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+        console.error("vs er", gl.getShaderInfoLog(vs));
+        console.error("fs er", gl.getShaderInfoLog(fs));
+        console.error("prg er", gl.getProgramInfoLog(prg));
+      } else {
+        ok = true;
+      }
+      gl.detachShader(prg, vs);
+      gl.deleteShader(vs);
+      gl.detachShader(prg, fs);
+      gl.deleteShader(fs);
+      if (!ok) {
+        throw "shd prg link err";
+      }
+      return prg;
+    }
+    // helper: query shader program (locations)
+    function qprg(prg) {
+      const u = {};
+      const a = {};
+      for (
+        let i = 0;
+        i <
+        (gl === null || gl === void 0
+          ? void 0
+          : gl.getProgramParameter(prg, gl.ACTIVE_UNIFORMS));
+        ++i
+      ) {
+        const { name } =
+          gl === null || gl === void 0 ? void 0 : gl.getActiveUniform(prg, i);
+        const loc =
+          gl === null || gl === void 0
+            ? void 0
+            : gl.getUniformLocation(prg, name); // is object ..
+        u[name] = loc;
+      }
+      for (
+        let i = 0;
+        i <
+        (gl === null || gl === void 0
+          ? void 0
+          : gl.getProgramParameter(prg, gl.ACTIVE_ATTRIBUTES));
+        ++i
+      ) {
+        const { name } =
+          gl === null || gl === void 0 ? void 0 : gl.getActiveAttrib(prg, i);
+        const loc =
+          gl === null || gl === void 0
+            ? void 0
+            : gl.getAttribLocation(prg, name); // is number ..
+        a[name] = loc;
+      }
+      return { a, u };
+    }
+    // helper: fill entire screen
+    function fscn(gl) {
+      const c = gl.canvas;
+      if (c instanceof HTMLCanvasElement) {
+        const { width, height } = getComputedStyle(c);
+        c.width = Math.ceil(parseFloat(width)) * devicePixelRatio;
+        c.height = Math.ceil(parseFloat(height)) * devicePixelRatio;
+        gl.viewport(0, 0, c.width, c.height);
+      } else {
+        throw new Error("offscreen? nah, bye");
       }
     }
-
-    function draw() {
-      simplex = new SimplexNoise();
-      ctx.lineWidth = 1;
-      config.noiseZoom = Math.random() * 400 + 200;
-
-      config.size = Math.random() * 19 + 16; //zw
-      setupHexagons();
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, w, h);
-      hexagons.forEach(h => {
-        h.draw();
-      });
+    // helper: asserts gl is webgl2 rendering ctx
+    function ping(x) {
+      if (!(x instanceof WebGL2RenderingContext)) {
+        throw new Error("wgl2 ctx, nah");
+      }
     }
-
-    setup();
+    // -------------- matlib stub -------------
+    // helper: create mat4 (row major)
+    //         I will transpose the matrix in shader. Hah
+    //
+    // maths | 0 1 2 3 | === [0, 1, 2, 3
+    //       | 4 5 6 7 |      4, 5, 6, 7
+    //       | 8 9 a b |      ..
+    //       | c d e f |                ]
+    function mat4(xs) {
+      return new Float32Array(xs);
+    }
+    function identity4() {
+      return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    }
+    function clone4(m) {
+      return Float32Array.from(m);
+    }
+    // mul mat m and mat n, put result into mat o
+    //      m          n
+    // | 0 1 2 3 || 0 1 2 3 |
+    // | 4 5 6 7 || 4 5 6 7 |
+    // | 8 9 a b || 8 9 a b |
+    // | c d e f || c d e f |
+    function mul4(m, n, o) {
+      o || (o = identity4());
+      // row 1
+      o[0] = m[0] * n[0] + m[1] * n[4] + m[2] * n[8] + m[3] * n[0xc];
+      o[1] = m[0] * n[1] + m[1] * n[5] + m[2] * n[9] + m[3] * n[0xd];
+      o[2] = m[0] * n[2] + m[1] * n[6] + m[2] * n[0xa] + m[3] * n[0xe];
+      o[3] = m[0] * n[3] + m[1] * n[7] + m[2] * n[0xb] + m[3] * n[0xf];
+      // row 2
+      o[4] = m[4] * n[0] + m[5] * n[4] + m[6] * n[8] + m[7] * n[0xc];
+      o[5] = m[4] * n[1] + m[5] * n[5] + m[6] * n[9] + m[7] * n[0xd];
+      o[6] = m[4] * n[2] + m[5] * n[6] + m[6] * n[0xa] + m[7] * n[0xe];
+      o[7] = m[4] * n[3] + m[5] * n[7] + m[6] * n[0xb] + m[7] * n[0xf];
+      // row 3
+      o[8] = m[8] * n[0] + m[9] * n[4] + m[0xa] * n[8] + m[0xb] * n[0xc];
+      o[9] = m[8] * n[1] + m[9] * n[5] + m[0xa] * n[9] + m[0xb] * n[0xd];
+      o[0xa] = m[8] * n[2] + m[9] * n[6] + m[0xa] * n[0xa] + m[0xb] * n[0xe];
+      o[0xb] = m[8] * n[3] + m[9] * n[7] + m[0xa] * n[0xb] + m[0xb] * n[0xf];
+      // row 4
+      o[0xc] = m[0xc] * n[0] + m[0xd] * n[4] + m[0xe] * n[8] + m[0xf] * n[0xc];
+      o[0xd] = m[0xc] * n[1] + m[0xd] * n[5] + m[0xe] * n[9] + m[0xf] * n[0xd];
+      o[0xe] =
+        m[0xc] * n[2] + m[0xd] * n[6] + m[0xe] * n[0xa] + m[0xf] * n[0xe];
+      o[0xf] =
+        m[0xc] * n[3] + m[0xd] * n[7] + m[0xe] * n[0xb] + m[0xf] * n[0xf];
+      return o;
+    }
+    // mul array of mats, starting from end..
+    function mul4c(ms, o) {
+      o || (o = identity4());
+      let i = ms.length - 2;
+      let n = Float32Array.from(ms[i + 1]); // copy
+      while (i >= 0) {
+        mul4(ms[i], n, o);
+        n.set(o);
+        --i;
+      }
+      return o;
+    }
+    // stub.. (because vertices already in clipspace, LOL)
+    function ortho() {
+      return mat4([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    }
+    function rz4(a) {
+      const c = Math.cos(a);
+      const s = Math.sin(a);
+      return mat4([c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    }
+    function rx4(a) {
+      const c = Math.cos(a);
+      const s = Math.sin(a);
+      return mat4([1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1]);
+    }
+    function ry4(a) {
+      const c = Math.cos(a);
+      const s = Math.sin(a);
+      return mat4([c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1]);
+    }
+    function scale4(sx, sy, sz) {
+      return mat4([sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, sz, 0, 0, 0, 0, 1]);
+    }
+    function move4(mx, my, mz) {
+      return mat4([1, 0, 0, mx, 0, 1, 0, my, 0, 0, 1, mz, 0, 0, 0, 1]);
+    }
+    function move4v(xs) {
+      return mat4([1, 0, 0, xs[0], 0, 1, 0, xs[1], 0, 0, 1, xs[2], 0, 0, 0, 1]);
+    }
   };
-
   window.done = () =>
     setTimeout(() => {
       $("aside[name=loader]").style.display = "none";

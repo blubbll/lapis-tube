@@ -113,7 +113,7 @@
                 Player.play(id);
               }
             } else {
-              console.error("Page not found");
+              console.warn("Page not found");
               setTimeout(() => {
                 setActiveView("404");
               });

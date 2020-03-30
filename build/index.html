@@ -164,18 +164,30 @@
       html,
       body {
         background: black;
-        background: var(--color-accent-main);
+        background: linear-gradient(
+            to top left,
+            magenta,
+            transparent,
+            darkblue,
+            cyan
+          ),
+          linear-gradient(to top right, darkblue, transparent, white);
       }
     </style>
   </head>
 
   <body>
     <aside name="loader">{{loader}}</aside>
-    {{indicators}}
-    {{filters}}
-    <canvas id="canvas"></canvas>
+    {{indicators}} {{filters}}
     <content></content>
 
     <script defer src="{{local}}/bundle.js"></script>
+
+    <script>
+      /*setInterval(() => {
+        $("#canvas").style.display =
+          $("#canvas").style.display === "block" ? "none" : "block";
+      }, 1000);*/
+    </script>
   </body>
 </html>
