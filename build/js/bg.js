@@ -313,7 +313,8 @@ void main() {
       let t0 = Date.now();
       (function g() {
         if (!frozen) {
-          sch(g);
+          //sch(g);
+          frozen=true;
           let now = Date.now();
           f(gl, (now - t0) / 1e3);
           t0 = now;

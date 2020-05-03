@@ -169,7 +169,7 @@
               $("#results-inner").classList.add("scrolling");
               results.scrollTimer = setTimeout(() => {
                 $("#results-inner").classList.remove("scrolling");
-              }, 29);
+              }, 0);
             }
           });
         results.scrollSetupDone = true;

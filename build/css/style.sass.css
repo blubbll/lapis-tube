@@ -87,6 +87,9 @@ body {
   padding: 25%;
   align-self: center;
   background: $blue;
+  background: rgba(0, 0, 255, 0.75);
+  /* mix-blend-mode: color-burn; */
+  backdrop-filter: blur(3px);
   p {
     color: $light-grey;
   }

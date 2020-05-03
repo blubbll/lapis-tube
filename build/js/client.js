@@ -336,7 +336,7 @@
       done();
 
       //small search demo
-      demo();
+      //demo();
 
       console.debug("Client done");
 
